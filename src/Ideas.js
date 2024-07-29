@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Ideas() {
+export default function Ideas() {
     return (
         <div>
             <h1>Ideas Page</h1>
@@ -8,5 +8,3 @@ function Ideas() {
         </div>
     );
 }
-
-export default Ideas;

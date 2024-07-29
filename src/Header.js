@@ -1,22 +1,25 @@
-import {Link, Outlet} from "react-router-dom";
+import {Link, Outlet, useLocation} from "react-router-dom";
 import React from "react";
 import {FaGithub, FaMousePointer} from "react-icons/fa";
 
-export default function Header() {
+export default function Header({title}) {
+    const location = useLocation();
+    const titleDisplay = (title === "" ? <h3 className={"bracket-title"}>Untitled Bracket</h3> :
+                          <h3 className={"bracket-title"}>{title}</h3>)
     return (
         <>
             <div className={"header"}>
-                <div className={"header-left"}>
-                    <Link className={"home-btn"} to={"/"}>
+            <div className={"header-left"}>
+                    <Link className={"link home-btn"} to={"/"}>
                         <span className={"header-title"}> Bracket
                             <span style={{fontWeight: "bold"}}> Maker</span>
                         </span>
                     </Link>
-                    <Link className={"header-new-bracket-btn"}
+                    <Link className={"link header-new-bracket-btn"}
                           to={"/create"}>New Bracket
                     </Link>
-                    <Link className={"header-ideas-btn"} to={"/help"}>Get Ideas</Link>
-                    <Outlet />
+                    <Link className={"link header-ideas-btn"} to={"/help"}>Get Ideas</Link>
+                    {(location.pathname === "/create") && titleDisplay}
                 </div>
                 <div className={"header-right"}>
                     {/*<p>Made by Luke Colombo</p>*/}
@@ -31,6 +34,7 @@ export default function Header() {
                     </a>
                 </div>
             </div>
+            <Outlet/>
         </>
     );
 }
