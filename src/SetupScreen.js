@@ -4,29 +4,28 @@ import Team from "./Team";
 import {FaShuffle} from "react-icons/fa6";
 import Settings from "./Settings";
 
-// TODO: - fix shuffling/removing teams
-//  - move 'Create Bracket' over to the left?
+// TODO: 
 export default function SetupScreen({setTitle, title}) {
     const [teams, setTeams] =
         useState([{id: 0, name: "Team 1", votes: 0}]);
     let numTeams = teams.length;
     const [desc, setDesc] = useState("");
 
-    function updateTeam(id, newName) {
-        setTeams(prevTeams => prevTeams.map(item =>
-                                                item.id === id ? {...item, name: newName} : item));
-        console.log(teams);
+    function updateTeam(index, newName) {
+        setTeams(prevTeams => {
+            const updatedTeams = [...prevTeams];
+            updatedTeams[index] = {...updatedTeams[index], name: newName};
+            return updatedTeams;
+        });
     }
 
     function createTeam() {
         let name = "Team " + (teams.length + 1)
         setTeams([...teams, {id: teams.length, name: name, votes: 0}]);
-        console.log(teams);
     }
 
     function changeNumTeams(targetNum) {
         if (targetNum === teams.length) {
-            // console.log("reached");
             return;
         }
         if (targetNum > teams.length) { //Add more teams
@@ -42,22 +41,9 @@ export default function SetupScreen({setTitle, title}) {
         }
     }
 
-    //Give teams new seeds (IDs) depending on their order in the variable `teams`
-    function reseed() {
+    function removeTeam(index) {
         let nextTeams = [...teams];
-        nextTeams.map((item, idx) => {
-            item.id = idx;
-            return item;
-        });
-        setTeams(nextTeams);
-    }
-
-    function removeTeam(id) {
-        console.log("removing team", id, teams);
-        let nextTeams = [...teams];
-        nextTeams = nextTeams.filter(team => team.id !== id);
-        // After shuffling, give teams new IDs (seeds)
-        // reseed();
+        nextTeams = [...nextTeams.slice(0, index), ...nextTeams.slice(index + 1)];
         setTeams(nextTeams);
     }
 
@@ -69,9 +55,7 @@ export default function SetupScreen({setTitle, title}) {
             nextTeams[i] = nextTeams[j];
             nextTeams[j] = temp;
         }
-        // reseed();
         setTeams(nextTeams);
-        console.log(nextTeams, teams);
     }
 
     return (
@@ -88,7 +72,7 @@ export default function SetupScreen({setTitle, title}) {
                     <div className={"ta-header icon"}>Icon</div>
                     <div className={"ta-header color"}>Color</div>
                     <div className={"ta-header remove"}></div>
-                    {/*TODO: Add a rearrange icon and delete only button when hovering*/}
+                    {/*TODO: Add a rearrange icon, and a delete button only when hovering*/}
                     {teams.map((team, index) => (
                         <Team key={index} index={index} name={team.name}
                               updateName={updateTeam} removeTeam={removeTeam}></Team>
