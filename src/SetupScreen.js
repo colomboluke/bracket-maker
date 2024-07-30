@@ -4,12 +4,14 @@ import Team from "./Team";
 import {FaShuffle} from "react-icons/fa6";
 import Settings from "./Settings";
 
-// TODO: 
+
 export default function SetupScreen({setTitle, title}) {
     const [teams, setTeams] =
         useState([{id: 0, name: "Team 1", votes: 0}]);
     let numTeams = teams.length;
     const [desc, setDesc] = useState("");
+
+    // ~~~~ Modifying State Functions ~~~~
 
     function updateTeam(index, newName) {
         setTeams(prevTeams => {
@@ -56,6 +58,22 @@ export default function SetupScreen({setTitle, title}) {
             nextTeams[j] = temp;
         }
         setTeams(nextTeams);
+        determineNumOfRounds();
+    }
+
+    // ~~~~ Bracket Functions ~~~~
+
+    const [rounds, setRounds] = useState(0);
+
+    function determineNumOfRounds() {
+        for (let i = teams.length; i > 0; i--) {
+            if (Number.isInteger(Math.log2(i))) {
+                console.log("Number of rounds:", Math.log2(i));
+                setRounds(Math.log2(i));
+                break;
+            }
+            console.log(i, Math.log2(i));
+        }
     }
 
     return (
@@ -88,7 +106,9 @@ export default function SetupScreen({setTitle, title}) {
                 </div>
             </div>
             <div className={"bracket-preview"}>
-                <div className={"match"}></div>
+                {Array(rounds).fill("").map((item, index) => (
+                    <div className={"match"}></div>
+                ))}
             </div>
         </div>
     );

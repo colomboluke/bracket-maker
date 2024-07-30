@@ -60,13 +60,18 @@ code {
 .header-right, .header-left {
   margin: auto;
   position: relative;
-  width: 50%;
+
 }
 
 .header-left {
   left: 40px;
   gap: 15px;
+  width: 75%;
   /*border: 2px solid red;*/
+}
+
+.header-right {
+  width: 25%;
 }
 
 .home-btn {
@@ -297,6 +302,7 @@ code {
 
 .setup-title {
   align-self: center;
+  font-size: 38px;
 }
 
 .setup-left {

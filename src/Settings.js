@@ -1,4 +1,15 @@
+
 export default function Settings({numTeams, changeNumTeams, title, setTitle, desc, setDesc}) {
+
+    function handleNumTeamChange(newVal) {
+        if (newVal < 0) { //Don't let there be less than 0 teams
+            return;
+        }
+        else {
+            changeNumTeams(newVal);
+        }
+    }
+
     return (
         <div className={"settings"}>
             <div className={"settings-item"}>
@@ -7,7 +18,7 @@ export default function Settings({numTeams, changeNumTeams, title, setTitle, des
                 <input value={numTeams} className={"settings-input num-teams-input"}
                        type={"number"}
                        onChange={e => {
-                           changeNumTeams(e.target.valueAsNumber);
+                           handleNumTeamChange(e.target.valueAsNumber);
                        }}/>
             </div>
             {/*<div className={"settings-item"}>*/}
@@ -23,6 +34,7 @@ export default function Settings({numTeams, changeNumTeams, title, setTitle, des
             <div className={"settings-desc"}>
                 <h4 className={"desc-title"}>Description</h4>
                 <textarea value={desc} className={"desc"}
+                          maxLength={150}
                           onChange={e => setDesc(e.target.value)}/>
             </div>
         </div>
