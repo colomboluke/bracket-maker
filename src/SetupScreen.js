@@ -3,7 +3,7 @@ import {useState} from "react";
 import Team from "./Team";
 import {FaShuffle} from "react-icons/fa6";
 import Settings from "./Settings";
-
+import {Link} from "react-router-dom";
 
 export default function SetupScreen({setTitle, title}) {
     const [teams, setTeams] =
@@ -80,7 +80,12 @@ export default function SetupScreen({setTitle, title}) {
         <div className={"setup-cont"}>
             <div className={"setup-left"}>
                 <h1 className={"setup-title"}>Create Bracket</h1>
-                <h3>Bracket Settings</h3>
+                <div className={"setup-top-cont"}>
+                    <h3 className={"t"}>Bracket Settings</h3>
+                    <Link to={"/play"} className={"link start-btn-cont"}>
+                        <button className={"start-btn"}>Start Bracket</button>
+                    </Link>
+                </div>
                 <Settings numTeams={numTeams} changeNumTeams={changeNumTeams} title={title}
                           setTitle={setTitle} desc={desc} setDesc={setDesc}/>
                 <h3>Participants</h3>

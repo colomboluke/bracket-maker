@@ -9,8 +9,9 @@
   --secondary: #050149;
   /*--accent: #ed1a82;*/
   /*--accent: #D8404C;*/
-  /*--accent: #a5639f;*/
-  --accent: #5d51bb;
+  --accent: #B7524C;
+  --accent-hover: #b94038;
+  /*--accent: #834dd5;*/
   --thin-lines: #2e2f38;
   --header-height: 70px;
 }
@@ -39,6 +40,7 @@ code {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  width: fit-content;
 }
 
 /* ~~~~~ HEADER ~~~~~ */
@@ -305,6 +307,31 @@ code {
   font-size: 38px;
 }
 
+.setup-top-cont {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-around;
+  align-items: center;
+  /*border: 2px solid blue;*/
+  gap: 75px;
+  margin-bottom: 10px;
+}
+
+.start-btn {
+  font-size: 18px;
+  font-weight: bold;
+  background-color: var(--accent);
+  color: var(--text);
+  border: none;
+  padding: 10px 30px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.start-btn:hover {
+  background-color: var(--accent-hover);
+}
+
 .setup-left {
   /*border: 2px solid blue;*/
   width: 30%;
@@ -482,6 +509,7 @@ code {
   border: 2px solid var(--text);
   border-left: none;
 }
+
 
 
 
