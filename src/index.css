@@ -8,10 +8,8 @@
   --primary-hover: #405dd5;
   --secondary: #050149;
   /*--accent: #ed1a82;*/
-  /*--accent: #D8404C;*/
-  --accent: #B7524C;
-  --accent-hover: #b94038;
-  /*--accent: #834dd5;*/
+  --accent: #3ea45e;
+  --accent-hover: #32884d;
   --thin-lines: #2e2f38;
   --header-height: 70px;
 }
@@ -501,6 +499,16 @@ code {
   height: 100% - var(--header-height);
   padding-top: 75px;
   padding-bottom: 75px;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.bracket-round {
+  border: 2px solid red;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  /*height: fit-content;*/
 }
 
 .match {
@@ -508,6 +516,16 @@ code {
   width: 200px;
   border: 2px solid var(--text);
   border-left: none;
+  margin: 0;
+  padding: 0;
+}
+
+.round-32 {
+  height: 200px;
+}
+
+.round-last {
+  justify-content: center;
 }
 
 

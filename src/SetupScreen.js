@@ -4,6 +4,7 @@ import Team from "./Team";
 import {FaShuffle} from "react-icons/fa6";
 import Settings from "./Settings";
 import {Link} from "react-router-dom";
+import Matchup from "./Matchup";
 
 export default function SetupScreen({setTitle, title}) {
     const [teams, setTeams] =
@@ -111,9 +112,14 @@ export default function SetupScreen({setTitle, title}) {
                 </div>
             </div>
             <div className={"bracket-preview"}>
-                {Array(rounds).fill("").map((item, index) => (
-                    <div className={"match"}></div>
-                ))}
+                {/*First round*/}
+                <div className={"bracket-round"}>
+                    {Array(rounds).fill("").map(() => (<Matchup/>))}
+                </div>
+                {/*Second round*/}
+                <div className={"bracket-round round-last"}>
+                    {Array(Math.round(rounds / 2)).fill("").map(() => (<Matchup className={"round-32"}/>))}
+                </div>
             </div>
         </div>
     );
