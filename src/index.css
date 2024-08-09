@@ -448,7 +448,6 @@ code {
   cursor: pointer;
 }
 
-
 .blue-button-cont {
   display: flex;
   flex-flow: row;
@@ -493,12 +492,18 @@ code {
   background-color: var(--primary-hover);
 }
 
+.setup-right {
+  overflow: scroll;
+  width: 70%;
+  border: 2px solid pink;
+}
+
 .bracket-preview {
   /*border: 2px solid red;*/
   width: 70%;
-  height: 100% - var(--header-height);
-  padding-top: 75px;
-  padding-bottom: 75px;
+  height: fit-content;
+  /*padding-top: 75px;*/
+  /*padding-bottom: 75px;*/
   display: flex;
   flex-flow: row nowrap;
 }
@@ -507,8 +512,7 @@ code {
   border: 2px solid red;
   display: flex;
   flex-flow: column;
-  justify-content: space-between;
-  /*height: fit-content;*/
+  justify-content: center;
 }
 
 .match {
@@ -520,11 +524,20 @@ code {
   padding: 0;
 }
 
-.round-32 {
+.round-64, .round-32 {
+  height: 60px;
+  margin: 0 0 60px;
+}
+
+.round-16, .round-8 {
+  height: 150px;
+}
+
+.round-4 {
   height: 200px;
 }
 
-.round-last {
+.round-2 {
   justify-content: center;
 }
 

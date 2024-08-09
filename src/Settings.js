@@ -2,10 +2,7 @@
 export default function Settings({numTeams, changeNumTeams, title, setTitle, desc, setDesc}) {
 
     function handleNumTeamChange(newVal) {
-        if (newVal < 0) { //Don't let there be less than 0 teams
-            return;
-        }
-        else {
+        if (!(newVal < 0)) { //Don't let there be less than 0 teams
             changeNumTeams(newVal);
         }
     }
@@ -15,6 +12,7 @@ export default function Settings({numTeams, changeNumTeams, title, setTitle, des
             <div className={"settings-item"}>
                 <h4>Number of Teams </h4>
                 {/*TODO: change the number adjuster thing in CSS*/}
+                {/*TODO: add a 'presets' dropdown which lets you pick any power of 2*/}
                 <input value={numTeams} className={"settings-input num-teams-input"}
                        type={"number"}
                        onChange={e => {
