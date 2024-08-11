@@ -9,17 +9,20 @@ import Matchup from "./Matchup";
 export default function SetupScreen({setTitle, title}) {
     const testTeams = [{id: 0, name: "Luke", votes: 0}, {id: 1, name: "Jake", votes: 0},
         {id: 2, name: "Luke2", votes: 0}, {id: 3, name: "Zach", votes: 0}, {id: 4, name: "Aidan", votes: 0},
-        {id: 5, name: "Gabe", votes: 0}, {id: 6, name: "Ivan", votes: 0}, {id: 7, name: "Levi", votes: 0},
-        {id: 8, name: "Connor", votes: 0}];
+        {id: 5, name: "Gabe", votes: 0}, {id: 6, name: "Ivan", votes: 0}, {id: 7, name: "Levi", votes: 0}];
     // const [teams, setTeams] =
     //     useState([{id: 0, name: "Team 1", votes: 0}]);
     const [teams, setTeams] =
-        useState(testTeams);
+        useState([]);
     let numTeams = teams.length;
     const [desc, setDesc] = useState("");
-    // TODO: make this a list instead? idk it makes more sense to me as a map
-    const [matchups, setMatchups] = useState(new Map(
-        [[6, null], [5, null], [4, null], [3, null], [2, null], [1, null]]));
+    const initialMatchups = [[6, Array(32).fill(null, null)],
+        [5, Array(16).fill([null, null])],
+        [4, Array(8).fill([null, null])],
+        [3, Array(4).fill([null, null])],
+        [2, Array(2).fill([null, null])],
+        [1, Array(1).fill([null, null])]];
+    const [matchups, setMatchups] = useState(new Map(initialMatchups));
 
     // ~~~~ Modifying State Functions ~~~~
 
@@ -91,7 +94,7 @@ export default function SetupScreen({setTitle, title}) {
         //Map where each key is the round (6 for 64, 5 for 32, etc), and each value is the teams who
         // exist in that round
         let matchupsList = [];
-        let nextMatchups = new Map(matchups);
+        let nextMatchups = new Map(initialMatchups);
         while (hiPointer - loPointer >= 1) {
             matchupsList.push([teams[loPointer], teams[hiPointer]]);
             console.log("HERE", teams[loPointer], teams[hiPointer]);
@@ -101,11 +104,11 @@ export default function SetupScreen({setTitle, title}) {
         // TODO: if a matchup is only length 1, move it to the next round
         // If there's an odd number of matchups, make the last one a matchup of length 1
         if (hiPointer === loPointer) {
-            matchupsList.push([teams[loPointer]]);    // Add the last matchup, which is currently incomplete
+            matchupsList.push([teams[loPointer], null]);    // Add the last matchup, which is currently incomplete
         }
         console.log("Step 1:\t", matchupsList);
 
-        // If there are 8 teams, set them to round 3, etc
+        // If there are 8 teams, set them to round 3, etc.
         nextMatchups.set(determineNumOfRounds(), matchupsList);
         setMatchups(nextMatchups);
         console.log("Step 2:\t", nextMatchups, nextMatchups.get(3));
@@ -150,41 +153,41 @@ export default function SetupScreen({setTitle, title}) {
             <div className={"setup-right"}>
                 <div className={"bracket-preview"}>
                     {/*TODO: clean this up using map or something*/}
-                    {/*Round of 64*/}
-                    {/*{rounds > 5 && (<div className={"bracket-round "}>*/}
-                    {/*    {Array(32).fill("").map((item, index) => (*/}
-                    {/*        <Matchup key={index} cssclassName={"round-64"} team1={2} index={index}/>))}*/}
-                    {/*</div>)}*/}
                     {/*Round of 32*/}
-                    {/*{rounds > 4 && (<div className={"bracket-round "}>*/}
-                    {/*    {Array(16).fill("").map((item, index) => (*/}
-                    {/*        <Matchup key={index} className={"round-32"}/>))}*/}
-                    {/*</div>)}*/}
+                    {rounds > 4 && (<div className={"bracket-round"}>
+                        {matchups.get(5).map((matchup, index) => (
+                            <Matchup key={index} className={"round-32"} team1={matchup[0]}
+                                     team2={matchup.length > 1 ? matchup[1] : ""}/>
+                        ))}
+                    </div>)}
                     {/*Round of 16*/}
-                    {/*{rounds > 3 && (<div className={"bracket-round "}>*/}
-                    {/*    {matchups.get(4).map((item, index) => (*/}
-                    {/*        // <Matchup key={index} className={"round-16"} team1={item.name} index={index}/>*/}
-                    {/*        <li key={index}>{item.name}</li>*/}
-                    {/*    ))}*/}
-                    {/*</div>)}*/}
+                    {rounds > 3 && (<div className={"bracket-round"}>
+                        {matchups.get(4).map((matchup, index) => (
+                            <Matchup key={index} className={"round-16"} team1={matchup[0]}
+                                     team2={matchup.length > 1 ? matchup[1] : ""}/>
+                        ))}
+                    </div>)}
                     {/*Quarterfinals*/}
-                    {rounds > 2 && (<div className={"bracket-round "}>
+                    {rounds > 2 && (<div className={"bracket-round"}>
                         {matchups.get(3).map((matchup, index) => (
-                            <Matchup key={index} className={"round-8"} team1={matchup[0].name}
-                                     team2={matchup.length > 1 ? matchup[1].name : ""}/>
-                            // <li key={index}>{item.id}</li>
+                            <Matchup key={index} className={"round-8"} team1={matchup[0]}
+                                     team2={matchup.length > 1 ? matchup[1] : ""}/>
                         ))}
                     </div>)}
                     {/*Semifinals*/}
-                    {/*{rounds > 1 && (<div className={"bracket-round "}>*/}
-                    {/*    {Array(2).fill("").map((item, index) => (*/}
-                    {/*        <Matchup key={index} className={"round-4"} team1={item.name}/>))}*/}
-                    {/*</div>)}*/}
+                    {rounds > 1 && (<div className={"bracket-round"}>
+                        {matchups.get(2).map((matchup, index) => (
+                            <Matchup key={index} className={"round-4"} team1={matchup[0]}
+                                     team2={matchup.length > 1 ? matchup[1] : ""}/>
+                        ))}
+                    </div>)}
                     {/*Finals*/}
-                    {/*{rounds > 0 && (<div className={"bracket-round round-last"}>*/}
-                    {/*    {Array(1).fill("").map((item, index) => (*/}
-                    {/*        <Matchup key={index} className={"round-2"} team1={item.name}/>))}*/}
-                    {/*</div>)}*/}
+                    {rounds > 0 && (<div className={"bracket-round"}>
+                        {matchups.get(1).map((matchup, index) => (
+                            <Matchup key={index} className={"round-2"} team1={matchup[0]}
+                                     team2={matchup.length > 1 ? matchup[1] : ""}/>
+                        ))}
+                    </div>)}
                 </div>
             </div>
         </div>
