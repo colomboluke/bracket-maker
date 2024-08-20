@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useState} from "react";
 import Team from "./Team";
 import {FaShuffle} from "react-icons/fa6";
@@ -8,21 +8,86 @@ import Matchup from "./Matchup";
 
 export default function SetupScreen({setTitle, title}) {
     const testTeams = [{id: 0, name: "Luke", votes: 0}, {id: 1, name: "Jake", votes: 0},
-        {id: 2, name: "Luke2", votes: 0}, {id: 3, name: "Zach", votes: 0}, {id: 4, name: "Aidan", votes: 0},
-        {id: 5, name: "Gabe", votes: 0}, {id: 6, name: "Ivan", votes: 0}, {id: 7, name: "Levi", votes: 0}];
-    // const [teams, setTeams] =
-    //     useState([{id: 0, name: "Team 1", votes: 0}]);
+        {id: 2, name: "Luke2", votes: 0}, {id: 3, name: "Zach", votes: 0},
+        {id: 4, name: "Aidan", votes: 0},
+        {id: 5, name: "Gabe", votes: 0}, {id: 6, name: "Ivan", votes: 0},
+        {id: 7, name: "Levi", votes: 0}];
     const [teams, setTeams] =
         useState([]);
     let numTeams = teams.length;
     const [desc, setDesc] = useState("");
-    const initialMatchups = [[6, Array(32).fill(null, null)],
-        [5, Array(16).fill([null, null])],
-        [4, Array(8).fill([null, null])],
-        [3, Array(4).fill([null, null])],
-        [2, Array(2).fill([null, null])],
-        [1, Array(1).fill([null, null])]];
-    const [matchups, setMatchups] = useState(new Map(initialMatchups));
+    const [rounds, setRounds] = useState(0);
+    // const initialMatches = {
+    //     round: 1,
+    //     matches: createMatches(teams)[0],
+    //     nextRound: null
+    // }
+    const [matches, setMatches] = useState({round: 1, matches: null, nextRound: null});
+    // Update matches whenever teams change
+    useEffect(() => {
+        let roundId = 1; //Accumulator for the round id, starting at 1
+        createMatches(teams, roundId, 0);
+    }, [teams]);
+
+    //Creates the initial matches in round 1, given the list of teams
+    function createMatches(teamsList, roundNum, originalLength) {
+        let roundOneMatches = []
+        // If no more matches, end
+        if (!teamsList || teamsList.length === 0) {
+            console.log("No teams left")
+            return [];
+        }
+
+        // Distribute byes: the top seeded teams get preference
+        let numByes = (teamsList.length <= 1) ? 0 :
+                      Math.pow(2, getNumOfRounds(teamsList.length)) - teamsList.length;
+        let byesList = []
+        for (let i = 0; i < numByes; i++) {
+            byesList.push(teamsList[i]);
+        }
+
+        let hiPointer = teamsList.length - 1; // index of the worst seeded team not yet added
+        let loPointer = numByes;  // index of the best seeded team not yet added
+        let matchesInCurRound = Math.round(teamsList.length / 2);
+        // console.log(matchesInCurRound);
+        while (hiPointer - loPointer >= 1) {
+            // nextMatchId is this match's id plus all the additional matches in this round
+            let curMatch = {
+                id: loPointer, winner: null, nextMatchId: matchesInCurRound + loPointer,
+                team1: teamsList[loPointer], team2: teamsList[hiPointer]
+            };
+            roundOneMatches.push(curMatch);
+            loPointer++;
+            hiPointer--;
+        }
+        // Odd number of matches; one match left out
+        if (hiPointer === loPointer) {
+            let curMatch = {
+                id: loPointer, winner: null, nextMatchId: matchesInCurRound + loPointer,
+                team1: teamsList[hiPointer], team2: null
+            };
+            roundOneMatches.push(curMatch);
+        }
+        console.log("Round " + roundNum, roundOneMatches, "Byes", byesList);
+        // TODO: set round one matches, then run this function again on the teams that get byes,
+        //  in case any of them play each other
+        return [roundOneMatches, createMatches(byesList, roundNum + 1, originalLength)];
+    }
+
+    //Given the matches in one round, create its next round (if one exists)
+    function createNextRound(matches) {
+        let matchesCopy = {...matches};
+        let curRound = matchesCopy.round;
+        let curTeams = matchesCopy;
+
+        // Base case; we've reached the final round
+        if (!matchesCopy) {
+            return null;
+        }
+        // Recursion case
+
+        return createNextRound(matchesCopy.nextRound);
+    }
 
     // ~~~~ Modifying State Functions ~~~~
 
@@ -75,50 +140,30 @@ export default function SetupScreen({setTitle, title}) {
 
     // ~~~~ Bracket Functions ~~~~
 
-    const [rounds, setRounds] = useState(0);
-
     // Determine how many rounds there are, based on the number of teams
-    function determineNumOfRounds() {
-        for (let i = teams.length; i > 0; i--) {
+    function getNumOfRounds(numTeams) {
+        if (numTeams === 0) {
+            return 0;
+        }
+        if (numTeams === 1) {
+            return 1;
+        }
+        // If the number of teams is exactly a power of 2, return that power
+        if (Number.isInteger(Math.log2(numTeams))) {
+            return Math.log2(numTeams);
+        }
+        // Else, find the highest power of 2 that's less than numTeams
+        for (let i = numTeams; i > 0; i--) {
             if (Number.isInteger(Math.log2(i))) {
-                setRounds(Math.log2(i));
-                return Math.log2(i);
+                return Math.log2(i) + 1;
             }
         }
     }
 
-    // Given the list of teams, structure it into a list of matchups (each matchup is a list of length 2)
-    function createMatchups() {
-        let hiPointer = teams.length - 1;
-        let loPointer = 0;
-        //Map where each key is the round (6 for 64, 5 for 32, etc), and each value is the teams who
-        // exist in that round
-        let matchupsList = [];
-        let nextMatchups = new Map(initialMatchups);
-        while (hiPointer - loPointer >= 1) {
-            matchupsList.push([teams[loPointer], teams[hiPointer]]);
-            console.log("HERE", teams[loPointer], teams[hiPointer]);
-            loPointer++;
-            hiPointer--;
-        }
-        // TODO: if a matchup is only length 1, move it to the next round
-        // If there's an odd number of matchups, make the last one a matchup of length 1
-        if (hiPointer === loPointer) {
-            matchupsList.push([teams[loPointer], null]);    // Add the last matchup, which is currently incomplete
-        }
-        console.log("Step 1:\t", matchupsList);
-
-        // If there are 8 teams, set them to round 3, etc.
-        nextMatchups.set(determineNumOfRounds(), matchupsList);
-        setMatchups(nextMatchups);
-        console.log("Step 2:\t", nextMatchups, nextMatchups.get(3));
-    }
-
-
     return (
         <div className={"setup-cont"}>
             <div className={"setup-left"}>
-                <button onClick={() => createMatchups()}>Testing button</button>
+                <button onClick={() => console.log(matches)}>Testing button</button>
                 <h1 className={"setup-title"}>Create Bracket</h1>
                 <div className={"setup-top-cont"}>
                     <h3 className={"t"}>Bracket Settings</h3>
@@ -152,42 +197,7 @@ export default function SetupScreen({setTitle, title}) {
             </div>
             <div className={"setup-right"}>
                 <div className={"bracket-preview"}>
-                    {/*TODO: clean this up using map or something*/}
-                    {/*Round of 32*/}
-                    {rounds > 4 && (<div className={"bracket-round"}>
-                        {matchups.get(5).map((matchup, index) => (
-                            <Matchup key={index} className={"round-32"} team1={matchup[0]}
-                                     team2={matchup.length > 1 ? matchup[1] : ""}/>
-                        ))}
-                    </div>)}
-                    {/*Round of 16*/}
-                    {rounds > 3 && (<div className={"bracket-round"}>
-                        {matchups.get(4).map((matchup, index) => (
-                            <Matchup key={index} className={"round-16"} team1={matchup[0]}
-                                     team2={matchup.length > 1 ? matchup[1] : ""}/>
-                        ))}
-                    </div>)}
-                    {/*Quarterfinals*/}
-                    {rounds > 2 && (<div className={"bracket-round"}>
-                        {matchups.get(3).map((matchup, index) => (
-                            <Matchup key={index} className={"round-8"} team1={matchup[0]}
-                                     team2={matchup.length > 1 ? matchup[1] : ""}/>
-                        ))}
-                    </div>)}
-                    {/*Semifinals*/}
-                    {rounds > 1 && (<div className={"bracket-round"}>
-                        {matchups.get(2).map((matchup, index) => (
-                            <Matchup key={index} className={"round-4"} team1={matchup[0]}
-                                     team2={matchup.length > 1 ? matchup[1] : ""}/>
-                        ))}
-                    </div>)}
-                    {/*Finals*/}
-                    {rounds > 0 && (<div className={"bracket-round"}>
-                        {matchups.get(1).map((matchup, index) => (
-                            <Matchup key={index} className={"round-2"} team1={matchup[0]}
-                                     team2={matchup.length > 1 ? matchup[1] : ""}/>
-                        ))}
-                    </div>)}
+
                 </div>
             </div>
         </div>
