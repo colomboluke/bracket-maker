@@ -16,31 +16,37 @@ export default function SetupScreen({setTitle, title}) {
         useState([]);
     let numTeams = teams.length;
     const [desc, setDesc] = useState("");
-    const [rounds, setRounds] = useState(0);
-    // const initialMatches = {
-    //     round: 1,
-    //     matches: createMatches(teams)[0],
-    //     nextRound: null
-    // }
-    const [matches, setMatches] = useState({round: 1, matches: null, nextRound: null});
+    const [matchIDcounter, setMatchIDcounter] = useState(0);
+
+    const [bracket, setBracket] = useState({round: 1, matches: [], nextRound: []});
     // Update matches whenever teams change
     useEffect(() => {
         let roundId = 1; //Accumulator for the round id, starting at 1
-        createMatches(teams, roundId, 0);
+        createMatches(teams, 0);
     }, [teams]);
 
+    function createByes() {
+    //     Need to evenly distribute the Bye teams across all match IDs that don't have
+    //     First get all the
+    }
+
     //Creates the initial matches in round 1, given the list of teams
-    function createMatches(teamsList, roundNum, originalLength) {
-        let roundOneMatches = []
+    function createMatches(teamsList, recurseFlag) {
+        let curRoundMatches = []
         // If no more matches, end
         if (!teamsList || teamsList.length === 0) {
             console.log("No teams left")
             return [];
         }
 
+
         // Distribute byes: the top seeded teams get preference
         let numByes = (teamsList.length <= 1) ? 0 :
                       Math.pow(2, getNumOfRounds(teamsList.length)) - teamsList.length;
+        // If we're recursing, don't do byes anymore
+        if (recurseFlag) {
+            numByes = 0;
+        }
         let byesList = []
         for (let i = 0; i < numByes; i++) {
             byesList.push(teamsList[i]);
@@ -48,30 +54,40 @@ export default function SetupScreen({setTitle, title}) {
 
         let hiPointer = teamsList.length - 1; // index of the worst seeded team not yet added
         let loPointer = numByes;  // index of the best seeded team not yet added
-        let matchesInCurRound = Math.round(teamsList.length / 2);
-        // console.log(matchesInCurRound);
+        let matchesInCurRound = Math.round((teamsList.length - numByes) / 2);
+        let matchIDCounterCopy = matchIDcounter;
         while (hiPointer - loPointer >= 1) {
             // nextMatchId is this match's id plus all the additional matches in this round
+            // TODO: check and make sure of this ^^
+            // TODO: make match IDs one scope level up: they should never repeat (should be state maybe?)
             let curMatch = {
-                id: loPointer, winner: null, nextMatchId: matchesInCurRound + loPointer,
+                id: matchIDCounterCopy, winner: null, nextMatchId: matchesInCurRound + loPointer,
                 team1: teamsList[loPointer], team2: teamsList[hiPointer]
             };
-            roundOneMatches.push(curMatch);
+            setMatchIDcounter(prevState => {return prevState + 1});
+            curRoundMatches.push(curMatch);
             loPointer++;
             hiPointer--;
         }
         // Odd number of matches; one match left out
         if (hiPointer === loPointer) {
             let curMatch = {
-                id: loPointer, winner: null, nextMatchId: matchesInCurRound + loPointer,
+                id: matchIDCounterCopy, winner: null, nextMatchId: matchesInCurRound + loPointer,
                 team1: teamsList[hiPointer], team2: null
             };
-            roundOneMatches.push(curMatch);
+            setMatchIDcounter(prevState => {return prevState + 1});
+            curRoundMatches.push(curMatch);
         }
-        console.log("Round " + roundNum, roundOneMatches, "Byes", byesList);
+
+        console.log("Round " + (recurseFlag + 1), curRoundMatches, "Byes", byesList);
         // TODO: set round one matches, then run this function again on the teams that get byes,
         //  in case any of them play each other
-        return [roundOneMatches, createMatches(byesList, roundNum + 1, originalLength)];
+        let nextBracket = {...bracket, matches: curRoundMatches};
+        setBracket(nextBracket);
+        //if we just ran for the first time, run again
+        if (recurseFlag === 0) {
+            createMatches(byesList, 1);
+        }
     }
 
     //Given the matches in one round, create its next round (if one exists)
@@ -163,7 +179,7 @@ export default function SetupScreen({setTitle, title}) {
     return (
         <div className={"setup-cont"}>
             <div className={"setup-left"}>
-                <button onClick={() => console.log(matches)}>Testing button</button>
+                <button onClick={() => console.log("Bracket", bracket)}>Testing button</button>
                 <h1 className={"setup-title"}>Create Bracket</h1>
                 <div className={"setup-top-cont"}>
                     <h3 className={"t"}>Bracket Settings</h3>
