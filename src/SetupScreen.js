@@ -22,12 +22,71 @@ export default function SetupScreen({setTitle, title}) {
     // Update matches whenever teams change
     useEffect(() => {
         let roundId = 1; //Accumulator for the round id, starting at 1
-        createMatches(teams, 0);
+        getNumOfRounds(teams.length);
+        // createMatches(teams, 0);
     }, [teams]);
 
-    function createByes() {
-    //     Need to evenly distribute the Bye teams across all match IDs that don't have
-    //     First get all the
+    function initializeEmptyBracket() {
+        //Every round has (2^round)/2 matches in it, except for round 1 (due to byes)
+        let totalRounds = getNumOfRounds(teams.length);
+        let numByes = (teams.length <= 1) ? 0 :
+                      Math.pow(2, getNumOfRounds(teams.length)) - teams.length;
+
+        // console.log(teams.length + " teams", rounds);
+
+        let initialBracket;
+        // If 0 teams, there is no bracket
+        if (totalRounds === 0) {
+            initialBracket = null;
+        }
+        // If 1 team, there's just one round with one (incomplete) match
+        else if (totalRounds === 1 && teams.length === 1) {
+            // TODO: figure out what winner should be in this case
+            initialBracket = {round: 1, matches: [{id: 1, winner: null, team1: teams[0], team2: null,
+                    nextMatchId: null}], nextRound: null};
+        }
+        // 2+ teams
+        else {
+            // Do the first round, then recurse for the rest of them
+            let matchIdCounter = 0;
+            let firstRoundMatches = []
+            let matchesInFirstRound = (totalRounds === 0) ? 0 :
+                                      (Math.pow(2, totalRounds) / 2) - numByes;
+            for (let i = 0; i < matchesInFirstRound; i++) {
+                firstRoundMatches.push({id: matchIdCounter});
+                matchIdCounter++;
+            }
+            // TODO: figure out this recursion. Should I create the first round manually,
+            //  then recurse for the rest of them? Also, should I instead do this whole thing by
+            //  having a team/match counter and looping until that's 0 (all are used up)?
+            initialBracket = {round: 1, matches: firstRoundMatches,
+                nextRound: initializeBracketHelp(2, totalRounds, matchIdCounter)};
+        }
+        console.log(initialBracket)
+    }
+
+    function initializeBracketHelp(curRoundNum, totalRounds, curMatchId) {
+        // End case: only one match left
+        if (curRoundNum >= totalRounds) {
+            console.log("Ending at round " + curRoundNum);
+            return {
+                round: curRoundNum,
+                matches: {id: curMatchId, nextMatchId: null},
+                nextRound: null};
+        }
+        // Standard case
+        let matchesInCurRound = Math.pow(2, (totalRounds - curRoundNum + 1)) / 2;
+        console.log("Current round: " + curRoundNum, "matches: " + matchesInCurRound);
+        let nextRoundMatches = [];
+        for (let i = 0; i < matchesInCurRound; i++) {
+            nextRoundMatches.push({id: curMatchId, nextMatchId: null});
+            curMatchId++;
+        }
+        return {
+            round: curRoundNum,
+            matches: nextRoundMatches,
+            nextRound: initializeBracketHelp(curRoundNum + 1, totalRounds, curMatchId)
+        }
     }
 
     //Creates the initial matches in round 1, given the list of teams
@@ -38,7 +97,6 @@ export default function SetupScreen({setTitle, title}) {
             console.log("No teams left")
             return [];
         }
-
 
         // Distribute byes: the top seeded teams get preference
         let numByes = (teamsList.length <= 1) ? 0 :
@@ -59,12 +117,15 @@ export default function SetupScreen({setTitle, title}) {
         while (hiPointer - loPointer >= 1) {
             // nextMatchId is this match's id plus all the additional matches in this round
             // TODO: check and make sure of this ^^
-            // TODO: make match IDs one scope level up: they should never repeat (should be state maybe?)
+            // TODO: make match IDs one scope level up: they should never repeat (should be state
+            // maybe?)
             let curMatch = {
                 id: matchIDCounterCopy, winner: null, nextMatchId: matchesInCurRound + loPointer,
                 team1: teamsList[loPointer], team2: teamsList[hiPointer]
             };
-            setMatchIDcounter(prevState => {return prevState + 1});
+            setMatchIDcounter(prevState => {
+                return prevState + 1
+            });
             curRoundMatches.push(curMatch);
             loPointer++;
             hiPointer--;
@@ -75,7 +136,9 @@ export default function SetupScreen({setTitle, title}) {
                 id: matchIDCounterCopy, winner: null, nextMatchId: matchesInCurRound + loPointer,
                 team1: teamsList[hiPointer], team2: null
             };
-            setMatchIDcounter(prevState => {return prevState + 1});
+            setMatchIDcounter(prevState => {
+                return prevState + 1
+            });
             curRoundMatches.push(curMatch);
         }
 
@@ -164,22 +227,14 @@ export default function SetupScreen({setTitle, title}) {
         if (numTeams === 1) {
             return 1;
         }
-        // If the number of teams is exactly a power of 2, return that power
-        if (Number.isInteger(Math.log2(numTeams))) {
-            return Math.log2(numTeams);
-        }
         // Else, find the highest power of 2 that's less than numTeams
-        for (let i = numTeams; i > 0; i--) {
-            if (Number.isInteger(Math.log2(i))) {
-                return Math.log2(i) + 1;
-            }
-        }
+        return Math.ceil(Math.log2(numTeams));
     }
 
     return (
         <div className={"setup-cont"}>
             <div className={"setup-left"}>
-                <button onClick={() => console.log("Bracket", bracket)}>Testing button</button>
+                <button onClick={() => initializeEmptyBracket()}>Testing button</button>
                 <h1 className={"setup-title"}>Create Bracket</h1>
                 <div className={"setup-top-cont"}>
                     <h3 className={"t"}>Bracket Settings</h3>
