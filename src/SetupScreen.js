@@ -17,7 +17,7 @@ export default function SetupScreen({setTitle, title}) {
     let numTeams = teams.length;
     const [desc, setDesc] = useState("");
 
-    const [bracket, setBracket] = useState({round: 1, matches: [], nextRound: []});
+    const [bracket, setBracket] = useState({round: 1, matches: [], nextRound: {}});
     // Update matches whenever teams change
     useEffect(() => {
         let roundId = 1; //Accumulator for the round id, starting at 1
@@ -143,8 +143,6 @@ export default function SetupScreen({setTitle, title}) {
         return array;
     }
 
-
-
     function constructBracket() {
         let totalRounds = getNumOfRounds(teams.length);
         let numByes = (teams.length <= 1) ? 0 :
@@ -178,25 +176,19 @@ export default function SetupScreen({setTitle, title}) {
                 }
                 return matchesToReturn;
             }
-            function buildRoundRecursive(teamsInRound, roundNum, byeFlag, numTotalTeams) {
+            function buildRoundRecursive(teamsInRound, roundNum, byeFlag) {
                 // If this is the first round after a bye, pad teams until we get to x/2, where
                 // x is the number of teams the wildcard round would have if it was full
                 if (byeFlag) {
                     teamsInRound = padArray(getNumMatchesInRound(teams.length),
                                             teamsInRound.length, teamsInRound);
                 }
-                if (teamsInRound.length === 1) { //if there's only one team left for some reason
-                    // TODO: figure out what winner should be in this case
-                    return {round: 1, matches: [{id: 1, winner: null, team1: teams[0], team2: null,
-                            nextMatchId: null}], nextRound: null};
-                }
                 let nextRoundTeams = [];
                 for (let i = 0; i < (teamsInRound.length) / 2; i++) {
                     nextRoundTeams.push(null);    //add placeholder for winner of this match
                 }
-                let curMatches = [];
                 let nextRound = null;
-                curMatches = pairTeams(teamsInRound, 0, teamsInRound.length - 1);
+                let curMatches = pairTeams(teamsInRound, 0, teamsInRound.length - 1);
                 if (curMatches.length > 1) {    //recurse if this isn't the finals
                     nextRound = buildRoundRecursive(nextRoundTeams, roundNum + 1, false);
                     // Assign nextMatchIds iff we recurse (finals match will have no nextMatchId)
@@ -214,17 +206,24 @@ export default function SetupScreen({setTitle, title}) {
                 initialBracket = {round: 0, matches: firstRoundMatches,
                     nextRound: nextRound};
             }
+            // Otherwise (exactly a power of 2), just start building recursively
             else {
                 initialBracket = buildRoundRecursive(teams, 0);
             }
         }
-        return initialBracket;
+        setBracket(initialBracket);
     }
+
+    // TODO: create a function that accounts for votes and determines the winner of a match,
+    //  updating the bracket accordingly
 
     return (
         <div className={"setup-cont"}>
             <div className={"setup-left"}>
-                <button onClick={() => console.log(constructBracket())}>Testing button</button>
+                <button onClick={() => {
+                    constructBracket();
+                    console.log(bracket)
+                }}>Testing button</button>
                 <h1 className={"setup-title"}>Create Bracket</h1>
                 <div className={"setup-top-cont"}>
                     <h3 className={"t"}>Bracket Settings</h3>
@@ -258,7 +257,8 @@ export default function SetupScreen({setTitle, title}) {
             </div>
             <div className={"setup-right"}>
                 <div className={"bracket-preview"}>
-
+                    {/*TODO: display teams from the bracket object here*/}
+                    {/*<Matchup className={"round-16"} team1={teams}></Matchup>*/}
                 </div>
             </div>
         </div>
