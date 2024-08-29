@@ -16,135 +16,14 @@ export default function SetupScreen({setTitle, title}) {
         useState([]);
     let numTeams = teams.length;
     const [desc, setDesc] = useState("");
-    const [matchIDcounter, setMatchIDcounter] = useState(0);
 
     const [bracket, setBracket] = useState({round: 1, matches: [], nextRound: []});
     // Update matches whenever teams change
     useEffect(() => {
         let roundId = 1; //Accumulator for the round id, starting at 1
-        getNumOfRounds(teams.length);
+        // console.log("# teams: " + teams.length, "num rounds: " + getNumOfRounds(teams.length), Math.pow(2, getNumOfRounds(teams.length)) / 2);
         // createMatches(teams, 0);
     }, [teams]);
-
-    function assignMatchIds(curMatchesList, nextMatchesList) {
-        // console.log(curMatchesList.map(match => match.id), nextMatchesList.map(match => match.id))
-        for (let i = 0; i < curMatchesList.length; i+=1) {
-            curMatchesList[i].nextMatchId = nextMatchesList[Math.floor(i / 2)].id;
-            curMatchesList[i].nextMatchId = nextMatchesList[Math.floor(i / 2)].id;
-        }
-    }
-
-    function constructBracket() {
-        //Every round has (2^round)/2 matches in it, except for round 1 (due to byes)
-        let totalRounds = getNumOfRounds(teams.length);
-        let numByes = (teams.length <= 1) ? 0 :
-                      Math.pow(2, getNumOfRounds(teams.length)) - teams.length;
-        // console.log(teams.length + " teams", rounds);
-
-        let initialBracket = null; // If 0 teams, there is no bracket
-        // If 1 team, there's just one round with one (incomplete) match
-        if (totalRounds === 1 && teams.length === 1) {
-            // TODO: figure out what winner should be in this case
-            initialBracket = {round: 1, matches: [{id: 1, winner: null, team1: teams[0], team2: null,
-                    nextMatchId: null}], nextRound: null};
-        }
-        // MAIN CASE: 2+ teams
-        else {
-            let matchIdCounter = 0;
-            // TODO: make sure this is changing properly (might need to make it state)
-            function buildFirstRoundMatches(numByes) {
-                // console.log("Building round 1", matchIdCounter);
-                let firstRoundMatches = [];
-                // Create matches, using the teams that don't get byes
-                let hiPointer = teams.length - 1; //index of worst team not yet added
-                let loPointer = numByes; //index of best team not yet added
-                // console.log(loPointer, hiPointer, numByes, numFirstRoundTeams);
-                // Should always be an even number of teams in the first round, so these will never meet
-                while (hiPointer - loPointer >= 1) {
-                    let curMatch = {id: matchIdCounter++, winner: null, team1: teams[loPointer],
-                        team2: teams[hiPointer]};
-                    firstRoundMatches.push(curMatch);
-                    loPointer++;
-                    hiPointer--;
-                }
-                // let teamsWithByes = teams.slice(0, numByes);
-                // let nextRoundMatches = [];
-                // console.log("First round matches: ", firstRoundMatches)
-                return firstRoundMatches;
-            }
-            function buildRoundRecursive(teamsInRound, roundNum, byeFlag) {
-
-                if (teamsInRound.length === 1) { //if there's only one team left for some reason
-                    // TODO: figure out what winner should be in this case
-                    return {round: 1, matches: [{id: 1, winner: null, team1: teams[0], team2: null,
-                            nextMatchId: null}], nextRound: null};
-                }
-                // If teamsInRound.length !== power of 2, pad the end with nulls to represent the
-                // wildcard spots
-                if (byeFlag) {
-                    teamsInRound.push(null);    //if there was a bye, we always add at least 1
-                    while (!Number.isInteger(Math.log2(teamsInRound.length))) {
-                        teamsInRound.push(null);
-                    }
-                }
-                console.log("Building round " + roundNum, teamsInRound, matchIdCounter);
-                let hiPointer = teamsInRound.length - 1;
-                let loPointer = 0;
-                let curMatches = [];
-                // If this is the first round after the wildcard round and there's an odd number
-                // of teams in it, seed #1 needs to get the first match, to play the worst seed
-                if (byeFlag && teamsInRound.length % 2 === 1) {
-                    let curMatch = {id: matchIdCounter++, winner: null, team1: teamsInRound[loPointer],
-                        team2: null};
-                    curMatches.push(curMatch);
-                    loPointer = 1;
-                }
-                let nextRoundTeams = [];
-                while (hiPointer - loPointer >= 1) {
-                    let curMatch = {id: matchIdCounter++, winner: null, team1: teamsInRound[loPointer],
-                        team2: teamsInRound[hiPointer]};
-                    curMatches.push(curMatch);
-                    nextRoundTeams.push(null);    //placeholder for winner of this match
-                    loPointer++;
-                    hiPointer--;
-                }
-                if (hiPointer === loPointer) { //odd number of matches
-                    let curMatch = {id: matchIdCounter++, winner: null, team1: teamsInRound[loPointer],
-                        team2: null};
-                    curMatches.push(curMatch);
-                }
-                console.log("Matches in round " + roundNum, curMatches);
-                let nextRound = null;
-                if (curMatches.length > 1) {    //recurse if this isn't the finals
-                    // console.log("Recursing with " + nextRoundTeams.length + " matches")
-                    nextRound = buildRoundRecursive(nextRoundTeams, roundNum + 1, false);
-                    // Assign nextMatchIds iff we recurse
-                    // TODO: this means the finals will have no nextMatchId, which I think is ok
-                    assignMatchIds(curMatches, nextRound.matches);
-                }
-
-                return {round: roundNum, matches: curMatches, nextRound: nextRound};
-            }
-            //If there are any byes, add a wildcard round to the start
-            if (numByes > 0) {
-                // console.log("Building first round with teams", teams.slice(numByes), teams.slice(0, numByes));
-                let firstRoundMatches = buildFirstRoundMatches(numByes);
-                // console.log(teams.slice(0, numByes));
-                let nextRound = buildRoundRecursive(teams.slice(0, numByes), 1, true);
-                // Assign nextMatchIds for first round, based on next round matches
-                // console.log(firstRound, teams.slice(numByes));
-                // assignMatchIds(firstRound, nextRound.matches);
-                initialBracket = {round: 0, matches: firstRoundMatches,
-                    nextRound: nextRound};
-            }
-            else {
-                initialBracket = buildRoundRecursive(teams, 0);
-            }
-        }
-        return initialBracket;
-    }
-
-
 
     // ~~~~ Modifying State Functions ~~~~
 
@@ -207,6 +86,139 @@ export default function SetupScreen({setTitle, title}) {
         }
         // Else, find the highest power of 2 that's less than numTeams
         return Math.ceil(Math.log2(numTeams));
+    }
+
+    function getMatchByIdBracket(wholeBracket, id) {
+        if (!wholeBracket) {
+            return null;
+        }
+        for (const match of wholeBracket.matches) {
+            if (match.id === id) {
+                return match;
+            }
+        }
+        return getMatchByIdBracket(wholeBracket.nextRound, id);
+    }
+
+    function getMatchByIdList(listOfMatches, id) {
+        for (const match of listOfMatches) {
+            if (match.id === id) {
+                return match;
+            }
+        }
+        return null;
+    }
+
+    function assignMatchIds(curMatchesList, nextMatchesList) {
+        // Loop through each of the nextMatches, if it has an opening, give it the id of a current
+        // match, starting with the highest current id
+        let curIdCounter = curMatchesList[curMatchesList.length - 1].id;
+        for (let i = 0; i < nextMatchesList.length; i++) {
+            let curMatch = nextMatchesList[i];
+            if (nextMatchesList[i].team1 == null) {
+                getMatchByIdList(curMatchesList, curIdCounter).nextMatchId = nextMatchesList[i].id;
+                curIdCounter--;
+            }
+            if (nextMatchesList[i].team2 == null) {
+                getMatchByIdList(curMatchesList, curIdCounter).nextMatchId = nextMatchesList[i].id;
+                curIdCounter--;
+            }
+        }
+    }
+
+    function getNumMatchesInRound(numTeams) {
+        if (numTeams === 0 || numTeams === 1) {
+            return 0;
+        }
+        else {
+            return Math.pow(2, getNumOfRounds(numTeams)) / 2
+        }
+    }
+
+    // Pad given array with nulls until it reaches the desired length
+    function padArray(targetLength, curLength, array) {
+        for (let i = 0; i < targetLength - curLength; i++) {
+            array.push(null);
+        }
+        return array;
+    }
+
+
+
+    function constructBracket() {
+        let totalRounds = getNumOfRounds(teams.length);
+        let numByes = (teams.length <= 1) ? 0 :
+                      Math.pow(2, getNumOfRounds(teams.length)) - teams.length;
+        let initialBracket = null; // If 0 teams, there is no bracket
+        // If 1 team, just one round with one (incomplete) match
+        if (totalRounds === 1 && teams.length === 1) {
+            // TODO: figure out what winner should be in this case
+            initialBracket = {round: 1, matches: [{id: 1, winner: null, team1: teams[0], team2: null,
+                    nextMatchId: null}], nextRound: null};
+        }
+        // MAIN CASE: 2+ teams
+        else {
+            let matchIdCounter = 0;
+            // Pair together the highest and lowest seed, repeat until there's 1 or 0 teams left
+            // loPointer: index of worst team not yet added
+            // hiPointer: index of best team not yet added
+            function pairTeams(teamsList, loPointer, hiPointer) {
+                let matchesToReturn = [];
+                while (hiPointer - loPointer >= 1) {
+                    let curMatch = {id: matchIdCounter++, winner: null, team1: teamsList[loPointer],
+                        team2: teamsList[hiPointer]};
+                    matchesToReturn.push(curMatch);
+                    loPointer++;
+                    hiPointer--;
+                }
+                if (hiPointer === loPointer) { //if odd number of matches
+                    let curMatch = {id: matchIdCounter++, winner: null, team1: teamsList[loPointer],
+                        team2: null};
+                    matchesToReturn.push(curMatch);
+                }
+                return matchesToReturn;
+            }
+            function buildRoundRecursive(teamsInRound, roundNum, byeFlag, numTotalTeams) {
+                // If this is the first round after a bye, pad teams until we get to x/2, where
+                // x is the number of teams the wildcard round would have if it was full
+                if (byeFlag) {
+                    teamsInRound = padArray(getNumMatchesInRound(teams.length),
+                                            teamsInRound.length, teamsInRound);
+                }
+                if (teamsInRound.length === 1) { //if there's only one team left for some reason
+                    // TODO: figure out what winner should be in this case
+                    return {round: 1, matches: [{id: 1, winner: null, team1: teams[0], team2: null,
+                            nextMatchId: null}], nextRound: null};
+                }
+                let nextRoundTeams = [];
+                for (let i = 0; i < (teamsInRound.length) / 2; i++) {
+                    nextRoundTeams.push(null);    //add placeholder for winner of this match
+                }
+                let curMatches = [];
+                let nextRound = null;
+                curMatches = pairTeams(teamsInRound, 0, teamsInRound.length - 1);
+                if (curMatches.length > 1) {    //recurse if this isn't the finals
+                    nextRound = buildRoundRecursive(nextRoundTeams, roundNum + 1, false);
+                    // Assign nextMatchIds iff we recurse (finals match will have no nextMatchId)
+                    assignMatchIds(curMatches, nextRound.matches);
+                }
+                return {round: roundNum, matches: curMatches, nextRound: nextRound};
+            }
+            //If there are any byes, add a wildcard round to the start
+            if (numByes > 0) {
+                // Build first round from the teams w/o byes
+                let firstRoundMatches = pairTeams(teams, numByes, teams.length - 1);
+                let nextRound = buildRoundRecursive(teams.slice(0, numByes), 1, true, teams.length);
+                // Assign nextMatchIds for first round, based on next round matches
+                assignMatchIds(firstRoundMatches, nextRound.matches);
+                initialBracket = {round: 0, matches: firstRoundMatches,
+                    nextRound: nextRound};
+            }
+            else {
+                initialBracket = buildRoundRecursive(teams, 0);
+            }
+        }
+        return initialBracket;
     }
 
     return (
