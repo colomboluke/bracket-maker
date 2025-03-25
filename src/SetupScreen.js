@@ -5,24 +5,18 @@ import {FaShuffle} from "react-icons/fa6";
 import Settings from "./Settings";
 import {Link} from "react-router-dom";
 import Matchup from "./Matchup";
+import BracketPreview from "./BracketPreview";
 
 export default function SetupScreen({setTitle, title}) {
-    const testTeams = [{id: 0, name: "Luke", votes: 0}, {id: 1, name: "Jake", votes: 0},
-        {id: 2, name: "Luke2", votes: 0}, {id: 3, name: "Zach", votes: 0},
-        {id: 4, name: "Aidan", votes: 0},
-        {id: 5, name: "Gabe", votes: 0}, {id: 6, name: "Ivan", votes: 0},
-        {id: 7, name: "Levi", votes: 0}];
     const [teams, setTeams] =
         useState([]);
     let numTeams = teams.length;
     const [desc, setDesc] = useState("");
 
-    const [bracket, setBracket] = useState({round: 1, matches: [], nextRound: {}});
+    const [bracket, setBracket] = useState({roundNum: 1, matches: [], nextRound: {}});
     // Update matches whenever teams change
     useEffect(() => {
-        let roundId = 1; //Accumulator for the round id, starting at 1
-        // console.log("# teams: " + teams.length, "num rounds: " + getNumOfRounds(teams.length), Math.pow(2, getNumOfRounds(teams.length)) / 2);
-        // createMatches(teams, 0);
+        constructBracket();
     }, [teams]);
 
     // ~~~~ Modifying State Functions ~~~~
@@ -114,7 +108,6 @@ export default function SetupScreen({setTitle, title}) {
         // match, starting with the highest current id
         let curIdCounter = curMatchesList[curMatchesList.length - 1].id;
         for (let i = 0; i < nextMatchesList.length; i++) {
-            let curMatch = nextMatchesList[i];
             if (nextMatchesList[i].team1 == null) {
                 getMatchByIdList(curMatchesList, curIdCounter).nextMatchId = nextMatchesList[i].id;
                 curIdCounter--;
@@ -129,8 +122,7 @@ export default function SetupScreen({setTitle, title}) {
     function getNumMatchesInRound(numTeams) {
         if (numTeams === 0 || numTeams === 1) {
             return 0;
-        }
-        else {
+        } else {
             return Math.pow(2, getNumOfRounds(numTeams)) / 2
         }
     }
@@ -143,16 +135,100 @@ export default function SetupScreen({setTitle, title}) {
         return array;
     }
 
+    // If this seed is higher than the highest seed, make it null
+    function changeIntoBye(seed, participantsCount) {
+        return seed <= participantsCount ? seed : null;
+    }
+
+    function seedTeams(matchIDCounter, numRounds) {
+        let matches = [{id: matchIDCounter, winner: null, team1: 1, team2: 2}];
+        for (let round = 1; round < numRounds; round++) {
+            let curRoundMatches = [];
+            let targetSum = Math.pow(2, round + 1) + 1;
+            for (let i = 0; i < matches.length; i++) {
+                let firstHome;
+                let firstAway;
+                let secondHome;
+                let secondAway;
+                // Flip the order of adding halfway through (so it's kinda mirror image)
+                if (i >= matches.length / 2) {
+                    firstHome = changeIntoBye(matches[i]["team2"], teams.length);
+                    firstAway = changeIntoBye(targetSum - matches[i]["team2"], teams.length);
+                    secondHome = changeIntoBye(matches[i]["team1"], teams.length);
+                    secondAway = changeIntoBye(targetSum - matches[i]["team1"], teams.length);
+                } else {
+                    firstHome = changeIntoBye(matches[i]["team1"], teams.length);
+                    firstAway = changeIntoBye(targetSum - matches[i]["team1"], teams.length);
+                    secondHome = changeIntoBye(matches[i]["team2"], teams.length);
+                    secondAway = changeIntoBye(targetSum - matches[i]["team2"], teams.length);
+                }
+                console.log("HERE", firstHome, firstAway);
+                curRoundMatches.push(
+                    {id: matchIDCounter++, winner: null, team1: firstHome, team2: firstAway});
+                curRoundMatches.push(
+                    {id: matchIDCounter++, winner: null, team1: secondHome, team2: secondAway});
+            }
+            matches = curRoundMatches;
+            console.log("Round", round, curRoundMatches)
+        }
+        return matches;
+    }
+
+    function newConstructBracket() {
+        let totalRounds = getNumOfRounds(teams.length);
+        let numByes = Math.pow(2, totalRounds) - teams.length;
+        let bracket; // 0 teams => there is no bracket
+        if (teams.length === 0) {
+            bracket = {roundNum: 0, matches: [], nextRound: null}
+        } else if (teams.length === 1) { // 1 team => one round with one (incomplete) match
+            // TODO: figure out what winner should be in this case
+            bracket = {
+                roundNum: 0, matches: [{
+                    id: 1, winner: null, team1: teams[0],
+                    team2: null, nextMatchId: null
+                }],
+                nextRound: null
+            };
+        } else {  // MAIN CASE: 2+ teams
+            //roundNum = 0 indexed, first round = 0
+            let matchIDCounter = 0;
+            // Teams in round: array containing Team objects
+            function buildRoundRecursive(teamsInRound, curRoundIdx) {
+                let curMatches =
+                    seedTeams(matchIDCounter, totalRounds - curRoundIdx);
+                //Create placeholders for next round
+                let nextRoundTeams = [];
+                for (let i = 0; i < (teamsInRound.length) / 2; i++) {
+                    nextRoundTeams.push(null);
+                }
+                // Recurse if this isn't the finals
+                let nextRound;
+                if (curMatches.length > 1) {
+                    nextRound = buildRoundRecursive(nextRoundTeams, curRoundIdx + 1);
+                }
+                return {roundNum: curRoundIdx, matches: curMatches, nextRound: nextRound}
+            }
+            bracket = buildRoundRecursive(teams, 0);
+        }
+
+        return bracket;
+    }
+
     function constructBracket() {
         let totalRounds = getNumOfRounds(teams.length);
         let numByes = (teams.length <= 1) ? 0 :
                       Math.pow(2, getNumOfRounds(teams.length)) - teams.length;
-        let initialBracket = null; // If 0 teams, there is no bracket
+        let initialBracket; // If 0 teams, there is no bracket
         // If 1 team, just one round with one (incomplete) match
         if (totalRounds === 1 && teams.length === 1) {
             // TODO: figure out what winner should be in this case
-            initialBracket = {round: 1, matches: [{id: 1, winner: null, team1: teams[0], team2: null,
-                    nextMatchId: null}], nextRound: null};
+            initialBracket = {
+                roundNum: 0, matches: [{
+                    id: 1, winner: null, team1: teams[0],
+                    team2: null, nextMatchId: null
+                }],
+                nextRound: null
+            };
         }
         // MAIN CASE: 2+ teams
         else {
@@ -160,22 +236,30 @@ export default function SetupScreen({setTitle, title}) {
             // Pair together the highest and lowest seed, repeat until there's 1 or 0 teams left
             // loPointer: index of worst team not yet added
             // hiPointer: index of best team not yet added
+            // This function has to be nested because of matchIDCounter
             function pairTeams(teamsList, loPointer, hiPointer) {
                 let matchesToReturn = [];
+                let numMatches = teamsList.length / 2;
                 while (hiPointer - loPointer >= 1) {
-                    let curMatch = {id: matchIdCounter++, winner: null, team1: teamsList[loPointer],
-                        team2: teamsList[hiPointer]};
+                    let curMatch = {
+                        id: matchIdCounter++, winner: null, team1: teamsList[loPointer],
+                        team2: teamsList[hiPointer]
+                    };
                     matchesToReturn.push(curMatch);
                     loPointer++;
                     hiPointer--;
                 }
                 if (hiPointer === loPointer) { //if odd number of matches
-                    let curMatch = {id: matchIdCounter++, winner: null, team1: teamsList[loPointer],
-                        team2: null};
+                    let curMatch = {
+                        id: matchIdCounter++, winner: null, team1: teamsList[loPointer],
+                        team2: null
+                    };
                     matchesToReturn.push(curMatch);
                 }
                 return matchesToReturn;
             }
+
+            // This function has to be nested because it calls pairTeams, which is nested
             function buildRoundRecursive(teamsInRound, roundNum, byeFlag) {
                 // If this is the first round after a bye, pad teams until we get to x/2, where
                 // x is the number of teams the wildcard round would have if it was full
@@ -194,8 +278,9 @@ export default function SetupScreen({setTitle, title}) {
                     // Assign nextMatchIds iff we recurse (finals match will have no nextMatchId)
                     assignMatchIds(curMatches, nextRound.matches);
                 }
-                return {round: roundNum, matches: curMatches, nextRound: nextRound};
+                return {roundNum: roundNum, matches: curMatches, nextRound: nextRound};
             }
+
             //If there are any byes, add a wildcard round to the start
             if (numByes > 0) {
                 // Build first round from the teams w/o byes
@@ -203,8 +288,10 @@ export default function SetupScreen({setTitle, title}) {
                 let nextRound = buildRoundRecursive(teams.slice(0, numByes), 1, true, teams.length);
                 // Assign nextMatchIds for first round, based on next round matches
                 assignMatchIds(firstRoundMatches, nextRound.matches);
-                initialBracket = {round: 0, matches: firstRoundMatches,
-                    nextRound: nextRound};
+                initialBracket = {
+                    roundNum: 0, matches: firstRoundMatches,
+                    nextRound: nextRound
+                };
             }
             // Otherwise (exactly a power of 2), just start building recursively
             else {
@@ -221,9 +308,9 @@ export default function SetupScreen({setTitle, title}) {
         <div className={"setup-cont"}>
             <div className={"setup-left"}>
                 <button onClick={() => {
-                    constructBracket();
-                    console.log(bracket)
-                }}>Testing button</button>
+                    console.log(newConstructBracket())
+                }}>Testing button
+                </button>
                 <h1 className={"setup-title"}>Create Bracket</h1>
                 <div className={"setup-top-cont"}>
                     <h3 className={"t"}>Bracket Settings</h3>
@@ -256,10 +343,7 @@ export default function SetupScreen({setTitle, title}) {
                 </div>
             </div>
             <div className={"setup-right"}>
-                <div className={"bracket-preview"}>
-                    {/*TODO: display teams from the bracket object here*/}
-                    {/*<Matchup className={"round-16"} team1={teams}></Matchup>*/}
-                </div>
+                <BracketPreview bracket={bracket} roundWidth={200}/>
             </div>
         </div>
     );

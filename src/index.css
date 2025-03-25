@@ -1,580 +1,639 @@
 :root {
-  --text: #ebe9fc;
-  --background: #474848;
-  --background2: #010104;
-  --background3: #3a3a3a;
-  --background4: #343333;
-  --primary: #4d6ef3;
-  --primary-hover: #405dd5;
-  --secondary: #050149;
-  /*--accent: #ed1a82;*/
-  --accent: #3ea45e;
-  --accent-hover: #32884d;
-  --thin-lines: #2e2f38;
-  --header-height: 70px;
+    --text: #ebe9fc;
+    --background: #474848;
+    --background2: #010104;
+    --background3: #3a3a3a;
+    --background4: #343333;
+    --primary: #4d6ef3;
+    --primary-hover: #405dd5;
+    --secondary: #050149;
+    /*--accent: #ed1a82;*/
+    --accent: #3ea45e;
+    --accent-hover: #32884d;
+    --thin-lines: #2e2f38;
+    --header-height: 70px;
 }
 
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--background);
-  /*TODO: try a gradient background*/
-  /*background-image: linear-gradient(var(--primary), #83c2d0);*/
-  color: var(--text);
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--background);
+    /*TODO: try a gradient background*/
+    /*background-image: linear-gradient(var(--primary), #83c2d0);*/
+    color: var(--text);
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-  monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }
 
 .link {
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  width: fit-content;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: fit-content;
 }
 
 /* ~~~~~ HEADER ~~~~~ */
 
 .header, .header-right, .header-left {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
 }
 
 .header {
-  /*border: 3px solid black;*/
-  box-shadow: var(--background4) 2px 4px 6px;
-  height: var(--header-height);
-  width: 100%;
-  background-color: var(--background2);
+    /*border: 3px solid black;*/
+    box-shadow: var(--background4) 2px 4px 6px;
+    height: var(--header-height);
+    width: 100%;
+    background-color: var(--background2);
 }
 
 .header-right, .header-left {
-  margin: auto;
-  position: relative;
+    margin: auto;
+    position: relative;
 
 }
 
 .header-left {
-  left: 40px;
-  gap: 15px;
-  width: 75%;
-  /*border: 2px solid red;*/
+    left: 40px;
+    gap: 15px;
+    width: 75%;
+    /*border: 2px solid red;*/
 }
 
 .header-right {
-  width: 25%;
+    width: 25%;
 }
 
 .home-btn {
-  border: none;
-  padding: 0;
-  background-color: var(--background2);
-  color: var(--text);
+    border: none;
+    padding: 0;
+    background-color: var(--background2);
+    color: var(--text);
 }
 
 /*TODO: make the second word highlight when hovered*/
 .header-title {
-  font-size: 22px;
-  margin-right: 25px;
+    font-size: 22px;
+    margin-right: 25px;
 }
 
 .header-right {
-  right: 20px;
-  /*border: 2px solid blue;*/
-  gap: 20px;
-  justify-content: right;
+    right: 20px;
+    /*border: 2px solid blue;*/
+    gap: 20px;
+    justify-content: right;
 }
 
 .header-github, .header-portfolio {
-  color: var(--text);
-  cursor: pointer;
+    color: var(--text);
+    cursor: pointer;
 }
 
 .header-github:hover, .header-portfolio:hover {
-  color: var(--primary);
+    color: var(--primary);
 }
 
 .header-github {
-  font-size: 32px;
+    font-size: 32px;
 }
 
 .header-portfolio {
-  font-size: 28px;
+    font-size: 28px;
 }
 
 .header-github:hover, .header-portfolio:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 .header-github:visited, .header-portfolio:visited {
-  cursor: pointer;
-  text-decoration: underline;
-  color: var(--primary);
+    cursor: pointer;
+    text-decoration: underline;
+    color: var(--primary);
 }
 
 .header-new-bracket-btn {
-  width: 125px;
-  height: 50%;
-  padding: 10px;
-  font-size: 16px;
-  font-weight: bolder;
-  background-color: var(--primary);
-  color: var(--text);
-  border: none;
-  border-radius: 3px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif;
-  cursor: pointer;
+    width: 125px;
+    height: 50%;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bolder;
+    background-color: var(--primary);
+    color: var(--text);
+    border: none;
+    border-radius: 3px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    cursor: pointer;
 }
 
 .header-new-bracket-btn:hover {
-  background-color: var(--primary-hover);
+    background-color: var(--primary-hover);
 }
 
 .header-ideas-btn {
-  font-weight: bold;
-  color: var(--text);
-  background-color: var(--background2);
-  text-align: center;
-  border: none;
-  font-size: 16px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif;
-  cursor: pointer;
+    font-weight: bold;
+    color: var(--text);
+    background-color: var(--background2);
+    text-align: center;
+    border: none;
+    font-size: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    cursor: pointer;
 }
 
 .header-ideas-btn:hover {
-  color: var(--primary);
+    color: var(--primary);
 }
 
 .bracket-title {
-  color: var(--text);
-  font-weight: lighter;
-  font-size: 22px;
-  margin-left: 25px;
+    color: var(--text);
+    font-weight: lighter;
+    font-size: 22px;
+    margin-left: 25px;
 }
 
 /* ~~~~~ HOME SCREEN ~~~~~ */
 
 .home-cont {
-  display: flex;
-  flex-flow: column;
-  /*border: 2px solid orange;*/
-  position: absolute;
-  align-items: center;
-  top: var(--header-height);
-  height: calc(100vh - var(--header-height));
-  width: 100vw;
-  margin: 0;
+    display: flex;
+    flex-flow: column;
+    /*border: 2px solid orange;*/
+    position: absolute;
+    align-items: center;
+    top: var(--header-height);
+    height: calc(100vh - var(--header-height));
+    width: 100vw;
+    margin: 0;
 }
 
 .home-title-card {
-  display: flex;
-  flex-flow: column;
-  /*border: 2px solid red;*/
-  width: 60%;
-  margin: 30px auto 150px;
+    display: flex;
+    flex-flow: column;
+    /*border: 2px solid red;*/
+    width: 60%;
+    margin: 30px auto 150px;
 }
 
 .home-title {
-  text-align: center;
-  margin: 15px 0 15px 0;
-  color: var(--text);
-  font-size: 40px;
+    text-align: center;
+    margin: 15px 0 15px 0;
+    color: var(--text);
+    font-size: 40px;
 }
 
 .title-color {
-  color: var(--primary);
+    color: var(--primary);
 }
 
 .home-subtitle {
-  text-align: center;
-  margin: 0;
-  font-weight: normal;
-  color: var(--text);
+    text-align: center;
+    margin: 0;
+    font-weight: normal;
+    color: var(--text);
 }
 
 .home-main {
-  display: flex;
-  flex-flow: column;
-  justify-content: flex-start;
-  align-items: center;
-  /*border: 2px solid blue;*/
-  height: auto;
-  width: 50%;
-  margin: 0 auto auto;
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: center;
+    /*border: 2px solid blue;*/
+    height: auto;
+    width: 50%;
+    margin: 0 auto auto;
 }
 
 .new-bracket-btn {
-  width: 300px;
-  height: 60px;
-  margin-bottom: 20px;
-  font-size: 22px;
-  font-weight: bolder;
-  background-color: var(--primary);
-  color: var(--text);
-  border: none;
-  border-radius: 5px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif;
-  cursor: pointer;
+    width: 300px;
+    height: 60px;
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: bolder;
+    background-color: var(--primary);
+    color: var(--text);
+    border: none;
+    border-radius: 5px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    cursor: pointer;
 }
 
 .new-bracket-btn:hover {
-  /*TODO: make it stay in place but pop out when you hover (might need to make position absolute)*/
-  /*width: 320px;*/
-  /*height: 65px;*/
-  background-color: var(--primary-hover);
+    /*TODO: make it stay in place but pop out when you hover (might need to make position absolute)*/
+    /*width: 320px;*/
+    /*height: 65px;*/
+    background-color: var(--primary-hover);
 }
 
 .home-ideas-btn {
-  text-align: center;
-  border: none;
-  background-color: var(--background);
-  color: var(--text);
-  font-weight: bold;
-  font-size: 16px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif;
+    text-align: center;
+    border: none;
+    background-color: var(--background);
+    color: var(--text);
+    font-weight: bold;
+    font-size: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
 }
 
 .home-ideas-btn:hover {
-  text-decoration: underline;
-  cursor: pointer;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .home-footer {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-around;
-  align-items: center;
-  /*border: 2px solid purple;*/
-  width: 50%;
-  margin: auto auto 20px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+    /*border: 2px solid purple;*/
+    width: 50%;
+    margin: auto auto 20px;
 }
 
 .footer-p1, .footer-p2 {
-  margin: 10px;
+    margin: 10px;
 }
 
 .footer-p2 {
-  display: flex;
-  flex-flow: row;
-  align-items: center;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
 }
 
 .footer-github {
-  font-size: 40px;
-  margin: 0 0 0 20px;
-  color: var(--accent);
+    font-size: 40px;
+    margin: 0 0 0 20px;
+    color: var(--accent);
 }
 
 .footer-github-link:visited {
-  color: #282c34;
+    color: #282c34;
 }
 
 /* ~~~~~ SETUP SCREEN ~~~~~ */
 
 .setup-cont {
-  position: absolute;
-  top: var(--header-height);
-  bottom: 0;
-  right: 0;
-  left: 0;
-  /*border: 2px solid gold;*/
-  display: flex;
-  flex-flow: row;
-  height: 100% - var(--header-height);
+    position: absolute;
+    top: var(--header-height);
+    bottom: 0;
+    right: 0;
+    left: 0;
+    /*border: 2px solid gold;*/
+    display: flex;
+    flex-flow: row;
+    height: 100% -var(--header-height);
 }
 
 .setup-title {
-  align-self: center;
-  font-size: 38px;
+    align-self: center;
+    font-size: 38px;
 }
 
 .setup-top-cont {
-  display: flex;
-  flex-flow: row;
-  justify-content: space-around;
-  align-items: center;
-  /*border: 2px solid blue;*/
-  gap: 75px;
-  margin-bottom: 10px;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-around;
+    align-items: center;
+    /*border: 2px solid blue;*/
+    gap: 75px;
+    margin-bottom: 10px;
 }
 
 .start-btn {
-  font-size: 18px;
-  font-weight: bold;
-  background-color: var(--accent);
-  color: var(--text);
-  border: none;
-  padding: 10px 30px;
-  border-radius: 6px;
-  cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: var(--accent);
+    color: var(--text);
+    border: none;
+    padding: 10px 30px;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
 .start-btn:hover {
-  background-color: var(--accent-hover);
+    background-color: var(--accent-hover);
 }
 
 .setup-left {
-  /*border: 2px solid blue;*/
-  width: 30%;
-  padding-left: 15px;
-  padding-right: 15px;
-  padding-bottom: 30px;
-  overflow: scroll;
-  height: 100% - var(--header-height)
+    /*border: 2px solid blue;*/
+    width: 30%;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 30px;
+    overflow: scroll;
+    height: 100%;
 }
 
 .settings {
-  /*border: 2px solid green;*/
-  position: relative;
-  top: 0;
-  align-self: center;
-  display: flex;
-  flex-flow: column;
-  justify-content: space-evenly;
-  background-color: var(--background3);
-  margin-left: 10px;
-  margin-right: 10px;
+    /*border: 2px solid green;*/
+    position: relative;
+    top: 0;
+    align-self: center;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-evenly;
+    background-color: var(--background3);
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .settings-item {
-  display: flex;
-  flex-flow: row;
-  align-items: center;
-  justify-content: space-between;
-  border-top: .05rem solid var(--thin-lines);
-  border-bottom: .05rem solid var(--thin-lines);
-  padding-left: 15px;
-  padding-right: 25px;
-  height: 55px;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: space-between;
+    border-top: .05rem solid var(--thin-lines);
+    border-bottom: .05rem solid var(--thin-lines);
+    padding-left: 15px;
+    padding-right: 25px;
+    height: 55px;
 }
 
 .settings-desc {
-  display: flex;
-  flex-flow: column;
-  padding-left: 15px;
-  padding-right: 25px;
-  align-items: flex-start;
-  padding-bottom: 20px;
+    display: flex;
+    flex-flow: column;
+    padding-left: 15px;
+    padding-right: 25px;
+    align-items: flex-start;
+    padding-bottom: 20px;
 }
 
 .desc-title {
-  margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 .desc {
-  height: 100%;
-  width: 100%;
-  border: 1px solid gray;
-  color: lightgray;
-  background-color: var(--background);
-  padding: 5px;
-  font-size: 16px;
-  outline: none;
-  resize: vertical;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif;
+    height: 100%;
+    width: 100%;
+    border: 1px solid gray;
+    color: lightgray;
+    background-color: var(--background);
+    padding: 5px;
+    font-size: 16px;
+    outline: none;
+    resize: vertical;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
 }
 
 .num-teams-input {
-  width: 10%;
-  height: 30%;
+    width: 10%;
+    height: 30%;
 }
 
 .settings-input {
-  align-self: center;
-  border: 1px solid gray;
-  color: lightgray;
-  background-color: var(--background);
-  padding: 5px;
-  font-size: 16px;
-  outline: none;
+    align-self: center;
+    border: 1px solid gray;
+    color: lightgray;
+    background-color: var(--background);
+    padding: 5px;
+    font-size: 16px;
+    outline: none;
 }
 
 .title-input {
-  height: 25%;
-  margin-left: 20px;
+    height: 25%;
+    margin-left: 20px;
 }
 
 .team-add-grid {
-  /*border: 2px solid green;*/
-  display: grid;
-  grid-template-columns: 3fr 12fr 3fr 3fr 1fr;
-  row-gap: 8px;
-  background-color: var(--background3);
-  padding: 15px 10px;
+    /*border: 2px solid green;*/
+    display: grid;
+    grid-template-columns: 3fr 12fr 3fr 3fr 1fr;
+    row-gap: 8px;
+    background-color: var(--background3);
+    padding: 15px 10px;
 }
 
 .ta-header {
-  text-align: center;
-  /*border: 1px solid white;*/
-  padding: 5px;
-  font-size: 16px;
-  font-weight: bold;
-  margin: auto;
+    text-align: center;
+    /*border: 1px solid white;*/
+    padding: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    margin: auto;
 }
 
 .seed, .name, .icon, .color, .remove {
-  text-align: center;
-  /*border: 1px solid white;*/
-  margin: auto;
+    text-align: center;
+    /*border: 1px solid white;*/
+    margin: auto;
 }
 
 .remove {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .remove-btn {
-  font-size: 18px;
-  cursor: pointer;
+    font-size: 18px;
+    cursor: pointer;
 }
 
 .blue-button-cont {
-  display: flex;
-  flex-flow: row;
-  grid-column: 1 / 6;
+    display: flex;
+    flex-flow: row;
+    grid-column: 1 / 6;
 }
 
 .blue-button {
-  width: auto;
-  padding-right: 20px;
-  padding-left: 20px;
-  margin: 20px auto 10px;
-  height: 35px;
-  background-color: var(--primary);
-  color: var(--text);
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 2px;
+    width: auto;
+    padding-right: 20px;
+    padding-left: 20px;
+    margin: 20px auto 10px;
+    height: 35px;
+    background-color: var(--primary);
+    color: var(--text);
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 2px;
 }
 
 .add-team-btn {
-  grid-column: 2 / 5; /*Effectively centers it b/c the ends are 1fr each*/
-  align-self: center;
-  font-weight: bold;
+    grid-column: 2 / 5; /*Effectively centers it b/c the ends are 1fr each*/
+    align-self: center;
+    font-weight: bold;
 }
 
 .shuffle-btn {
-  grid-column: 1 / 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: min-content;
-  padding-right: 10px;
-  padding-left: 10px;
+    grid-column: 1 / 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: min-content;
+    padding-right: 10px;
+    padding-left: 10px;
 }
 
 .shuffle-icon {
-  font-size: 20px;
+    font-size: 20px;
 }
 
 .add-team-btn:hover, .shuffle-btn:hover {
-  background-color: var(--primary-hover);
+    background-color: var(--primary-hover);
 }
 
 .setup-right {
-  overflow: scroll;
-  width: 70%;
-  /*border: 2px solid pink;*/
+    overflow: scroll;
+    width: 70%;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: baseline;
 }
 
-.bracket-preview {
-  /*border: 2px solid red;*/
-  width: 70%;
-  height: fit-content;
-  display: flex;
-  flex-flow: row nowrap;
-  padding-top: 40px;
+.round-column {
+    height: 100%;
+    /*height: fit-content;*/
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    top: 10%;
 }
 
-/*TODO: make these numbers dynamic. So when you have only 4 teams, it doesn't take up the same
-   height as if you had 32.*/
-
-.bracket-round {
-  /*border: 2px solid red;*/
-  display: block;
-  height: auto;
-  padding: 0;
+.round-0 {
+    /*justify-content: flex-start;*/
 }
 
-.match-outer {
-  padding: 0;
+.round-1 {
+    /*height: fit-content;*/
+    /*justify-content: flex-end;*/
 }
 
-.match-inner {
-  width: 180px;
-  border: 2px solid var(--text);
-  border-left: none;
-  display: flex;
-  flex-flow: column;
-  justify-content: flex-end;
+.tournament {
+    display: flex;
+    flex-direction: row;
 }
 
-.match-text {
-  margin-left: 5px;
-  font-size: 17px;
-  padding: 0;
+.round {
+    display: flex;
+    flex-flow: column;
+    width: 200px;
+    list-style: none;
+    /*border: 1px solid gold;*/
 }
 
-.round-32 {
-  height: 40px;
+.hidden {
+    border: none;
 }
 
-.margin-round-32 {
-  margin: 0 0 30px 0;
+/*Controls the vertical distance between games*/
+.round .spacer {
+    flex-grow: .5;
 }
 
-.round-16 {
-  height: 94px;
+/*Controls the vertical distance before the first game and after the last game*/
+.round .spacer:first-child, .round .spacer:last-child {
+    flex-grow: .75;
 }
 
-.margin-round-16 {
-  margin: 22px 0 70px 0;
+/*Controls the vertical distance within games*/
+.round .game-spacer {
+    flex-grow: 2.5;
 }
 
-.round-8 {
-  height: 188px;
+
+.game-top {
+    border-bottom: 1px solid var(--text);
 }
 
-.margin-round-8 {
-  margin: 69px 0 164px 0;
+.team-seed {
+    float: left;
+    margin-left: 0;
 }
 
-.round-4 {
-  height: 376px;
+.team-name {
+    margin-left: 10px;
 }
 
-.margin-round-4 {
-  margin: 161px 0 352px 0;
+.team-votes {
+    float: right;
+    margin-right: 5px;
 }
 
-.round-2 {
-  height: 752px;
+.game-spacer {
+    border-right: 1px solid var(--text);
+    min-height: 40px;
 }
 
-.margin-round-2 {
-  margin: 350px 0 0 0;
+.game-bottom {
+    border-top: 1px solid var(--text);
 }
+
+/*.match {*/
+/*  margin: 0 0 100px 0;*/
+/*  height: 100px;*/
+/*  width: 180px;*/
+/*  border: 2px solid var(--text);*/
+/*  border-left: none;*/
+/*  flex-shrink: 0;*/
+/*  flex-grow: 0;*/
+/*  display: flex;*/
+/*  flex-flow: column;*/
+/*}*/
+
+/*.match-top, .match-bottom {*/
+/*  display: flex;*/
+/*  flex-flow: row;*/
+/*  width: 100%;*/
+/*  !*border: 2px solid blue;*!*/
+/*}*/
+
+/*.match-top {*/
+/*  position: relative;*/
+/*  top: -22px;*/
+/*  !*border: 2px solid blue;*!*/
+/*}*/
+
+/*.match-bottom {*/
+/*  position: relative;*/
+/*  top: 60px;*/
+/*  !*bottom: 2px;*!*/
+/*}*/
+
+/*.match-seed {*/
+/*  width: 30px;*/
+/*  position: relative;*/
+/*  left: 5px;*/
+/*  font-weight: bold;*/
+/*  !*border: 2px solid green;*!*/
+/*}*/
+
+/*.match-team {*/
+/*  margin-left: 5px;*/
+/*  !*border: 2px solid yellow;*!*/
+/*}*/
+
+/*.match-score {*/
+/*  position: absolute;*/
+/*  right: 5px;*/
+/*  !*border: 2px solid red;*!*/
+/*}*/
+
+
+
+
+
 
 
 

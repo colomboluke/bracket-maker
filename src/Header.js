@@ -9,7 +9,7 @@ export default function Header({title}) {
     return (
         <>
             <div className={"header"}>
-            <div className={"header-left"}>
+                <div className={"header-left"}>
                     <Link className={"link home-btn"} to={"/"}>
                         <span className={"header-title"}> Bracket
                             <span style={{fontWeight: "bold"}}> Maker</span>

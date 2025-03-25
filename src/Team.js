@@ -9,8 +9,8 @@ export default function Team({index, name, updateName, removeTeam}) {
                        updateName(index, e.target.value);
                    }}
                    placeholder={"Add Name"}/>
-            <div className={"icon"}>tbd</div>
-            <div className={"color"}>tbd</div>
+            <div className={"icon"}>to-do</div>
+            <div className={"color"}>to-do</div>
             <div className={"remove"}><CgRemove className={"remove-btn"}
                                                 onClick={() => removeTeam(index)}/></div>
         </>
