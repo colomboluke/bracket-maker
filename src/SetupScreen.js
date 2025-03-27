@@ -13,7 +13,7 @@ export default function SetupScreen({setTitle, title}) {
     let numTeams = teams.length;
     const [desc, setDesc] = useState("");
 
-    const [bracket, setBracket] = useState({roundNum: 1, matches: [], nextRound: {}});
+    let [bracket, setBracket] = useState({roundNum: 1, matches: [], nextRound: {}});
     // Update matches whenever teams change
     useEffect(() => {
         constructBracket();
@@ -140,40 +140,66 @@ export default function SetupScreen({setTitle, title}) {
         return seed <= participantsCount ? seed : null;
     }
 
-    function seedTeams(matchIDCounter, numRounds) {
+    // True = requires a bye
+    // False = does not require a bye
+    function checkBye(seed, participantsCount) {
+        return seed >= participantsCount;
+    }
+
+    function createMatch(homeTeam, targetSum, totalTeams, matchID, byes) {
+        // Home seed will never be null
+        // TODO: change this team variable to an object rather than an Int
+        let homeSeed = homeTeam
+        let awaySeed = targetSum - homeSeed;
+        if (awaySeed > totalTeams) { //this match is a bye, should be moved to next round of tourney
+            byes.push(homeSeed);
+            awaySeed = null;
+        }
+        return {id: matchID, winner: null, team1: homeSeed, team2: awaySeed}
+    }
+
+    // Given the desired number of rounds, returns the properly seeded first round
+    //  with 2^numRounds teams in it
+    // Time complexity: O(m*(m/2))
+    function initialSeeding(matchIDCounter, numRounds) {
         let matches = [{id: matchIDCounter, winner: null, team1: 1, team2: 2}];
+        let byes = [];
         for (let round = 1; round < numRounds; round++) {
             let curRoundMatches = [];
             let targetSum = Math.pow(2, round + 1) + 1;
             for (let i = 0; i < matches.length; i++) {
-                let firstHome;
-                let firstAway;
-                let secondHome;
-                let secondAway;
-                // Flip the order of adding halfway through (so it's kinda mirror image)
+                let firstMatch;
+                let secondMatch;
+                // Flip the order of adding halfway through (so top half of bracket mirrors bottom)
                 if (i >= matches.length / 2) {
-                    firstHome = changeIntoBye(matches[i]["team2"], teams.length);
-                    firstAway = changeIntoBye(targetSum - matches[i]["team2"], teams.length);
-                    secondHome = changeIntoBye(matches[i]["team1"], teams.length);
-                    secondAway = changeIntoBye(targetSum - matches[i]["team1"], teams.length);
+                    firstMatch = createMatch(matches[i]["team2"], targetSum, teams.length,
+                                             matchIDCounter, byes);
+                    secondMatch = createMatch(matches[i]["team1"], targetSum, teams.length,
+                                              matchIDCounter, byes);
                 } else {
-                    firstHome = changeIntoBye(matches[i]["team1"], teams.length);
-                    firstAway = changeIntoBye(targetSum - matches[i]["team1"], teams.length);
-                    secondHome = changeIntoBye(matches[i]["team2"], teams.length);
-                    secondAway = changeIntoBye(targetSum - matches[i]["team2"], teams.length);
+                    firstMatch = createMatch(matches[i]["team1"], targetSum, teams.length,
+                                             matchIDCounter, byes);
+                    secondMatch = createMatch(matches[i]["team2"], targetSum, teams.length,
+                                              matchIDCounter, byes);
                 }
-                console.log("HERE", firstHome, firstAway);
-                curRoundMatches.push(
-                    {id: matchIDCounter++, winner: null, team1: firstHome, team2: firstAway});
-                curRoundMatches.push(
-                    {id: matchIDCounter++, winner: null, team1: secondHome, team2: secondAway});
+                curRoundMatches.push(firstMatch);
+                curRoundMatches.push(secondMatch);
             }
             matches = curRoundMatches;
-            console.log("Round", round, curRoundMatches)
+            // console.log("Round", round, curRoundMatches)
         }
-        return matches;
+        return [matches, byes];
     }
 
+    function createPlaceholderRound(numTeams, ) {
+
+    }
+
+    // 1. Figure out meta info (num rounds, num byes, etc)
+    // 2. Create the first round with initialSeeding algo
+    // 3. Remove any byes matches from that list, put the bye teams in nextRoundMatches
+    // 4. Repeat step 2, but output null matches instead of actual teams
+    // 5. At some point, assign match IDs properly to keep track of which matches feed into others
     function newConstructBracket() {
         let totalRounds = getNumOfRounds(teams.length);
         let numByes = Math.pow(2, totalRounds) - teams.length;
@@ -181,7 +207,6 @@ export default function SetupScreen({setTitle, title}) {
         if (teams.length === 0) {
             bracket = {roundNum: 0, matches: [], nextRound: null}
         } else if (teams.length === 1) { // 1 team => one round with one (incomplete) match
-            // TODO: figure out what winner should be in this case
             bracket = {
                 roundNum: 0, matches: [{
                     id: 1, winner: null, team1: teams[0],
@@ -193,24 +218,40 @@ export default function SetupScreen({setTitle, title}) {
             //roundNum = 0 indexed, first round = 0
             let matchIDCounter = 0;
             // Teams in round: array containing Team objects
-            function buildRoundRecursive(teamsInRound, curRoundIdx) {
-                let curMatches =
-                    seedTeams(matchIDCounter, totalRounds - curRoundIdx);
-                //Create placeholders for next round
+            function buildRoundRecursive(teamsInCurRound, curRoundIdx) {
+                let seedTeamsResult = initialSeeding(matchIDCounter, totalRounds - curRoundIdx)
+                let curMatches = seedTeamsResult[0];
+                console.log("Current round matches: ", curMatches)
+                // Create next round placeholders based on this round's teams (handles byes)
                 let nextRoundTeams = [];
-                for (let i = 0; i < (teamsInRound.length) / 2; i++) {
-                    nextRoundTeams.push(null);
-                }
+                let curMatchesNoNull = [];
+                // Create placeholders for next round. Also, remove byes from this round, add
+                //  them to next round
+                // TODO: assign match IDs properly
+                curMatches.forEach(function (match) {
+                    let team1Seed = match["team1"];
+                    let team2Seed = match["team2"];
+                    if (team1Seed === null) {
+                        nextRoundTeams.push(team2Seed)
+                    }
+                    else if (team2Seed === null) {
+                        nextRoundTeams.push(team1Seed)
+                    }
+                    else {
+                        nextRoundTeams.push(null);
+                        curMatchesNoNull.push(match);
+                    }
+                })
+                console.log("Next round teams: ", nextRoundTeams)
                 // Recurse if this isn't the finals
                 let nextRound;
                 if (curMatches.length > 1) {
                     nextRound = buildRoundRecursive(nextRoundTeams, curRoundIdx + 1);
                 }
-                return {roundNum: curRoundIdx, matches: curMatches, nextRound: nextRound}
+                return {roundNum: curRoundIdx, matches: curMatchesNoNull, nextRound: nextRound}
             }
             bracket = buildRoundRecursive(teams, 0);
         }
-
         return bracket;
     }
 
@@ -308,7 +349,7 @@ export default function SetupScreen({setTitle, title}) {
         <div className={"setup-cont"}>
             <div className={"setup-left"}>
                 <button onClick={() => {
-                    console.log(newConstructBracket())
+                    console.log("BRACKET:", newConstructBracket())
                 }}>Testing button
                 </button>
                 <h1 className={"setup-title"}>Create Bracket</h1>

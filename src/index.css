@@ -559,7 +559,7 @@ code {
 
 .team-seed {
     float: left;
-    margin-left: 0;
+    margin-left: 10px;
 }
 
 .team-name {
@@ -580,55 +580,6 @@ code {
     border-top: 1px solid var(--text);
 }
 
-/*.match {*/
-/*  margin: 0 0 100px 0;*/
-/*  height: 100px;*/
-/*  width: 180px;*/
-/*  border: 2px solid var(--text);*/
-/*  border-left: none;*/
-/*  flex-shrink: 0;*/
-/*  flex-grow: 0;*/
-/*  display: flex;*/
-/*  flex-flow: column;*/
-/*}*/
-
-/*.match-top, .match-bottom {*/
-/*  display: flex;*/
-/*  flex-flow: row;*/
-/*  width: 100%;*/
-/*  !*border: 2px solid blue;*!*/
-/*}*/
-
-/*.match-top {*/
-/*  position: relative;*/
-/*  top: -22px;*/
-/*  !*border: 2px solid blue;*!*/
-/*}*/
-
-/*.match-bottom {*/
-/*  position: relative;*/
-/*  top: 60px;*/
-/*  !*bottom: 2px;*!*/
-/*}*/
-
-/*.match-seed {*/
-/*  width: 30px;*/
-/*  position: relative;*/
-/*  left: 5px;*/
-/*  font-weight: bold;*/
-/*  !*border: 2px solid green;*!*/
-/*}*/
-
-/*.match-team {*/
-/*  margin-left: 5px;*/
-/*  !*border: 2px solid yellow;*!*/
-/*}*/
-
-/*.match-score {*/
-/*  position: absolute;*/
-/*  right: 5px;*/
-/*  !*border: 2px solid red;*!*/
-/*}*/
 
 
 
