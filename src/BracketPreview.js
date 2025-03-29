@@ -22,7 +22,6 @@ export default function BracketPreview({bracket}) {
     let idealNumOfMatches = numRounds;
 
     function renderRound(roundData) {
-        // console.log("Rendering round", roundData)
         if (roundData == null || roundData.matches.length === 0) {
             return null;
         } else {
@@ -31,7 +30,11 @@ export default function BracketPreview({bracket}) {
             let roundNum = roundData.roundNum;
             // 2^(number of teams in this round)
             let idealNumOfMatches = (Math.pow(2, numRounds - roundNum) / 2);
-            let dummyArray = Array(idealNumOfMatches - roundData.matches.length).fill(0);
+            let dummyArray = [];
+            // Fill it with unique numbers to give each HiddenMatchup a unique key
+            for (let i = 0; i < idealNumOfMatches - roundData.matches.length; i++) {
+                dummyArray.push(i);
+            }
             // TODO: generate matches to make up for this discrepancy but just hide them in CSS
             return (
                 <>
@@ -41,7 +44,7 @@ export default function BracketPreview({bracket}) {
                             <Matchup key={index} team1={match.team1}
                                      team2={match.team2} className={roundNum}></Matchup>))}
                         {/* Generate dummy matches for proper spacing*/}
-                        {dummyArray.map(() => (<HiddenMatchup/>))}
+                        {dummyArray.map((index) => (<HiddenMatchup key={index}/>))}
                     </div>
                     {renderRound(roundData.nextRound, roundNum + 1)}
                 </>
