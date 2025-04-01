@@ -1,9 +1,15 @@
-TODO:
-- Problem: when rendering the round after a bye round, the order of teams may need to be shuffled around. For example, in the case of 13 teams, the second round should go: {team 1, null}, {null, null}, {team 3, null}, {team 2, null}. Not sure if I should do this in React or CSS. 
-  - I think this might get pretty complicated.
-  - Easiest way might be to add dummy matches to always make the bracket an even power of 2, then keep track of which matches are dummies and need to be hidden.
-    - This way, I can pre-define heights and positions for each match
-    - Not super scalable, will have to cap it at 64
-- figure out how to space each round of the bracket—each round should have a fixed height, and the matchups need to be sized/spaced according to how many there are
-- Have the bracket have a re-seed option: after each round, the top seed will play the lowest, etc. By default this will be off
+Features to add:
 - Make a group stage feature
+
+Bracket creating algorithm (4+ teams):
+1. Seed teams in the correct order, creating Match objects as we go
+2. Sort matches so that lower team is always home
+3. Convert each Int inside the Match to a Team
+4. Assign match IDs to these initial matches
+5. Post-process the initial matches: handle byes here
+6. Create placeholders for next round's matches, advancing any bye matches
+7. Repeat steps 1-6 for the next round if necessary 
+
+TODO:
+- Change 'id' in the Team object to 'seed'
+- 
