@@ -21,7 +21,8 @@ export default function SetupScreen({setTitle, title}) {
         constructBracket();
     }, [teams]);
 
-    // Making matchIDCounter a global variable - I think it doesn't need to be state because I actually want it to reset after re-renders
+    // Making matchIDCounter a global variable - I think it doesn't need to be state because I
+    // actually want it to reset after re-renders
     let matchIDCounter = 0;
 
     // ~~~~ Modifying State Functions ~~~~
@@ -141,69 +142,82 @@ export default function SetupScreen({setTitle, title}) {
     }
 
     // Convert each match from a list of two Ints to a list of two Teams (id, name, votes)
-    // Assumes home team will never be null
     // Finds the Team objects from teams variable and chooses the one with the corresponding ID
+    // If a team is null, that means it's either a bye or this is a placeholder match: either way,
+    // no need to make a change
     function convertToTeamObject(matchesList) {
         return matchesList.map((match) => {
             // Before processing, match.team1 and match.team2 are just Ints
             // Match IDs from seeding algo are 1-indexed, have to adjust
-            let homeTeam = teams.filter(team => team.id + 1 === match.team1)[0];
+            let homeTeam = match.team1;
+            if (homeTeam !== null) {
+                homeTeam = teams.filter(team => team.id + 1 === match.team1)[0];
+            }
             let awayTeam = match.team2;
             if (awayTeam !== null) {
                 awayTeam = teams.filter(team => team.id + 1 === awayTeam)[0];
             }
-            return {id: match.id, winner: match.winner, team1: homeTeam, team2: awayTeam};
+            return {id: match.id, winner: null, team1: homeTeam, team2: awayTeam};
         })
     }
 
-    // Creates a match in the first round: may generate byes
-    // If placeholder flag, create a placeholder match with null teams instead of an actual match
-    function createMatch(homeSeed, targetSum, totalTeams, byes) {
-        // Home seed will never be null
-        let awaySeed = targetSum - homeSeed;
-        if (awaySeed > totalTeams) { //this match is a bye, should be moved to next round of tourney
+    // Total teams = number of non-placeholder teams in this round
+    function createMatch2(homeSeed, awaySeed, totalTeams, byes) {
+        if (awaySeed > totalTeams) {
             byes.push(homeSeed);
             awaySeed = null;
         }
-        // console.log("Home team: ", homeTeam, 'Away team: ', awayTeam)
-        return {id: null, winner: null, team1: homeSeed, team2: awaySeed};
+        if (homeSeed > totalTeams) {
+            byes.push(awaySeed);
+            homeSeed = null;
+        }
+        return {id: null, winner: null, team1: homeSeed, team2: awaySeed}
+    }
+
+    function makeLowerOnTop(matchesArray) {
+        let temp = [];
+        for (let i = 0; i < matchesArray.length; i++) {
+            let match = matchesArray[i]
+            if (match.team1 < match.team2) {
+                temp.push(match)
+            } else {
+                temp.push({...match, team1: match.team2, team2: match.team1})
+            }
+        }
+        return temp;
     }
 
     // Given the desired number of rounds, returns the properly seeded first round
     //  with 2^numRounds teams in it
     // Time complexity: O(m*(m/2))
     function seedTeams(numRounds, roundID, numNonPlaceholderTeams, byeTeams) {
-        // console.log(`Seeding teams: ${numRounds} rounds, ${numNonPlaceholderTeams} non-placeholder teams, bye teams: ${byeTeams}`)
-        // If this variable gets outputted unchanged, something is wack
+        console.log(
+            `Seeding teams: ${numRounds} rounds, ${numNonPlaceholderTeams} non-placeholder teams, bye teams: ${byeTeams}`)
+        // The bracket tree gets built off the root [1,2]
         let matches = [{team1: 1, team2: 2}];
         let byes = [];
         for (let round = 1; round < numRounds; round++) {
             let curRoundMatches = [];
             let targetSum = Math.pow(2, round + 1) + 1;
+            // Whether to add the two feeder matches from this iteration to the right or to the left.
+            // Made this a number instead of boolean in case I want to change it to every 4 rather than two
+            let pushToRight = 0;
             // For each match in this round, create the two matches in the previous round that feed
             // into it
             for (let i = 0; i < matches.length; i++) {
-                let firstMatch;
-                let secondMatch;
-                // Flip the order of adding halfway through (so top half of bracket mirrors bottom)
-                if (i >= matches.length / 2) {
-                    // Add 1 to away seed since team IDs are 0-indexed, seeds at 1-indexed
-                    firstMatch =
-                        createMatch(matches[i].team2, targetSum, numNonPlaceholderTeams, byes);
-                    secondMatch =
-                        createMatch(matches[i].team1, targetSum, numNonPlaceholderTeams, byes);
-                } else {
-                    firstMatch =
-                        createMatch(matches[i].team1, targetSum, numNonPlaceholderTeams, byes);
-                    secondMatch =
-                        createMatch(matches[i].team2, targetSum, numNonPlaceholderTeams, byes);
-                }
-                curRoundMatches.push(firstMatch);
-                curRoundMatches.push(secondMatch);
+                let firstMatch = createMatch2(matches[i].team1, targetSum - matches[i].team1,
+                                              numNonPlaceholderTeams, byeTeams);
+                let secondMatch = createMatch2(targetSum - matches[i].team2, matches[i].team2,
+                                               numNonPlaceholderTeams, byeTeams)
+                curRoundMatches.push(firstMatch, secondMatch)
+                pushToRight = !pushToRight;
             }
             matches = curRoundMatches;
+            console.log(`Matches in round ${round}: `, curRoundMatches)
         }
         // Right now, each Team in a Match is just an Int. This converts them to actual Team objects
+        // Go through every match and put the lower seed on top, for aesthetic purposes
+        matches = makeLowerOnTop(matches)
         let newMatches = convertToTeamObject(matches)
         return [newMatches, byes];
     }
@@ -247,74 +261,46 @@ export default function SetupScreen({setTitle, title}) {
             //roundNum = 0 indexed, first round = 0
             // Teams in round: array containing Team objects
             function buildRoundRecursive(teamsInCurRound, curRoundIdx, byeTeamsFromLastRound) {
-                console.log(`BUILDING ROUND ${curRoundIdx} with teams `, teamsInCurRound)
+                console.log(`BUILDING ROUND ${curRoundIdx} with teams `, teamsInCurRound, "Bye teams from last round", byeTeamsFromLastRound)
                 //Number of non-placeholder teams = number of bye teams.
                 //  Unless it's the first round, where it = number of teams in current round
-                let numNonPlaceholderTeamsInRound = byeTeamsFromLastRound.length
+                let numNonPlaceholderTeamsInRound = byeTeamsFromLastRound.length;
                 if (curRoundIdx === 0) {
-                    numNonPlaceholderTeamsInRound = teamsInCurRound.length
+                    numNonPlaceholderTeamsInRound = teamsInCurRound.length;
                 }
                 let seedTeamsResult = seedTeams(totalRounds - curRoundIdx,
                                                 curRoundIdx, numNonPlaceholderTeamsInRound,
                                                 byeTeamsFromLastRound)
-                let curMatches = seedTeamsResult[0];
+                // Matches initial will always be a power of 2
+                let initialMatches = seedTeamsResult[0];
                 // Assign match IDs sequentially
                 // TODO: This works, but now we need to assign nextMatchIDs
-                seedTeamsResult[0].map((match) => {
+                initialMatches.map((match) => {
                     match.id = matchIDCounter++;
                     return match;
                 })
-                console.log("Matches initial ", curMatches, byeTeamsFromLastRound)
-                // Create next round placeholders based on this round's teams (handles byes)
-                let nextRoundTeams = [];
-                // By "bye match", I mean a match in the first round that should really be in the
-                //  second round. E.g. 1vsNull should be moved to round 2, not included in round 1
-                //  Won't have to worry about this if we're past round 1
-                // TODO: only handle this in round 1
-                let curNonByeMatches = [];
-                // Create placeholders for next round. Also, remove byes from this round, add
-                //  them to next round
-                curMatches.forEach(function (match) {
-                    // A bye team is one that is playing a null team in its current match.
-                    // If there are any bye teams from last round, this is round 2, and so next
-                    // round's teams must be all null (no team can get two bye rounds)
-                    // TODO: put this code in a separate function
-                    let team1 = match.team1;
-                    let team2 = match.team2;
-                    if (curRoundIdx === 0) { //advance bye teams to next round iff this is round 1
-                        if (team1 === null) {
-                            nextRoundTeams.push(team2)
-                        } else if (team2 === null) {
-                            nextRoundTeams.push(team1)
-                        } else {
-                            nextRoundTeams.push(null);
-                            curNonByeMatches.push(match);
-                        }
-                    } else { //Just add one placeholder team per match
-                        nextRoundTeams.push(null);
-                        // Iff we're in round 2, push the match as is if it's a bye match.
-                        //  Otherwise, push a placeholder
-                        if (curRoundIdx === 1) {
-                            // Adjust by 1 since seeds are 1-indexed, IDs are 0-indexed
-                            if (byeTeamsFromLastRound.includes(team1.id + 1)) {
-                                curNonByeMatches.push(match);
-                            } else {
-                                curNonByeMatches.push(convertMatchToPlaceholder(match));
-                            }
-                        } else { //Otherwise, all matches will be placeholders
-                            curNonByeMatches.push(convertMatchToPlaceholder(match));
-                        }
-                    }
-                })
-                console.log("Matches actual: ", curNonByeMatches)
-                // console.log("Next round teams: ", nextRoundTeams, byeTeamsFromLastRound)
+                // let nextMatchID = 0;
+                // for (let i = 0; i < matchesInitial.length; i++) {
+                //     matchesInitial[i].nextMatchId = matchesInitial.length + i + nextMatchID;
+                //     // Increase next ID every 2 matches
+                //     if (i % 2 === 0) {
+                //         nextMatchID++;
+                //     }
+                // }
+                // TODO: why is byeteamsfromlastround not empty??
+                console.log("Matches initial", initialMatches, "Bye teams", byeTeamsFromLastRound)
+                // Remove byes from current round, or convert matches to placeholders
+                let curMatches = processMatches(initialMatches, curRoundIdx, byeTeamsFromLastRound);
+                // Create placeholder teams for (or add bye teams to) next round
+                let nextRoundTeams = getNextRoundTeams(initialMatches, curRoundIdx);
+                console.log("Matches actual: ", curMatches)
+                console.log("Next round teams: ", nextRoundTeams, seedTeamsResult[1])
                 // Recurse if this isn't the finals
                 let nextRound;
-                if (curMatches.length > 1) {
-                    nextRound =
-                        buildRoundRecursive(nextRoundTeams, curRoundIdx + 1, seedTeamsResult[1]);
+                if (initialMatches.length > 1) {
+                    nextRound = buildRoundRecursive(nextRoundTeams, curRoundIdx + 1, seedTeamsResult[1]);
                 }
-                return {roundNum: curRoundIdx, matches: curNonByeMatches, nextRound: nextRound}
+                return {roundNum: curRoundIdx, matches: curMatches, nextRound: nextRound}
             }
 
             bracket = buildRoundRecursive(teams, 0, []);
@@ -322,9 +308,80 @@ export default function SetupScreen({setTitle, title}) {
         return bracket;
     }
 
+    // nextRoundTeams logic:
+    //  Round 1: Teams with byes get placed into nextRoundTeams - in order
+    //  Round 2-n: nextRoundTeams is an array of nulls, of length (num teams in round / 2)
+    function getNextRoundTeams(matches, roundIdx) {
+        let nextRoundTeams = [];
+        if (roundIdx === 0) {
+            for (let i = 0; i < matches.length; i++) {
+                let team1 = matches[i].team1;
+                let team2 = matches[i].team2;
+                // If one of the teams in this match is null, it's a bye match, so advance the other one
+                if (team1 === null) {
+                    nextRoundTeams.push(team2)
+                } else if (team2 === null) {
+                    nextRoundTeams.push(team1)
+                } else { //Otherwise, push one team per match
+                    nextRoundTeams.push(null);
+                }
+            }
+        } else {
+            for (let i = 0; i < matches.length / 2; i++) {
+                nextRoundTeams.push(null);
+            }
+        }
+        return nextRoundTeams;
+    }
+
+    function roundUpToNearestPowerOfTwo(number) {
+        return Math.pow(2, Math.ceil(Math.log2(number)));
+    }
+
+    // Takes in the initial matches and processes them, returning the actual current-round matches
+    // curMatches logic:
+    //  Round 1: Remove any matches with teams who get byes, keep the rest as is
+    //  Round 2: Turn each match into a placeholder, unless it's a bye match - keep those as is
+    //  Round 3-n: Turn each match into a placeholder
+    function processMatches(matches, roundIdx, byeTeamsFromLastRound) {
+        let curMatches = [];
+        for (let i = 0; i < matches.length; i++) {
+            let match = matches[i];
+            let team1 = match.team1;
+            let team2 = match.team2;
+            if (roundIdx === 0) { //Round 1
+                if (team1 === null) {
+                    continue
+                } else if (team2 === null) {
+                    continue
+                } else {
+                    curMatches.push(match);
+                }
+            } else if (roundIdx === 1) { //Round 2
+                // Adjust by 1 since seeds are 1-indexed, IDs are 0-indexed
+                if (team1 !== null && byeTeamsFromLastRound.includes(team1.id + 1)) {
+                    curMatches.push(match);
+                } else {
+                    curMatches.push(convertMatchToPlaceholder(match));
+                }
+            } else {
+                curMatches.push(convertMatchToPlaceholder(match))
+            }
+        }
+        return curMatches;
+    }
+
     function convertMatchToPlaceholder(match) {
         return {id: match.id, winner: match.winner, team1: null, team2: null}
     }
+
+
+
+
+
+
+
+
 
     function constructBracket() {
         let totalRounds = getNumOfRounds(teams.length);
