@@ -145,23 +145,23 @@ export default function SetupScreen({setTitle, title}) {
     const oneTeamBracket = {
         roundNum: 0, matches: [{
             id: 0, winner: null, team1: teams[0],
-            team2: null, nextMatchId: null
+            team2: null, nextMatchID: null
         }], nextRound: null
     };
     const twoTeamBracket = {
         roundNum: 0, matches: [{
             id: 0, winner: null, team1: teams[0],
-            team2: teams[1], nextMatchId: null
+            team2: teams[1], nextMatchID: null
         }], nextRound: null
     };
     const threeTeamBracket = {
         roundNum: 0, matches: [{
             id: 0, winner: null, team1: teams[1],
-            team2: teams[2], nextMatchId: 1
+            team2: teams[2], nextMatchID: 1
         }],
         nextRound: {
             roundNum: 1, matches: [{
-                id: 1, winner: null, team1: teams[0], team2: null, nextMatchId: null
+                id: 1, winner: null, team1: teams[0], team2: null, nextMatchID: null
             }], nextRound: null
         }
     };
@@ -200,21 +200,13 @@ export default function SetupScreen({setTitle, title}) {
                 let initialMatches = seedTeamsResult[0];
                 let curByeTeams = seedTeamsResult[1];
                 initialMatches = newAssignMatchIDs(initialMatches);
-                // let nextMatchID = 0;
-                // for (let i = 0; i < matchesInitial.length; i++) {
-                //     matchesInitial[i].nextMatchId = matchesInitial.length + i + nextMatchID;
-                //     // Increase next ID every 2 matches
-                //     if (i % 2 === 0) {
-                //         nextMatchID++;
-                //     }
-                // }
-                console.log("Matches initial", initialMatches, "Bye teams", curByeTeams)
+                // console.log("Matches initial", initialMatches, "Bye teams", curByeTeams)
                 // Remove byes from current round, or convert matches to placeholders
                 let curMatches = processMatches(initialMatches, curRoundIdx, lastRoundByeTeams);
                 // Create placeholder teams for (or add bye teams to) next round
                 let nextRoundTeams = getNextRoundTeams(initialMatches, curRoundIdx);
-                console.log("Matches actual: ", curMatches)
-                console.log("Next round teams: ", nextRoundTeams, "Bye teams", curByeTeams)
+                // console.log("Matches actual: ", curMatches)
+                // console.log("Next round teams: ", nextRoundTeams, "Bye teams", curByeTeams)
                 // Recurse if this isn't the finals
                 let nextRound;
                 if (initialMatches.length > 1) {
@@ -253,13 +245,8 @@ export default function SetupScreen({setTitle, title}) {
         }
         // Byes created = byes - lastRoundByeTeams
         let byesCreated = byes.filter(x => !lastRoundByeTeams.includes(x));
-        // console.log("Last round's bye teams:", lastRoundByeTeams, "This round's bye teams:",
-        // byesCreated) console.log("Matches pre-processing:", matches) Right now, each Team in a
-        // Match is just an Int. This converts them to actual Team objects Go through every match
-        // and put the lower seed on top, for aesthetic purposes
-        matches = makeLowerOnTop(matches)
-        // console.log("Matches post-processing:", matches)
-        matches = convertToTeamObject(matches)
+        matches = makeLowerOnTop(matches);
+        matches = convertToTeamObject(matches);
         return [matches, byesCreated];
     }
 
@@ -274,7 +261,7 @@ export default function SetupScreen({setTitle, title}) {
             byes.push(awaySeed);
             homeSeed = null;
         }
-        return {id: null, winner: null, team1: homeSeed, team2: awaySeed}
+        return {id: null, winner: null, team1: homeSeed, team2: awaySeed};
     }
 
     // Given an array of matches, ensure that the lower seed (higher ranked) goes first
@@ -297,7 +284,11 @@ export default function SetupScreen({setTitle, title}) {
     // If a team is null, that means it's either a bye or this is a placeholder match: either way,
     // no need to make a change
     function convertToTeamObject(matchesList) {
-        return matchesList.map((match) => {
+        // console.log("Before", matchesList)
+        // TODO: How/why tf is this method assigning IDs and nextMatchIDs? It doesn't happen when
+        //  I comment out newAssignMatchIDs()
+        // ^^ I mean it works but idk why
+        let returnVal = matchesList.map((match) => {
             // Before processing, match.team1 and match.team2 are just Ints
             // Match IDs from seeding algo are 1-indexed, have to adjust
             let homeTeam = match.team1;
@@ -310,14 +301,23 @@ export default function SetupScreen({setTitle, title}) {
             }
             return {id: match.id, winner: null, team1: homeTeam, team2: awayTeam};
         })
+        // console.log("After", returnVal)
+        return returnVal;
     }
-    // Assign match IDs sequentially
-    // TODO: This works, but now we need to assign nextMatchIDs
-    function newAssignMatchIDs(matches) {
-        return matches.map((match) => {
+
+    // Assign matches their own IDs, and the IDs of the matches they feed into
+    function newAssignMatchIDs(matchesArr) {
+        // Assign standard match IDs (simple increment)
+        let matchesWithIDs = matchesArr.map((match) => {
             match.id = matchIDCounter++;
             return match;
         });
+        // Assign next match IDs. Next match ID = ID of first match in this round + number of
+        //  matches in this round, increment every 2 matches
+        for (let i = 0; i < matchesWithIDs.length; i++) {
+            matchesWithIDs[i].nextMatchID = matchesWithIDs[0].id + matchesWithIDs.length + Math.floor(i/2);
+        }
+        return matchesWithIDs
     }
 
     // Takes in the initial matches and processes them, returning the actual current-round matches
@@ -353,7 +353,7 @@ export default function SetupScreen({setTitle, title}) {
 
     // Makes both teams null, keeps everything else the same
     function convertMatchToPlaceholder(match) {
-        return {id: match.id, winner: match.winner, team1: null, team2: null}
+        return {id: match.id, winner: match.winner, team1: null, team2: null, nextMatchID: match.nextMatchID,}
     }
 
     // nextRoundTeams logic:
@@ -383,6 +383,8 @@ export default function SetupScreen({setTitle, title}) {
         return nextRoundTeams;
     }
 
+
+
     // ~~~ OLD ALGO ~~~~
 
     function constructBracket() {
@@ -396,7 +398,7 @@ export default function SetupScreen({setTitle, title}) {
             initialBracket = {
                 roundNum: 0, matches: [{
                     id: 1, winner: null, team1: teams[0],
-                    team2: null, nextMatchId: null
+                    team2: null, nextMatchID: null
                 }],
                 nextRound: null
             };
