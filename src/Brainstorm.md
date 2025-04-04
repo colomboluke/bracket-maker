@@ -21,3 +21,4 @@ TODO:
 - Change 'id' in the Team object to 'seed'
 - Make new seeding algorithm work with rendering
 - Add choosing winner capability
+- BUG: when we have 5+ teams, and try to remove the first one, it crashes. 

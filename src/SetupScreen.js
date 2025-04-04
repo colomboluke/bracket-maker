@@ -88,59 +88,6 @@ export default function SetupScreen({setTitle, title}) {
         return Math.ceil(Math.log2(numTeams));
     }
 
-    function getMatchByIdBracket(wholeBracket, id) {
-        if (!wholeBracket) {
-            return null;
-        }
-        for (const match of wholeBracket.matches) {
-            if (match.id === id) {
-                return match;
-            }
-        }
-        return getMatchByIdBracket(wholeBracket.nextRound, id);
-    }
-
-    function getMatchByIdList(listOfMatches, id) {
-        for (const match of listOfMatches) {
-            if (match.id === id) {
-                return match;
-            }
-        }
-        return null;
-    }
-
-    function assignMatchIds(curMatchesList, nextMatchesList) {
-        // Loop through each of the nextMatches, if it has an opening, give it the id of a current
-        // match, starting with the highest current id
-        let curIdCounter = curMatchesList[curMatchesList.length - 1].id;
-        for (let i = 0; i < nextMatchesList.length; i++) {
-            if (nextMatchesList[i].team1 == null) {
-                getMatchByIdList(curMatchesList, curIdCounter).nextMatchId = nextMatchesList[i].id;
-                curIdCounter--;
-            }
-            if (nextMatchesList[i].team2 == null) {
-                getMatchByIdList(curMatchesList, curIdCounter).nextMatchId = nextMatchesList[i].id;
-                curIdCounter--;
-            }
-        }
-    }
-
-    function getNumMatchesInRound(numTeams) {
-        if (numTeams === 0 || numTeams === 1) {
-            return 0;
-        } else {
-            return Math.pow(2, getNumOfRounds(numTeams)) / 2
-        }
-    }
-
-    // Pad given array with nulls until it reaches the desired length
-    function padArray(targetLength, curLength, array) {
-        for (let i = 0; i < targetLength - curLength; i++) {
-            array.push(null);
-        }
-        return array;
-    }
-
     const emptyBracket = {roundNum: 0, matches: [], nextRound: null};
     const oneTeamBracket = {
         roundNum: 0, matches: [{
@@ -185,8 +132,8 @@ export default function SetupScreen({setTitle, title}) {
             //roundNum = 0 indexed, first round = 0
             // Teams in round: array containing Team objects
             function buildRoundRecursive(teamsInCurRound, curRoundIdx, lastRoundByeTeams) {
-                console.log(`BUILDING ROUND ${curRoundIdx} with teams `, teamsInCurRound,
-                            "Bye teams from last round", lastRoundByeTeams)
+                // console.log(`BUILDING ROUND ${curRoundIdx} with teams `, teamsInCurRound,
+                //             "Bye teams from last round", lastRoundByeTeams)
                 //Number of non-placeholder teams = number of bye teams.
                 //  Unless it's the first round, where it = number of teams in current round
                 let numNonPlaceholderTeams = lastRoundByeTeams.length;
@@ -214,6 +161,7 @@ export default function SetupScreen({setTitle, title}) {
             bracket = buildRoundRecursive(teams, 0, []);
         }
         setBracket(bracket);
+        console.log("BRACKET", bracket)
         return bracket;
     }
 
@@ -329,6 +277,9 @@ export default function SetupScreen({setTitle, title}) {
             if (roundIdx === 0) { //Round 1: remove matches with null values, these are byes
                 if (team1 !== null && team2 !== null) {
                     curMatches.push(match);
+                } else {
+                    // Bye matches are kept as placeholders, for ease of rendering
+                    curMatches.push(convertMatchToPlaceholder(match));
                 }
             } else if (roundIdx === 1) { //Round 2
                 // Find which teams were bye teams from last round (adjust by 1 for indexing)
