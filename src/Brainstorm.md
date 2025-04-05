@@ -22,3 +22,4 @@ TODO:
 - Make new seeding algorithm work with rendering
 - Add choosing winner capability
 - BUG: when we have 5+ teams, and try to remove the first one, it crashes. 
+- Make a zoom in/out button in the bottom right of BracketPreview

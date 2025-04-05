@@ -511,15 +511,6 @@ code {
     top: 10%;
 }
 
-.round-0 {
-    /*justify-content: flex-start;*/
-}
-
-.round-1 {
-    /*height: fit-content;*/
-    /*justify-content: flex-end;*/
-}
-
 .tournament {
     display: flex;
     flex-direction: row;
@@ -533,25 +524,25 @@ code {
     /*border: 1px solid gold;*/
 }
 
-.hidden {
-    border: none;
+.top {
+
 }
 
 /*Controls the vertical distance between games*/
-.round .spacer {
+.spacer {
+    height: 10px; /* Initial height */
+    flex-grow: .4;
+}
+
+/*Controls the vertical space before the first game and after the last game*/
+.spacer:first-child, .spacer:last-child {
     flex-grow: .5;
 }
 
-/*Controls the vertical distance before the first game and after the last game*/
-.round .spacer:first-child, .round .spacer:last-child {
-    flex-grow: .75;
-}
-
 /*Controls the vertical distance within games*/
-.round .game-spacer {
-    flex-grow: 2.5;
+.game-spacer {
+    flex-grow: 2.0;
 }
-
 
 .game-top {
     border-bottom: 1px solid var(--text);

@@ -102,10 +102,9 @@ export default function SetupScreen({setTitle, title}) {
         }], nextRound: null
     };
     const threeTeamBracket = {
-        roundNum: 0, matches: [{
-            id: 0, winner: null, team1: teams[1],
-            team2: teams[2], nextMatchID: 1
-        }],
+        roundNum: 0,
+        matches: [{id: 0, winner: null, team1: null, team2: null, nextMatchID: null},
+            {id: 1, winner: null, team1: teams[1], team2: teams[2], nextMatchID: 1}],
         nextRound: {
             roundNum: 1, matches: [{
                 id: 1, winner: null, team1: teams[0], team2: null, nextMatchID: null
@@ -259,7 +258,8 @@ export default function SetupScreen({setTitle, title}) {
         // Assign next match IDs. Next match ID = ID of first match in this round + number of
         //  matches in this round, increment every 2 matches
         for (let i = 0; i < matchesWithIDs.length; i++) {
-            matchesWithIDs[i].nextMatchID = matchesWithIDs[0].id + matchesWithIDs.length + Math.floor(i/2);
+            matchesWithIDs[i].nextMatchID =
+                matchesWithIDs[0].id + matchesWithIDs.length + Math.floor(i / 2);
         }
         return matchesWithIDs
     }
@@ -299,7 +299,13 @@ export default function SetupScreen({setTitle, title}) {
 
     // Makes both teams null, keeps everything else the same
     function convertMatchToPlaceholder(match) {
-        return {id: match.id, winner: match.winner, team1: null, team2: null, nextMatchID: match.nextMatchID}
+        return {
+            id: match.id,
+            winner: match.winner,
+            team1: null,
+            team2: null,
+            nextMatchID: match.nextMatchID
+        }
     }
 
     // nextRoundTeams logic:
