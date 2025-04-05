@@ -11,16 +11,11 @@ import home from "./Home";
 export default function SetupScreen({setTitle, title}) {
     const [teams, setTeams] =
         useState([]);
-    // TODO: why is this here
-    let numTeams = teams.length;
     const [desc, setDesc] = useState("");
-
-    let [bracket, setBracket] = useState({roundNum: 0, matches: [], nextRound: {}});
+    const [bracket, setBracket] = useState({roundNum: 0, matches: [], nextRound: {}});
     // Update bracket whenever teams change
     useEffect(() => {
-        console.log("Updating teams", teams)
         newConstructBracket();
-        console.log("Updating bracket b/c teams changed", bracket)
     }, [teams]);
 
     // Making matchIDCounter a global variable - I think it doesn't need to be state because I
@@ -85,7 +80,6 @@ export default function SetupScreen({setTitle, title}) {
             nextTeams[i] = nextTeams[j];
             nextTeams[j] = temp;
         }
-        // TODO: Why is this not updating the state??
         setTeams(reSeed(nextTeams));
     }
 
@@ -230,17 +224,17 @@ export default function SetupScreen({setTitle, title}) {
 
     // Given an array of matches, ensure that the lower seed (higher ranked) goes first
     function makeLowerOnTop(matchesArray) {
-        let temp = [];
+        let output = [];
         for (let i = 0; i < matchesArray.length; i++) {
             let match = matchesArray[i]
             // No change needed
             if (match.team1 == null || match.team2 == null || match.team1 < match.team2) {
-                temp.push(match);
+                output.push(match);
             } else {    //swap order of teams
-                temp.push({...match, team1: match.team2, team2: match.team1})
+                output.push({...match, team1: match.team2, team2: match.team1})
             }
         }
-        return temp;
+        return output;
     }
 
     // Convert each match from a list of two Ints to a list of two Teams (id, name, votes)
@@ -250,8 +244,7 @@ export default function SetupScreen({setTitle, title}) {
     function convertToTeamObject(matchesList) {
         // console.log("Before", matchesList)
         // TODO: How/why tf is this method assigning IDs and nextMatchIDs? It doesn't happen when
-        //  I comment out newAssignMatchIDs()
-        // ^^ I mean it works but idk why
+        //  I comment out newAssignMatchIDs(). I mean it works but idk why
         let returnVal = matchesList.map((match) => {
             // Match IDs from seeding algo are 1-indexed, have to adjust
             let homeTeam = match.team1;
@@ -346,6 +339,7 @@ export default function SetupScreen({setTitle, title}) {
                     nextRoundTeams.push(null);
                 }
             }
+        //     Why does this push one term per two matches? Honestly forget why this works
         } else { //Round 2+
             for (let i = 0; i < matches.length / 2; i++) {
                 nextRoundTeams.push(null);
@@ -368,7 +362,7 @@ export default function SetupScreen({setTitle, title}) {
                         <button className={"start-btn"}>Start Bracket</button>
                     </Link>
                 </div>
-                <Settings numTeams={numTeams} changeNumTeams={changeNumTeams} title={title}
+                <Settings numTeams={teams.length} changeNumTeams={changeNumTeams} title={title}
                           setTitle={setTitle} desc={desc} setDesc={setDesc}/>
                 <h3>Participants</h3>
                 <div className={"team-add-grid"}>
