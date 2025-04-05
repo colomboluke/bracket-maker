@@ -15,10 +15,12 @@ export default function SetupScreen({setTitle, title}) {
     let numTeams = teams.length;
     const [desc, setDesc] = useState("");
 
-    let [bracket, setBracket] = useState({roundNum: 1, matches: [], nextRound: {}});
-    // Update matches whenever teams change
+    let [bracket, setBracket] = useState({roundNum: 0, matches: [], nextRound: {}});
+    // Update bracket whenever teams change
     useEffect(() => {
+        console.log("Updating teams", teams)
         newConstructBracket();
+        console.log("Updating bracket b/c teams changed", bracket)
     }, [teams]);
 
     // Making matchIDCounter a global variable - I think it doesn't need to be state because I
@@ -27,6 +29,7 @@ export default function SetupScreen({setTitle, title}) {
 
     // ~~~~ Modifying State Functions ~~~~
 
+    // Give a team a new name
     function updateTeam(index, newName) {
         setTeams(prevTeams => {
             const updatedTeams = [...prevTeams];
@@ -35,11 +38,20 @@ export default function SetupScreen({setTitle, title}) {
         });
     }
 
+    // Create a new team, with a seed one higher than the current highest and a default name
     function createTeam() {
-        let name = "Team " + (teams.length + 1)
-        setTeams([...teams, {id: teams.length, name: name, votes: 0}]);
+        let newName = "Team " + (teams.length + 1);
+        let lastTeam = teams.length > 0 ? teams.slice(-1)[0] : null;
+        if (lastTeam) {
+            // If the new name-to-be already exists, add 1 to it
+            if (lastTeam.name === newName) {
+                newName = "Team " + (parseInt(lastTeam.name.slice(-1)) + 1);
+            }
+        }
+        setTeams([...teams, {id: teams.length, name: newName, votes: 0}]);
     }
 
+    // Given a target number of teams, add or remove teams to meet that target
     function changeNumTeams(targetNum) {
         if (targetNum === teams.length) {
             return;
@@ -49,7 +61,7 @@ export default function SetupScreen({setTitle, title}) {
                 createTeam();
             }
         }
-        if (targetNum < teams.length) { //Take away teams
+        if (targetNum < teams.length) { //Remove teams
             for (let i = targetNum; i < teams.length; i++) {
                 let lastID = teams.slice(-1)[0].id;
                 removeTeam(lastID);
@@ -57,12 +69,14 @@ export default function SetupScreen({setTitle, title}) {
         }
     }
 
+    // Remove a team
     function removeTeam(index) {
         let nextTeams = [...teams];
         nextTeams = [...nextTeams.slice(0, index), ...nextTeams.slice(index + 1)];
-        setTeams(nextTeams);
+        setTeams(reSeed(nextTeams));
     }
 
+    // Randomize the order of the existing teams
     function shuffleTeams() {
         let nextTeams = [...teams];
         for (let i = nextTeams.length - 1; i > 0; i--) {
@@ -71,10 +85,20 @@ export default function SetupScreen({setTitle, title}) {
             nextTeams[i] = nextTeams[j];
             nextTeams[j] = temp;
         }
-        setTeams(nextTeams);
+        // TODO: Why is this not updating the state??
+        setTeams(reSeed(nextTeams));
     }
 
-    // ~~~~ Bracket Functions ~~~~
+    // Re-distribute the seeds of all existing teams
+    // Seeds will always go from 0-n (n = num teams), with no gaps
+    function reSeed(teamsList) {
+        for (let i = 0; i < teamsList.length; i++) {
+            teamsList[i].id = i;
+        }
+        return teamsList;
+    }
+
+    // ~~~~ Creating Bracket Functions ~~~~
 
     // Determine how many rounds there are, based on the number of teams
     function getNumOfRounds(numTeams) {
@@ -129,26 +153,24 @@ export default function SetupScreen({setTitle, title}) {
             bracket = threeTeamBracket;
         } else {  // MAIN CASE: 4+ teams
             //roundNum = 0 indexed, first round = 0
+            bracket = buildRoundRecursive(teams, 0, []);
             // Teams in round: array containing Team objects
             function buildRoundRecursive(teamsInCurRound, curRoundIdx, lastRoundByeTeams) {
                 // console.log(`BUILDING ROUND ${curRoundIdx} with teams `, teamsInCurRound,
                 //             "Bye teams from last round", lastRoundByeTeams)
-                //Number of non-placeholder teams = number of bye teams.
-                //  Unless it's the first round, where it = number of teams in current round
+                //Number of non-placeholder teams = number of bye teams, unless it's the first
+                // round, where it = number of teams in current round
                 let numNonPlaceholderTeams = lastRoundByeTeams.length;
                 if (curRoundIdx === 0) {
                     numNonPlaceholderTeams = teamsInCurRound.length;
                 }
                 let seedTeamsResult = seedTeams(totalRounds - curRoundIdx, curRoundIdx,
-                                                numNonPlaceholderTeams, lastRoundByeTeams)
+                                                numNonPlaceholderTeams, lastRoundByeTeams);
                 let initialMatches = seedTeamsResult[0];
                 let curByeTeams = seedTeamsResult[1];
                 initialMatches = newAssignMatchIDs(initialMatches);
-                // console.log("Matches initial", initialMatches, "Bye teams", curByeTeams)
                 let curMatches = processMatches(initialMatches, curRoundIdx, lastRoundByeTeams);
                 let nextRoundTeams = getNextRoundTeams(initialMatches, curRoundIdx);
-                // console.log("Matches actual: ", curMatches)
-                // console.log("Next round teams: ", nextRoundTeams, "Bye teams", curByeTeams)
                 // Recurse if this isn't the finals
                 let nextRound;
                 if (initialMatches.length > 1) {
@@ -156,11 +178,8 @@ export default function SetupScreen({setTitle, title}) {
                 }
                 return {roundNum: curRoundIdx, matches: curMatches, nextRound: nextRound}
             }
-
-            bracket = buildRoundRecursive(teams, 0, []);
         }
         setBracket(bracket);
-        console.log("BRACKET", bracket)
         return bracket;
     }
 
@@ -170,7 +189,8 @@ export default function SetupScreen({setTitle, title}) {
     function seedTeams(numRounds, roundID, numNonPlaceholderTeams, lastRoundByeTeams) {
         // console.log(
         //     `Seeding teams: ${numRounds} rounds, ${numNonPlaceholderTeams} non-placeholder
-        // teams`) The bracket tree gets built off the root [1,2]
+        // teams`)
+        // The bracket tree gets built off the root [1,2]
         let matches = [{team1: 1, team2: 2}];
         let byes = [];
         for (let round = 1; round < numRounds; round++) {
@@ -338,7 +358,7 @@ export default function SetupScreen({setTitle, title}) {
         <div className={"setup-cont"}>
             <div className={"setup-left"}>
                 <button onClick={() => {
-                    console.log("BRACKET:", newConstructBracket())
+                    console.log("BRACKET:", bracket)
                 }}>Testing button
                 </button>
                 <h1 className={"setup-title"}>Create Bracket</h1>

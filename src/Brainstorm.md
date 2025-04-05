@@ -18,8 +18,8 @@ Bracket creating algorithm (4+ teams):
    8. We recurse until we are left with 1 match.
 
 TODO:
-- Change 'id' in the Team object to 'seed'
-- Make new seeding algorithm work with rendering
 - Add choosing winner capability
-- BUG: when we have 5+ teams, and try to remove the first one, it crashes. 
 - Make a zoom in/out button in the bottom right of BracketPreview
+
+Considering:
+- Change 'id' in the Team object to 'seed'

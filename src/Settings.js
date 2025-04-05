@@ -19,9 +19,6 @@ export default function Settings({numTeams, changeNumTeams, title, setTitle, des
                            handleNumTeamChange(e.target.valueAsNumber);
                        }}/>
             </div>
-            {/*<div className={"settings-item"}>*/}
-            {/*    <h4>Enhanced mode </h4>*/}
-            {/*</div>*/}
             <div className={"settings-item"}>
                 <h4>Bracket Name</h4>
                 <input value={title} className={"settings-input title-input"}

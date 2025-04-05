@@ -1,9 +1,8 @@
 import Matchup from "./Matchup";
-import HiddenMatchup from "./HiddenMatchup";
 
 /**
  * Takes in the data from one round and renders it, then recursively renders the next round.
- * The right side of the set up screen, giving a preview of what the bracket will look like.
+ * The right side of the setup screen, giving a preview of what the bracket will look like.
  * @param roundData
  * @returns {JSX.Element|null}
  */
