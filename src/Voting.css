@@ -1,0 +1,47 @@
+.voting-screen {
+    border: 2px solid green;
+    width: 800px;
+    margin: auto;
+}
+
+.match-title {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.voting-grid {
+    width: 40%;
+    margin: auto;
+    display: flex;
+    flex-flow: column;
+    row-gap: 15px;
+    /*border: 1px solid white;*/
+}
+
+.user-row {
+    /*border: 1px solid red;*/
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 10px;
+}
+
+.buttons {
+    /*display: flex;*/
+    /*flex-flow: row;*/
+    /*justify-content: center;*/
+    /*border: 2px solid red;*/
+}
+
+.choice-btn {
+    /*border: none;*/
+}
+
+.selected {
+    background-color: #4d6ef3;
+}
+

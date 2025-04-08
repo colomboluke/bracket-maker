@@ -20,6 +20,7 @@ Bracket creating algorithm (4+ teams):
 TODO:
 - Add choosing winner capability
 - Make a zoom in/out button in the bottom right of BracketPreview
+- Ideas page
 
 Considering:
 - Change 'id' in the Team object to 'seed'

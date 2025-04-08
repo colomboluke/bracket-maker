@@ -4,9 +4,7 @@ import Team from "./Team";
 import {FaShuffle} from "react-icons/fa6";
 import Settings from "./Settings";
 import {Link} from "react-router-dom";
-import Matchup from "./Matchup";
 import BracketPreview from "./BracketPreview";
-import home from "./Home";
 
 export default function SetupScreen({setTitle, title}) {
     const [teams, setTeams] =

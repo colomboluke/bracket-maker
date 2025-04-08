@@ -4,7 +4,7 @@ import Home from './Home';
 import Ideas from './Ideas';
 import Header from "./Header";
 import SetupScreen from "./SetupScreen";
-import PlayBracket from "./PlayBracket";
+import PlayBracketScreen from "./PlayBracketScreen";
 
 function App() {
     const [title, setTitle] = useState("");
@@ -16,7 +16,7 @@ function App() {
                         <Route path="/" element={<Home/>}/>
                         <Route path="create" element={<SetupScreen title={title} setTitle={setTitle}/>} />
                         <Route path="help" element={<Ideas />} />
-                        <Route path="play" element={<PlayBracket />} />
+                        <Route path="play" element={<PlayBracketScreen />} />
                     </Route>
                 </Routes>
         </Router>
