@@ -28,7 +28,7 @@ export default function Header({title}) {
                        rel="noreferrer">
                         <FaGithub className={"header-github"}/>
                     </a>
-                    <a href="https://lukecolombo.bio/" target={"_blank"} rel="noreferrer">
+                    <a href="https://lukecolombo.me/" target={"_blank"} rel="noreferrer">
                         <FaMousePointer className={"header-portfolio"}/>
                         {/*<FaBriefcase className={"header-portfolio"}/>*/}
                     </a>

@@ -1,47 +1,132 @@
-.voting-screen {
-    border: 2px solid green;
-    width: 800px;
+.voting-cont {
+    border: 3px solid #3ea45e;
+    width: 600px;
     margin: auto;
+    display: flex;
+    flex-flow: column nowrap;
 }
 
-.match-title {
+.title-cont {
+    border-bottom: 1px solid white;
+    margin: 0 0 10px;
+    width: 100%;
+    height: 40px;
     display: flex;
-    flex-flow: row;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+}
+
+.title {
+    font-size: 20px;
 }
 
 .voting-grid {
-    width: 40%;
-    margin: auto;
     display: flex;
     flex-flow: column;
+    width: 100%;
+    margin: 0 0 20px;
+    /*border: 2px solid pink;*/
     row-gap: 15px;
-    /*border: 1px solid white;*/
 }
 
-.user-row {
-    /*border: 1px solid red;*/
+.voter-row {
+    /*border: 1px solid black;*/
     display: flex;
     flex-flow: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
+}
+
+.voter-col {
+    width: 33%;
+    /*border: 1px solid gold;*/
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: center;
+    /*border: 1px solid gold;*/
+}
+
+.option-title-cont {
+    width: auto;
+    height: auto;
+
+}
+
+.option-title {
+    font-size: 30px;
+    font-weight: bold;
+    width: 100%;
+    overflow-wrap: break-word;
+    text-align: center;
+    margin: 0 0 10px;
+    /*border: 2px solid gold;*/
+}
+
+.option-icon {
+    border-radius: 50%;
+    height: 120px;
+    width: 120px;
+    background-color: white;
+}
+
+.vs {
+    font-size: 24px;
+}
+
+.voting-spacer {
+    height: 20px;
+}
+
+.vote-button {
+    height: 15px;
+    border-radius: 20%;
+    border: none;
+    color: black;
+    text-align: center;
+}
+
+.voter-name {
+    /*border: 2px solid white;*/
     padding-left: 10px;
-}
-
-.buttons {
-    /*display: flex;*/
-    /*flex-flow: row;*/
-    /*justify-content: center;*/
-    /*border: 2px solid red;*/
-}
-
-.choice-btn {
-    /*border: none;*/
+    padding-right: 10px;
+    font-size: 22px;
+    font-weight: bold;
 }
 
 .selected {
-    background-color: #4d6ef3;
+    display: none;
 }
+
+.voting-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 25px 0 0;
+}
+
+.next-matchup-button {
+    /*height: 30px;*/
+    border-radius: 7%;
+    border: none;
+    background-color: #32884d;
+    font-size: 18px;
+    text-align: center;
+    padding: 8px;
+    margin: 5px 5px 15px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -19,6 +19,8 @@ Bracket creating algorithm (4+ teams):
 
 TODO:
 - Add choosing winner capability
+  - Make 'next matchup' button only active when all users have voted
+  - Display
 - Make a zoom in/out button in the bottom right of BracketPreview
 - Ideas page
 
