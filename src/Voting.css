@@ -26,7 +26,7 @@
     width: 100%;
     margin: 0 0 20px;
     /*border: 2px solid pink;*/
-    row-gap: 15px;
+    row-gap: 5px;
 }
 
 .voter-row {
@@ -100,21 +100,46 @@
 
 .voting-footer {
     display: flex;
+    flex-flow: column;
     align-items: center;
     justify-content: center;
     margin: 25px 0 0;
+    row-gap: 25px;
 }
 
+.winner-text {
+    font-size: 20px;
+}
+
+/*TODO: make this look faded when inactive*/
 .next-matchup-button {
     /*height: 30px;*/
     border-radius: 7%;
     border: none;
-    background-color: #32884d;
-    font-size: 18px;
+    font-size: 16px;
+    font-weight: bold;
     text-align: center;
     padding: 8px;
     margin: 5px 5px 15px;
 }
+
+.next-matchup-button:disabled {
+    background-color: #adadad;
+    color: grey;
+}
+
+.active {
+    background-color: #32884d;
+    color: #e5e0e0;
+    box-shadow: 0 3px 3px #1d3b19;
+}
+
+.active:hover {
+    background-color: #1c803b;
+    cursor: pointer;
+}
+
+
 
 
 

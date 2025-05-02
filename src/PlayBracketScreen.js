@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
 import "./Voting.css";
 import UserRow from "./UserRow";
-import VotingGrid from "./VotingGrid";
+import VotingScreen from "./VotingScreen";
 
 export default function PlayBracketScreen() {
 
+    // Whether all participants have voted or not
     const voters = ["Luke", "Jake", "Zach", "Ivan", "Aidan"]
+    const choices = ["Into the Spiderverse", "Cars"]
 
     return (
         <>
@@ -17,11 +19,9 @@ export default function PlayBracketScreen() {
                     <span className={"title"}>SELECT VOTES</span>
                 </div>
 
-                <VotingGrid voters={voters}/>
+                <VotingScreen voters={voters} choices={choices}/>
 
-                <div className={"voting-footer"}>
-                    <button className={"next-matchup-button"}>NEXT MATCHUP</button>
-                </div>
+
             </div>
 
         </>

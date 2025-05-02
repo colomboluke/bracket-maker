@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import "./Voting.css";
 
-export default function UserRow({voterName}) {
+export default function UserRow({index, voterName, onClick}) {
     // 0: neither selected. 1: left selected. 2: right selected
     const [buttonState, setButtonState] = useState(0);
 
@@ -9,7 +9,8 @@ export default function UserRow({voterName}) {
     // 1 = left, 2 = right
     function handleClick(input) {
         // If neither is currently selected, select whichever one was clicked
-        setButtonState(input)
+        setButtonState(input);
+        onClick(index, input);
     }
 
     let leftBtnStyle = buttonState === 1 ? "selected" : "unselected";
@@ -29,7 +30,6 @@ export default function UserRow({voterName}) {
     } else if (buttonState === 2) { //right button selected
         displayArray = [leftButton, rightButton, voterNameSpan]
     }
-
 
     return (
         <div className={"voter-row"}>
