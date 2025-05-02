@@ -3,14 +3,6 @@ import UserRow from "./UserRow";
 
 export default function VotingScreen({voters, choices}) {
 
-    const gridStyle = {
-        width: '40%',
-        margin: 'auto',
-        display: 'grid',
-        gridTemplateRows: `repeat(${voters.length}, 1fr)`,
-        border: `1px solid black`
-    }
-
     // Tracks which users have voted
     const [votedStates, setVotedStates] = useState(Array(voters.length).fill(0));
     // Whether all users have voted
@@ -71,9 +63,9 @@ export default function VotingScreen({voters, choices}) {
             <div className={"voting-grid"}>
                 {title}
                 <div className={"voting-spacer"}></div>
-                {voters.map((name, idx) => (
+                {voters.map((voter, idx) => (
                     // TODO: make the left/right buttons greyed out when everyone has voted
-                    <UserRow key={idx} voterName={name} index={idx} onClick={handleVote}/>
+                    <UserRow key={idx} voterName={voter.name} index={idx} onClick={handleVote}/>
                 ))}
             </div>
             <div className={"voting-footer"}>

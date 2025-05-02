@@ -297,7 +297,7 @@ code {
     /*border: 2px solid gold;*/
     display: flex;
     flex-flow: row;
-    height: 100% -var(--header-height);
+    height: 100% - var(--header-height);
 }
 
 .setup-title {
@@ -420,6 +420,22 @@ code {
     row-gap: 8px;
     background-color: var(--background3);
     padding: 15px 10px;
+}
+
+.voter-add-grid {
+    /*border: 2px solid green;*/
+    display: grid;
+    grid-template-columns: 6fr 3fr 3fr 1fr;
+    row-gap: 8px;
+    background-color: var(--background3);
+    padding: 15px 10px;
+}
+
+/*TODO: use this instead of just nothing for Team component*/
+.team-add-row {
+    display: flex;
+    flex-flow: row wrap;
+    border: 2px solid gold;
 }
 
 .ta-header {
