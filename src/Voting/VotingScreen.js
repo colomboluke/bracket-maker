@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import UserRow from "./UserRow";
+import "./Voting.css";
 
 export default function VotingScreen({voters, choices}) {
 
@@ -37,13 +38,11 @@ export default function VotingScreen({voters, choices}) {
     // Returns the choice that the majority of users have voted for
     // If not everyone has voted, return nothing
     function getWinner() {
-        console.log(votedStates)
         let votesMap = new Map([[1, 0], [2, 0]]);
         // Count votes
         for (const vote of votedStates) {
             votesMap.set(vote, votesMap.get(vote) + 1);
         }
-        console.log(votesMap);
         // Only return a string if everyone voted
         if (votedStates.every(item => item !== 0)) {
             if (votesMap.get(1) > votesMap.get(2)) { //first option wins
@@ -59,7 +58,10 @@ export default function VotingScreen({voters, choices}) {
     }
 
     return (
-        <>
+        <div className={"voting-cont"}>
+            <div className={"title-cont"}>
+                <span className={"title"}>SELECT VOTES</span>
+            </div>
             <div className={"voting-grid"}>
                 {title}
                 <div className={"voting-spacer"}></div>
@@ -71,10 +73,11 @@ export default function VotingScreen({voters, choices}) {
             <div className={"voting-footer"}>
                 <span className={"winner-text"}>WINNER: {getWinner()}</span>
                 <button className={`next-matchup-button ${nextBtnActive}`} disabled={!allSelected}
-                        onClick={() => console.log(getWinner())}>NEXT</button>
+                        onClick={() => console.log(getWinner())}>NEXT
+                </button>
             </div>
 
-        </>
+        </div>
 
     )
 }

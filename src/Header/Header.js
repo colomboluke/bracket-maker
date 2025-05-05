@@ -1,6 +1,7 @@
 import {Link, Outlet, useLocation} from "react-router-dom";
 import React from "react";
 import {FaGithub, FaMousePointer} from "react-icons/fa";
+import "./Header.css";
 
 export default function Header({title}) {
     const location = useLocation();

@@ -1,20 +1,16 @@
 import React, {useEffect} from 'react';
 import {useState} from "react";
-import Team from "./Team";
 import {FaShuffle} from "react-icons/fa6";
-import Settings from "./Settings";
 import {Link} from "react-router-dom";
-import BracketPreview from "./BracketPreview";
+import "./Setup.css";
+import TeamRow from "../TeamRow";
+import BracketPreview from "../BracketPreview/BracketPreview";
+import Settings from "./Settings";
 import VoterRow from "./VoterRow";
 
-export default function SetupScreen({title, setTitle, teams, setTeams, bracket, voters, setVoters}) {
+export default function SetupPage({title, setTitle, teams, setTeams, bracket, voters, setVoters}) {
 
     const [desc, setDesc] = useState("");
-
-
-    // Making matchIDCounter a global variable - I think it doesn't need to be state because I
-    // actually want it to reset after re-renders
-    let matchIDCounter = 0;
 
     // ~~~~ Modifying State Functions ~~~~
 
@@ -162,8 +158,8 @@ export default function SetupScreen({title, setTitle, teams, setTeams, bracket, 
                     <div className={"ta-header remove"}></div>
                     {/*TODO: Add a rearrange icon, and a delete button only when hovering*/}
                     {teams.map((team, index) => (
-                        <Team key={index} index={index} name={team.name}
-                              updateName={updateTeam} removeTeam={removeTeam}></Team>
+                        <TeamRow key={index} index={index} name={team.name}
+                                 updateName={updateTeam} removeTeam={removeTeam}></TeamRow>
                     ))}
                     {teams.length > 0 ? (<button className={"blue-button shuffle-btn"}
                                                  onClick={() => shuffleTeams()}>

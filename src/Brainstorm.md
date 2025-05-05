@@ -18,12 +18,12 @@ Bracket creating algorithm (4+ teams):
    8. We recurse until we are left with 1 match.
 
 TODO:
-- Have PlayBracketScreen render the bracket, and make each match clickable
+- Have PlayBracketPage render the bracket, and make each match clickable
   - Upon click the VotingScreen pops up
     - VotingScreen mutates the bracket object once there's a winner
   - Users can click 'next' to go to the next VotingScreen, or 'back to bracket'
 - Make a zoom in/out button in the bottom right of BracketPreview
-- Ideas page
+- IdeasPage page
 - Ensure that there can't be an even number of users
 
 Considering:

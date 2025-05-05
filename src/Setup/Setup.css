@@ -1,0 +1,239 @@
+
+.setup-cont {
+    position: absolute;
+    top: var(--header-height);
+    bottom: 0;
+    right: 0;
+    left: 0;
+    /*border: 2px solid gold;*/
+    display: flex;
+    flex-flow: row;
+    height: 100% - var(--header-height);
+}
+
+.setup-title {
+    align-self: center;
+    font-size: 38px;
+}
+
+.setup-top-cont {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-around;
+    align-items: center;
+    /*border: 2px solid blue;*/
+    gap: 75px;
+    margin-bottom: 10px;
+}
+
+.start-btn {
+    font-size: 18px;
+    font-weight: bold;
+    background-color: var(--accent);
+    color: var(--text);
+    border: none;
+    padding: 10px 30px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.start-btn:hover {
+    background-color: var(--accent-hover);
+}
+
+.setup-left {
+    /*border: 2px solid blue;*/
+    width: 30%;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 30px;
+    overflow: scroll;
+    height: 100%;
+}
+
+.settings {
+    /*border: 2px solid green;*/
+    position: relative;
+    top: 0;
+    align-self: center;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-evenly;
+    background-color: var(--background3);
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.settings-item {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: space-between;
+    border-top: .05rem solid var(--thin-lines);
+    border-bottom: .05rem solid var(--thin-lines);
+    padding-left: 15px;
+    padding-right: 25px;
+    height: 55px;
+}
+
+.settings-desc {
+    display: flex;
+    flex-flow: column;
+    padding-left: 15px;
+    padding-right: 25px;
+    align-items: flex-start;
+    padding-bottom: 20px;
+}
+
+.desc-title {
+    margin-bottom: 15px;
+}
+
+.desc {
+    height: 100%;
+    width: 100%;
+    border: 1px solid gray;
+    color: lightgray;
+    background-color: var(--background);
+    padding: 5px;
+    font-size: 16px;
+    outline: none;
+    resize: vertical;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.num-teams-input {
+    width: 10%;
+    height: 30%;
+}
+
+.settings-input {
+    align-self: center;
+    border: 1px solid gray;
+    color: lightgray;
+    background-color: var(--background);
+    padding: 5px;
+    font-size: 16px;
+    outline: none;
+}
+
+.title-input {
+    height: 25%;
+    margin-left: 20px;
+}
+
+.team-add-grid {
+    /*border: 2px solid green;*/
+    display: grid;
+    grid-template-columns: 3fr 12fr 3fr 3fr 1fr;
+    row-gap: 8px;
+    background-color: var(--background3);
+    padding: 15px 10px;
+}
+
+.voter-add-grid {
+    /*border: 2px solid green;*/
+    display: grid;
+    grid-template-columns: 6fr 3fr 3fr 1fr;
+    row-gap: 8px;
+    background-color: var(--background3);
+    padding: 15px 10px;
+}
+
+/*TODO: use this instead of just nothing for Team component*/
+.team-add-row {
+    display: flex;
+    flex-flow: row wrap;
+    border: 2px solid gold;
+}
+
+.ta-header {
+    text-align: center;
+    /*border: 1px solid white;*/
+    padding: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    margin: auto;
+}
+
+.seed, .name, .icon, .color, .remove {
+    text-align: center;
+    /*border: 1px solid white;*/
+    margin: auto;
+}
+
+.remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove-btn {
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.blue-button-cont {
+    display: flex;
+    flex-flow: row;
+    grid-column: 1 / 6;
+}
+
+.blue-button {
+    width: auto;
+    padding-right: 20px;
+    padding-left: 20px;
+    margin: 20px auto 10px;
+    height: 35px;
+    background-color: var(--primary);
+    color: var(--text);
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.add-team-btn {
+    grid-column: 2 / 5; /*Effectively centers it b/c the ends are 1fr each*/
+    align-self: center;
+    font-weight: bold;
+}
+
+.shuffle-btn {
+    grid-column: 1 / 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: min-content;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.shuffle-icon {
+    font-size: 20px;
+}
+
+.add-team-btn:hover, .shuffle-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.setup-right {
+    overflow: scroll;
+    width: 70%;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: baseline;
+}
+
+.round-column {
+    height: 100%;
+    /*height: fit-content;*/
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    top: 10%;
+}

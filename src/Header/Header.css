@@ -1,0 +1,121 @@
+.header, .header-right, .header-left {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
+
+.header {
+    /*border: 3px solid black;*/
+    box-shadow: var(--background4) 2px 4px 6px;
+    height: var(--header-height);
+    width: 100%;
+    background-color: var(--background2);
+}
+
+.header-right, .header-left {
+    margin: auto;
+    position: relative;
+
+}
+
+.header-left {
+    left: 40px;
+    gap: 15px;
+    width: 75%;
+    /*border: 2px solid red;*/
+}
+
+.header-right {
+    width: 25%;
+}
+
+.home-btn {
+    border: none;
+    padding: 0;
+    background-color: var(--background2);
+    color: var(--text);
+}
+
+/*TODO: make the second word highlight when hovered*/
+.header-title {
+    font-size: 22px;
+    margin-right: 25px;
+}
+
+.header-right {
+    right: 20px;
+    /*border: 2px solid blue;*/
+    gap: 20px;
+    justify-content: right;
+}
+
+.header-github, .header-portfolio {
+    color: var(--text);
+    cursor: pointer;
+}
+
+.header-github:hover, .header-portfolio:hover {
+    color: var(--primary);
+}
+
+.header-github {
+    font-size: 32px;
+}
+
+.header-portfolio {
+    font-size: 28px;
+}
+
+.header-github:hover, .header-portfolio:hover {
+    text-decoration: underline;
+}
+
+.header-github:visited, .header-portfolio:visited {
+    cursor: pointer;
+    text-decoration: underline;
+    color: var(--primary);
+}
+
+.header-new-bracket-btn {
+    width: 125px;
+    height: 50%;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bolder;
+    background-color: var(--primary);
+    color: var(--text);
+    border: none;
+    border-radius: 3px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    cursor: pointer;
+}
+
+.header-new-bracket-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.header-ideas-btn {
+    font-weight: bold;
+    color: var(--text);
+    background-color: var(--background2);
+    text-align: center;
+    border: none;
+    font-size: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    cursor: pointer;
+}
+
+.header-ideas-btn:hover {
+    color: var(--primary);
+}
+
+.bracket-title {
+    color: var(--text);
+    font-weight: lighter;
+    font-size: 22px;
+    margin-left: 25px;
+}

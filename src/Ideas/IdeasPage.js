@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Ideas() {
+export default function IdeasPage() {
     return (
         <div>
             <h1>Ideas Page</h1>

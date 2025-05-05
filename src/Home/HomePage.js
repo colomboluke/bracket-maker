@@ -1,12 +1,13 @@
 import React from 'react';
 import {FaGithub} from "react-icons/fa";
 import {Link} from "react-router-dom";
+import "./Home.css";
 
-function Home() {
+function HomePage() {
     // return (
     //     <div className={"home-cont"}>
-    //         <h1>Home Page</h1>
-    //         <p>Welcome to the Home Page</p>
+    //         <h1>HomePage Page</h1>
+    //         <p>Welcome to the HomePage Page</p>
     //     </div>
     // );
 
@@ -40,4 +41,4 @@ function Home() {
     );
 }
 
-export default Home;
+export default HomePage;
