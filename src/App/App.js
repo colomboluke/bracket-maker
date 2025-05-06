@@ -14,7 +14,7 @@ function App() {
     const [voters, setVoters] = useState([]);
 
     // Bracket algorithm: takes teams array and turns it into a bracket
-    let bracket = constructBracket(teams);
+    const bracket = constructBracket(teams);
 
     return (
         <Router>

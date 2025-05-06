@@ -47,14 +47,12 @@ export default function VotingScreen({voters, choices}) {
         if (votedStates.every(item => item !== 0)) {
             if (votesMap.get(1) > votesMap.get(2)) { //first option wins
                 return choices[0];
-            } else if (votesMap.get(2) > votesMap.get(1)) {
+            } else if (votesMap.get(2) > votesMap.get(1)) { //second option wins
                 return choices[1];
-            } else {
-                return "";
             }
         }
+        // Either not everyone voted, or there's a tie
         return "";
-
     }
 
     return (

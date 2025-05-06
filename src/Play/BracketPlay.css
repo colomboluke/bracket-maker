@@ -1,0 +1,73 @@
+
+.tournament {
+    display: flex;
+    flex-direction: row;
+    /*Do I want it to start in the middle or from the top?*/
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.round {
+    display: flex;
+    flex-flow: column;
+    width: 200px;
+    list-style: none;
+    /*border: 1px solid gold;*/
+}
+
+
+/*Controls the vertical distance between games*/
+.spacer {
+    height: 10px; /* Initial height */
+    flex-grow: .4;
+}
+
+/*Controls the vertical space before the first game and after the last game*/
+.spacer:first-child, .spacer:last-child {
+    flex-grow: .5;
+}
+
+/*Controls the vertical distance within games*/
+.game-spacer {
+    flex-grow: 2.0;
+}
+
+.matchup {
+    display: flex;
+    flex-flow: column;
+    list-style: none;
+    height: 100%;
+    width: 100%;
+}
+
+.matchup:hover {
+    border: 2px solid var(--text);
+    cursor: pointer;
+}
+
+.game-top {
+    border-bottom: 1px solid var(--text);
+}
+
+.team-seed {
+    float: left;
+    margin-left: 10px;
+}
+
+.team-name {
+    margin-left: 10px;
+}
+
+.team-votes {
+    float: right;
+    margin-right: 5px;
+}
+
+.game-spacer {
+    border-right: 1px solid var(--text);
+    min-height: 40px;
+}
+
+.game-bottom {
+    border-top: 1px solid var(--text);
+}

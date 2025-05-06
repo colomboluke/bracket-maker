@@ -136,6 +136,7 @@ export default function SetupPage({title, setTitle, teams, setTeams, bracket, vo
                 <button onClick={() => {
                     console.log("Teams:", teams);
                     console.log("Voters:", voters);
+                    console.log("Bracket:", bracket);
                 }}>Testing button
                 </button>
                 <h1 className={"setup-title"}>Create Bracket</h1>

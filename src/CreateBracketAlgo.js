@@ -29,8 +29,37 @@ function getPresetBracket(teams) {
     }
 }
 
-let matchIDCounter = 0;
+// Bracket creating algorithm (4+ teams):
+// 1. Seed teams in the correct order, creating Match objects as we go
+//      a) This algorithm starts with a 'root' of [1,2], representing the two seeds expected to make
+//      the finals. It then expands each seed into the two seeds that feed into it during the
+//      previous round. 1 turns into [1,4], 2 turns into [3,2]. Both of these add up to 5. When
+//      creating these feeder matches, the original seed alternates its placement: first left, then
+//      right, etc. If a team should have a bye, that's represented as it playing against a null
+//      opponent. his repeats for n number of rounds. Final result: a properly seeded, full bracket
+//      with n rounds.
+// 2. Sort matches so that lower team is always home
+// 3. Convert each Int inside the Match to a Team
+//      a) Before this stage, each 'team' was just an integer. [1,2] would be the match between the
+//      1 and two seeds.
+// 4. Assign match IDs to these initial matches
+//      a) Initial match ID: simple increment by 1
+//      b) Next match ID (the ID of the match that winner of this one will play in): ID of first
+//      match in this round + number of matches in this round, increment every 2 matches
+// 5. Post-process the initial matches: handle byes here
+//      a) The initial matches created in steps 1-4 assume a 'full' bracket. So if we have anywhere
+//      from 5-8 teams, it will create a bracket with 8 teams. This algo detects bye matches in
+//      round 1 and transfers them to round 2. All other matches in rounds 2-n get turned into
+//      placeholders (null vs null).
+// 6. Create placeholders for next round's matches, advancing any bye matches
+//      a) If the current round has n matches, next round should have n/2, except round 2, if we
+//         have bye teams.
+// 7. Repeat steps 1-6 for the next round if necessary
+//      a) We recurse until we are left with 1 match.
 
+
+
+// console.log("here", matchIDCounter)
 /**
  * Constructs a bracket object from the current teams state
  * @returns a recursive bracket object {roundNum, matches, nextRound}
@@ -48,11 +77,10 @@ export default function constructBracket(teams) {
         bracket = getPresetBracket(teams);
     } else {  // MAIN CASE: 4+ teams
         //roundNum = 0 indexed, first round = 0
+        let matchIDCounter = 0;
         bracket = buildRoundRecursive(teams, 0, []);
         // Teams in round: array containing Team objects
         function buildRoundRecursive(teamsInCurRound, curRoundIdx, lastRoundByeTeams) {
-            // console.log(`BUILDING ROUND ${curRoundIdx} with teams `, teamsInCurRound,
-            //             "Bye teams from last round", lastRoundByeTeams)
             //Number of non-placeholder teams = number of bye teams, unless it's the first
             // round, where it = number of teams in current round
             let numNonPlaceholderTeams = lastRoundByeTeams.length;
@@ -63,7 +91,7 @@ export default function constructBracket(teams) {
                                             numNonPlaceholderTeams, lastRoundByeTeams, teams);
             let initialMatches = seedTeamsResult[0];
             let curByeTeams = seedTeamsResult[1];
-            initialMatches = newAssignMatchIDs(initialMatches);
+            initialMatches = assignMatchIDs(structuredClone(initialMatches));
             let curMatches = processMatches(initialMatches, curRoundIdx, lastRoundByeTeams);
             let nextRoundTeams = getNextRoundTeams(initialMatches, curRoundIdx);
             // Recurse if this isn't the finals
@@ -72,6 +100,23 @@ export default function constructBracket(teams) {
                 nextRound = buildRoundRecursive(nextRoundTeams, curRoundIdx + 1, curByeTeams);
             }
             return {roundNum: curRoundIdx, matches: curMatches, nextRound: nextRound}
+        }
+        // Assign matches their own IDs, and the IDs of the matches they feed into
+        // NOTE: this function has to be in the same scope as buildRoundRecursive to sync matchIDs
+        function assignMatchIDs(matchesArr) {
+            // Assign standard match IDs (simple increment)
+            let matchesWithIDs = matchesArr.map((match) => {
+                match.id = matchIDCounter;
+                matchIDCounter++;
+                return match;
+            });
+            // Assign next match IDs. Next match ID = ID of first match in this round + number of
+            //  matches in this round, increment every 2 matches
+            for (let i = 0; i < matchesWithIDs.length; i++) {
+                matchesWithIDs[i].nextMatchID =
+                    matchesWithIDs[0].id + matchesWithIDs.length + Math.floor(i / 2);
+            }
+            return matchesWithIDs
         }
     }
     return bracket;
@@ -154,10 +199,7 @@ function makeLowerOnTop(matchesArray) {
 // If a team is null, that means it's either a bye or this is a placeholder match: either way,
 // no need to make a change
 function convertToTeamObject(matchesList, teams) {
-    // console.log("Before", matchesList)
-    // TODO: How/why tf is this method assigning IDs and nextMatchIDs? It doesn't happen when
-    //  I comment out newAssignMatchIDs(). I mean it works but idk why
-    let returnVal = matchesList.map((match) => {
+    return matchesList.map(match => {
         // Match IDs from seeding algo are 1-indexed, have to adjust
         let homeTeam = match.team1;
         if (homeTeam !== null) {
@@ -167,27 +209,11 @@ function convertToTeamObject(matchesList, teams) {
         if (awayTeam !== null) {
             awayTeam = teams.filter(team => team.id + 1 === awayTeam)[0];
         }
-        return {id: match.id, winner: null, team1: homeTeam, team2: awayTeam};
-    })
-    // console.log("After", returnVal)
-    return returnVal;
+        return {id: null, winner: null, team1: homeTeam, team2: awayTeam};
+    });
 }
 
-// Assign matches their own IDs, and the IDs of the matches they feed into
-function newAssignMatchIDs(matchesArr) {
-    // Assign standard match IDs (simple increment)
-    let matchesWithIDs = matchesArr.map((match) => {
-        match.id = matchIDCounter++;
-        return match;
-    });
-    // Assign next match IDs. Next match ID = ID of first match in this round + number of
-    //  matches in this round, increment every 2 matches
-    for (let i = 0; i < matchesWithIDs.length; i++) {
-        matchesWithIDs[i].nextMatchID =
-            matchesWithIDs[0].id + matchesWithIDs.length + Math.floor(i / 2);
-    }
-    return matchesWithIDs
-}
+
 
 // Takes in the initial matches and processes them, returning the actual current-round matches
 //  Round 1: Remove any matches with bye teams, keep the rest as is

@@ -17,6 +17,9 @@ Bracket creating algorithm (4+ teams):
 7. Repeat steps 1-6 for the next round if necessary 
    8. We recurse until we are left with 1 match.
 
+BUGS:
+- Match IDs not starting from 0
+
 TODO:
 - Have PlayBracketPage render the bracket, and make each match clickable
   - Upon click the VotingScreen pops up
