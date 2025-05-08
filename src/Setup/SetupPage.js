@@ -4,7 +4,7 @@ import {FaShuffle} from "react-icons/fa6";
 import {Link} from "react-router-dom";
 import "./Setup.css";
 import TeamRow from "../TeamRow";
-import BracketPreview from "../BracketPreview/BracketPreview";
+import PreviewBracket from "../PreviewBracket/PreviewBracket";
 import Settings from "./Settings";
 import VoterRow from "./VoterRow";
 
@@ -184,7 +184,7 @@ export default function SetupPage({title, setTitle, teams, setTeams, bracket, vo
                 </div>
             </div>
             <div className={"setup-right"}>
-                <BracketPreview bracket={bracket} roundWidth={200}/>
+                <PreviewBracket bracket={bracket} roundWidth={200}/>
             </div>
         </div>
     );

@@ -58,13 +58,47 @@ function getPresetBracket(teams) {
 //      a) We recurse until we are left with 1 match.
 
 
+// Given a bracket object and a match ID, return the match corresponding to that ID
+export function getMatch(bracket, targetID) {
+    // Base case. Null bracket -> return null
+    if (bracket === null || bracket === undefined) {
+        return null;
+    }
+    // Check for match in this round
+    let curMatches = bracket.matches;
+    for (let i = 0; i < curMatches.length; i++) {
+        if (curMatches[i].id === targetID) {
+            return curMatches[i];
+        }
+    }
+    // Recurse on next round if we didn't find anything
+    return getMatch(bracket.nextRound, targetID);
+}
 
-// console.log("here", matchIDCounter)
+// Replaces the old match (corresponding to matchID) with a new one
+export function setMatch(bracket, matchID, newMatch) {
+    // Base case. Null bracket -> return null
+    if (bracket === null || bracket === undefined) {
+        return null;
+    }
+    // Check for match in this round
+    let curMatches = bracket.matches;
+    for (let i = 0; i < curMatches.length; i++) {
+        if (curMatches[i].id === newMatch.id) { //found the match
+            curMatches[i] = newMatch;
+            bracket.matches = curMatches;
+            console.log("Set new match: ", bracket);
+        }
+    }
+    // Recurse on next round if we didn't find anything
+    return setMatch(bracket.nextRound, newMatch.id);
+}
+
 /**
  * Constructs a bracket object from the current teams state
  * @returns a recursive bracket object {roundNum, matches, nextRound}
  */
-export default function constructBracket(teams) {
+export function constructBracket(teams) {
     let totalRounds = getNumOfRounds(teams.length);
     let bracket; // 0 teams => there is no bracket
     if (teams.length === 0) {
@@ -138,9 +172,6 @@ function getNumOfRounds(numTeams) {
 //  with 2^numRounds teams in it
 // Time complexity: O(m*(m/2))
 function seedTeams(numRounds, roundID, numNonPlaceholderTeams, lastRoundByeTeams, teams) {
-    // console.log(
-    //     `Seeding teams: ${numRounds} rounds, ${numNonPlaceholderTeams} non-placeholder
-    // teams`)
     // The bracket tree gets built off the root [1,2]
     let matches = [{team1: 1, team2: 2}];
     let byes = [];
@@ -156,7 +187,6 @@ function seedTeams(numRounds, roundID, numNonPlaceholderTeams, lastRoundByeTeams
             curRoundMatches.push(firstMatch, secondMatch)
         }
         matches = curRoundMatches;
-        // console.log(`Matches in round ${round}: `, curRoundMatches)
     }
     // Byes created = byes - lastRoundByeTeams (set difference)
     let byesCreated = byes.filter(x => !lastRoundByeTeams.includes(x));
@@ -212,7 +242,6 @@ function convertToTeamObject(matchesList, teams) {
         return {id: null, winner: null, team1: homeTeam, team2: awayTeam};
     });
 }
-
 
 
 // Takes in the initial matches and processes them, returning the actual current-round matches

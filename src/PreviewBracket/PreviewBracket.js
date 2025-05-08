@@ -1,4 +1,4 @@
-import "./BracketPreview.css";
+import "./PreviewBracket.css";
 import Matchup from "../Matchup";
 
 /**
@@ -8,7 +8,7 @@ import Matchup from "../Matchup";
  * @returns {JSX.Element|null}
  */
 
-export default function BracketPreview({bracket}) {
+export default function PreviewBracket({bracket}) {
 
     function renderRound(roundData) {
         if (roundData == null || roundData.matches.length === 0) {

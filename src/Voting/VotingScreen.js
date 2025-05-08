@@ -2,15 +2,27 @@ import React, {useState} from "react";
 import UserRow from "./UserRow";
 import "./Voting.css";
 
-export default function VotingScreen({voters, choices}) {
-
+export default function VotingScreen({voters, match, incrementVote}) {
+    console.log("Matchup: ", match)
     // Tracks which users have voted
     const [votedStates, setVotedStates] = useState(Array(voters.length).fill(0));
     // Whether all users have voted
     const allSelected = votedStates.every(item => item !== 0);
+    let choiceOne = match.team1.name;
+    let choiceTwo = match.team2.name;
 
+    // TODO: mutate the match by making it state
+    const [match, setMatch] = useState(match);
     // Check off that a user has voted
+    // Vote of 1 --> vote for team 1
+    // Vote of 2 --> vote for team 2
     function handleVote(index, vote) {
+        // Backend
+        // Create a nextMatchVotes array
+        // if vote == 1: match.votes[0] += 1, match.votes[1] -= 1
+        // else: opposite
+        // incrementVote(nextMatchVotes)
+        // Frontend
         const newStates = [...votedStates];
         newStates[index] = vote;
         setVotedStates(newStates);
@@ -18,14 +30,14 @@ export default function VotingScreen({voters, choices}) {
 
     const title = <div className={"voter-row"}>
         <div className={"voter-col"}>
-            <div className={"option-title"}>{choices[0]}</div>
+            <div className={"option-title"}>{choiceOne}</div>
             <div className={"option-icon"}></div>
         </div>
         <div className={"voter-col"}>
             <span className={"vs"}>VS.</span>
         </div>
         <div className={"voter-col"}>
-            <div className={"option-title"}>{choices[1]}</div>
+            <div className={"option-title"}>{choiceTwo}</div>
             <div className={"option-icon"}></div>
         </div>
     </div>
@@ -46,9 +58,9 @@ export default function VotingScreen({voters, choices}) {
         // Only return a string if everyone voted
         if (votedStates.every(item => item !== 0)) {
             if (votesMap.get(1) > votesMap.get(2)) { //first option wins
-                return choices[0];
+                return choiceOne;
             } else if (votesMap.get(2) > votesMap.get(1)) { //second option wins
-                return choices[1];
+                return choiceTwo;
             }
         }
         // Either not everyone voted, or there's a tie

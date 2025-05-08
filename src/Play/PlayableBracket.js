@@ -1,4 +1,4 @@
-import "./BracketPlay.css";
+import "./PlayableBracket.css";
 import Matchup from "../Matchup";
 
 /**
@@ -8,11 +8,8 @@ import Matchup from "../Matchup";
  * @returns {JSX.Element|null}
  */
 
-export default function BracketPlay({bracket}) {
+export default function PlayableBracket({bracket, onClick}) {
 
-    function handleClick(matchID) {
-        alert("Match " + matchID + " clicked");
-    }
 
     function renderRound(roundData) {
         if (roundData == null || roundData.matches.length === 0) {
@@ -27,7 +24,7 @@ export default function BracketPlay({bracket}) {
                         {roundData.matches.map((match, index) => (
                             <Matchup key={index} team1={match.team1}
                                      team2={match.team2} className={roundNum}
-                                    matchID={match.id} onClick={handleClick}></Matchup>))}
+                                    matchID={match.id} onClick={onClick}></Matchup>))}
                     </div>
                     {renderRound(roundData.nextRound, roundNum + 1)}
                 </>
