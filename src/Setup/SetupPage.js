@@ -15,7 +15,7 @@ export default function SetupPage({title, setTitle, teams, setTeams, bracket, vo
     // ~~~~ Modifying State Functions ~~~~
 
     // Give a team a new name
-    function updateTeam(index, newName) {
+    function updateTeamName(index, newName) {
         setTeams(prevTeams => {
             let updatedTeams = [...prevTeams];
             updatedTeams[index] = {...updatedTeams[index], name: newName};
@@ -44,7 +44,7 @@ export default function SetupPage({title, setTitle, teams, setTeams, bracket, vo
                 newName = "Team " + (parseInt(lastTeam.name.slice(-1)) + 1);
             }
         }
-        setTeams([...teams, {id: teams.length, name: newName, votes: 0}]);
+        setTeams([...teams, {id: teams.length, name: newName}]);
     }
 
     // Given a target number of teams, add or remove teams to meet that target
@@ -160,7 +160,7 @@ export default function SetupPage({title, setTitle, teams, setTeams, bracket, vo
                     {/*TODO: Add a rearrange icon, and a delete button only when hovering*/}
                     {teams.map((team, index) => (
                         <TeamRow key={index} index={index} name={team.name}
-                                 updateName={updateTeam} removeTeam={removeTeam}></TeamRow>
+                                 updateName={updateTeamName} removeTeam={removeTeam}></TeamRow>
                     ))}
                     {teams.length > 0 ? (<button className={"blue-button shuffle-btn"}
                                                  onClick={() => shuffleTeams()}>

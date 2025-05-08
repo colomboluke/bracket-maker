@@ -1,30 +1,37 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import UserRow from "./UserRow";
 import "./Voting.css";
 
-export default function VotingScreen({voters, match, incrementVote}) {
+export default function VotingScreen({match, voters, updateVotes}) {
     console.log("Matchup: ", match)
     // Tracks which users have voted
     const [votedStates, setVotedStates] = useState(Array(voters.length).fill(0));
+    useEffect(() => {
+        console.log("New voting state: ", votedStates)
+    }, [votedStates]);
     // Whether all users have voted
     const allSelected = votedStates.every(item => item !== 0);
     let choiceOne = match.team1.name;
     let choiceTwo = match.team2.name;
 
-    // TODO: mutate the match by making it state
-    const [match, setMatch] = useState(match);
-    // Check off that a user has voted
-    // Vote of 1 --> vote for team 1
-    // Vote of 2 --> vote for team 2
-    function handleVote(index, vote) {
+    // Handle a user voting for one team in a match
+    // TODO: right now this is creating a new votesArray and counting all past votes every time
+    //  there's a new vote. To make it faster, it should only count new votes
+    function handleVote(voterIdx, vote) {
+        // console.log(`User ${voterIdx} voted for ${vote}`)
         // Backend
-        // Create a nextMatchVotes array
-        // if vote == 1: match.votes[0] += 1, match.votes[1] -= 1
-        // else: opposite
-        // incrementVote(nextMatchVotes)
+        let newVoteArray = [0,0];
+        for (let i = 0; i < votedStates.length; i++) {
+            if (votedStates[i] === 1) { // a vote for team 1
+                newVoteArray[0] += 1;
+            } else if (votedStates[i] === 2) { // a vote for team 2
+                newVoteArray[1] += 1;
+            }
+        }
+        updateVotes(match.id, newVoteArray)
         // Frontend
         const newStates = [...votedStates];
-        newStates[index] = vote;
+        newStates[voterIdx] = vote;
         setVotedStates(newStates);
     }
 

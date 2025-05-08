@@ -64,34 +64,36 @@ export function getMatch(bracket, targetID) {
     if (bracket === null || bracket === undefined) {
         return null;
     }
-    // Check for match in this round
+    // If the target match exists in this round, return it
     let curMatches = bracket.matches;
     for (let i = 0; i < curMatches.length; i++) {
         if (curMatches[i].id === targetID) {
-            return curMatches[i];
+            return curMatches[i]; //return the target match
         }
     }
-    // Recurse on next round if we didn't find anything
+    // Otherwise, recurse on next round
     return getMatch(bracket.nextRound, targetID);
 }
 
-// Replaces the old match (corresponding to matchID) with a new one
-export function setMatch(bracket, matchID, newMatch) {
+// Replaces the given Match's votes array with a new array
+export function updateVotes(bracket, matchID, newVoteArr) {
+    console.log("Updating bracket", bracket, matchID, newVoteArr)
+    console.log(newVoteArr)
     // Base case. Null bracket -> return null
     if (bracket === null || bracket === undefined) {
         return null;
     }
-    // Check for match in this round
+    // If the target match exists in this round, update it
     let curMatches = bracket.matches;
+    console.log("Current matches: ", curMatches);
     for (let i = 0; i < curMatches.length; i++) {
-        if (curMatches[i].id === newMatch.id) { //found the match
-            curMatches[i] = newMatch;
-            bracket.matches = curMatches;
-            console.log("Set new match: ", bracket);
+        if (curMatches[i].id === matchID) {
+            curMatches[i] = {...curMatches[i], votes: newVoteArr};
+            return bracket; //return the bracket after updating match
         }
     }
-    // Recurse on next round if we didn't find anything
-    return setMatch(bracket.nextRound, newMatch.id);
+    // Otherwise, recurse on next round
+    return {...bracket, nextRound: updateVotes(bracket.nextRound, matchID, newVoteArr)};
 }
 
 /**
@@ -206,7 +208,7 @@ function createMatch(homeSeed, awaySeed, totalTeams, byes) {
         byes.push(awaySeed);
         homeSeed = null;
     }
-    return {id: null, winner: null, team1: homeSeed, team2: awaySeed};
+    return {id: null, winner: null, team1: homeSeed, team2: awaySeed, votes: [0, 0]};
 }
 
 // Given an array of matches, ensure that the lower seed (higher ranked) goes first
@@ -239,7 +241,7 @@ function convertToTeamObject(matchesList, teams) {
         if (awayTeam !== null) {
             awayTeam = teams.filter(team => team.id + 1 === awayTeam)[0];
         }
-        return {id: null, winner: null, team1: homeTeam, team2: awayTeam};
+        return {...match, team1: homeTeam, team2: awayTeam};
     });
 }
 
@@ -279,13 +281,8 @@ function processMatches(matches, roundIdx, byeTeamsFromLastRound) {
 
 // Makes both teams null, keeps everything else the same
 function convertMatchToPlaceholder(match) {
-    return {
-        id: match.id,
-        winner: match.winner,
-        team1: null,
-        team2: null,
-        nextMatchID: match.nextMatchID
-    }
+    return {...match, team1: null, team2: null};
+
 }
 
 // nextRoundTeams logic:
