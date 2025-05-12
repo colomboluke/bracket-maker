@@ -1,26 +1,27 @@
 import React, {useEffect, useState} from 'react';
 import PlayableBracket from "./PlayableBracket";
 import VotingScreen from "../Voting/VotingScreen";
-import {getMatch} from "../CreateBracketAlgo";
+import {getMatch} from "../BracketAlgos";
 
 export default function PlayBracketPage({title, bracket, voters, updateVotes, updateWinner}) {
-
-    // TODO: function that initializes vote arrays for each Match, now that we know how many voters there are
-
-
-    // TODO: track the currently selected match (using its ID)
+    // Track the currently selected match using its ID
     const [selectedMatchID, setSelectedMatchID] = useState(null);
+    // Tracks which users have voted
+    const [votedStates, setVotedStates] = useState(Array(voters.length).fill(0));
+    // When selectedMatchID changes, reset the votes (use has chosen a new match to vote on)
+    useEffect(() => {
+        console.log("selected match ID changed")
+        setVotedStates(Array(voters.length).fill(0));
+    }, [selectedMatchID, voters.length])
     let selectedMatch = getMatch(bracket, selectedMatchID);
-    const choices = ["Into the Spiderverse", "Cars"];
 
     let newTitle = 'Untitled Bracket';
-    if (title !== undefined && title !== null) {
+    if (title !== undefined && title !== null && title !== "") {
         newTitle = title;
     }
 
     function handleMatchClick(matchID) {
         setSelectedMatchID(matchID);
-        console.log(matchID + " clicked");
     }
 
     // // Adjusts the vote by given value for given team in a given match
@@ -38,15 +39,14 @@ export default function PlayBracketPage({title, bracket, voters, updateVotes, up
     //     }
     // }
 
-    // TODO: make a close button for the voting screen
     let votingScreen;
     selectedMatch === null ? votingScreen = <></> : votingScreen =
-        <VotingScreen voters={voters} match={selectedMatch}
-                      updateVotes={updateVotes} updateWinner={updateWinner}/>
+        <VotingScreen key={selectedMatchID} voters={voters} match={selectedMatch} votedStates={votedStates} setVotedStates={setVotedStates}
+                      updateVotes={updateVotes} onWinnerChange={updateWinner} onClose={() => setSelectedMatchID(null)}/>
 
     return (
         <div className={"play-bracket-cont"}>
-            <h1>{title}</h1>
+            <h1>{newTitle}</h1>
             <button onClick={() => console.log(bracket, voters)}>Log bracket</button>
             <button onClick={() => console.log(getMatch(bracket, 2))}>Test find match</button>
             <button onClick={() => updateVotes(2, [1, 0])}>Test update votes</button>

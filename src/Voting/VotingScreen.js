@@ -1,20 +1,26 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import UserRow from "./UserRow";
 import "./Voting.css";
 
 // TODO: make this less coupled with App/CreateBracketAlgo
 // TODO: handle users clicking on a future round match that has no teams yet
-export default function VotingScreen({match, voters, updateVotes, updateWinner}) {
-    // console.log("Matchup: ", match)
+export default function VotingScreen({match, voters, votedStates, setVotedStates, updateVotes, onWinnerChange, onClose}) {
+    console.log("Matchup: ", match, votedStates)
 
-    // Tracks which users have voted
-    const [votedStates, setVotedStates] = useState(Array(voters.length).fill(0));
-    const [winner, setWinner] = useState(null)
+    // Using useRef instead of State
+    const [winner, setWinner] = useState(null);
 
     // Update the winner when the votes change
+    // TODO: right now, when you choose a winner in one match then switch to the next, it gets an error because there's a null winner
     useEffect(() => {
-        console.log("Votes changed, updating winner", votedStates)
-        setWinner(getWinner());
+        // console.log("Votes changed, updating winner", votedStates)
+        const newWinner = getWinner();
+        // console.log("New winner: ", newWinner, "Old winner: ", winner, newWinner === winner);
+        if (newWinner !== winner) {
+            setWinner(newWinner);
+            onWinnerChange(match.id, newWinner.id); //tell parent to update bracket
+        }
+
         // Returns the Team that the majority of users have voted for
         // If not everyone has voted, return nothing
         function getWinner() {
@@ -34,16 +40,7 @@ export default function VotingScreen({match, voters, updateVotes, updateWinner})
             // Either not everyone voted, or there's a tie
             return null;
         }
-    }, [match.team1, match.team2, votedStates]);
-
-    // When we get a new winner, call updateWinner
-    // TODO: why is this effect running infinitely?
-    // useEffect(() => {
-    //     if (winner !== null) {
-    //         console.log("New winner detected, updating bracket")
-    //         updateWinner(match.id, winner.id)
-    //     }
-    // }, [match.id, updateWinner, winner]);
+    }, [votedStates, winner, onWinnerChange, match.id, match.team1, match.team2]);
 
     // Whether all users have voted
     const allSelected = votedStates.every(item => item !== 0);
@@ -102,6 +99,7 @@ export default function VotingScreen({match, voters, updateVotes, updateWinner})
         <div className={"voting-cont"}>
             <div className={"title-cont"}>
                 <span className={"title"}>SELECT VOTES</span>
+                <button onClick={onClose} className={"close-btn"}>X</button>
             </div>
             <div className={"voting-grid"}>
                 {title}

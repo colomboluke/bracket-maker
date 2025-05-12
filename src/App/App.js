@@ -1,16 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import {constructBracket, updateVotes, updateMatchWinner} from "../CreateBracketAlgo";
+import {constructBracket, updateVotes, updateMatchWinner} from "../BracketAlgos";
 import Header from "../Header/Header";
 import HomePage from "../Home/HomePage";
 import SetupPage from "../Setup/SetupPage";
 import IdeasPage from "../Ideas/IdeasPage";
 import PlayBracketPage from "../Play/PlayBracketPage";
 
+/**
+ * Top level component
+ */
 function App() {
     const [title, setTitle] = useState("");
-    const [teams, setTeams] =
-        useState([]);
+    const [teams, setTeams] = useState([]);
     const [voters, setVoters] = useState([]);
 
     // constructBracket(): takes teams array and turns it into a bracket
@@ -21,7 +23,7 @@ function App() {
     }, [teams]);
 
     useEffect(() => {
-        console.log("New bracket state: ", bracket);
+        // console.log("New bracket state: ", bracket);
     }, [bracket])
 
     // Given user input, update the votes array for a match
@@ -33,7 +35,7 @@ function App() {
 
     function handleUpdateWinner(matchID, winnerID) {
         let nextBracket = updateMatchWinner(bracket, matchID, winnerID);
-        console.log("Updating winner: ", nextBracket)
+        // console.log("Updating winner: ", nextBracket)
         setBracket(nextBracket);
     }
 

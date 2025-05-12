@@ -1,5 +1,5 @@
 import "./PreviewBracket.css";
-import Matchup from "../Matchup";
+import Matchup from "../Setup/Matchup";
 
 /**
  * Takes in the data from one round and renders it, then recursively renders the next round.

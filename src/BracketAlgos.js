@@ -43,6 +43,7 @@ export function updateVotes(bracket, matchID, newVoteArr) {
 }
 
 // Sets the winner of a match
+// Also advances the winning Team to the next round
 export function updateMatchWinner(bracket, matchID, winner) {
     let oldMatch = getMatch(bracket, matchID);
     let newBracket = {...bracket};
@@ -52,24 +53,24 @@ export function updateMatchWinner(bracket, matchID, winner) {
         newBracket = setMatch(newBracket, matchID, newMatch);
         // Update the next round accordingly
         let nextRoundMatch = getMatch(bracket, oldMatch.nextMatchID);
+        let winnerTeam; //winner as a Team object
+        if (winner === oldMatch.team1.id) {
+            winnerTeam = oldMatch.team1;
+        } else if (winner === oldMatch.team2.id) {
+            winnerTeam = oldMatch.team2;
+        } else {
+            throw new Error(`Winner ID ${winner} does not match either team`)
+        }
         if (oldMatch.nextStatus === 0) { //becomes 'home' team for its next match
-            nextRoundMatch = {...nextRoundMatch, team1: oldMatch}
+            nextRoundMatch = {...nextRoundMatch, team1: winnerTeam}
         } else if (oldMatch.nextStatus === 1) { //becomes 'away' team
-            nextRoundMatch = {...nextRoundMatch, team2: oldMatch}
+            nextRoundMatch = {...nextRoundMatch, team2: winnerTeam}
         } else {
             throw new Error(`Next statuses should be only 0 or 1. Found: ${oldMatch.nextStatus}`)
         }
         newBracket = setMatch(newBracket, nextRoundMatch.id, nextRoundMatch)
     }
     return newBracket;
-}
-
-// Once a match has a winner, advance it to the next round
-function advanceWinner(matchID) {
-    // get the target match and its nextMatch
-    // create a new nextMatch, have team1 (if that's taken, team2) be the target match
-    //   *if its team 2, reorder the matches so lower seed is home
-    // setMatch with the new nextMatch
 }
 
 // ~~~ BRACKET CREATING ALGO ~~~

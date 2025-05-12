@@ -1,5 +1,5 @@
 import "./PlayableBracket.css";
-import Matchup from "../Matchup";
+import ClickableMatchup from "./ClickableMatch";
 
 /**
  * Takes in the data from one round and renders it, then recursively renders the next round.
@@ -22,9 +22,9 @@ export default function PlayableBracket({bracket, onClick}) {
                     <div className={"round"}>
                         {/*Generate actual matches*/}
                         {roundData.matches.map((match, index) => (
-                            <Matchup key={index} team1={match.team1}
+                            <ClickableMatchup key={index} team1={match.team1}
                                      team2={match.team2} className={roundNum}
-                                    matchID={match.id} onClick={onClick}></Matchup>))}
+                                    matchID={match.id} onClick={onClick}/>))}
                     </div>
                     {renderRound(roundData.nextRound, roundNum + 1)}
                 </>

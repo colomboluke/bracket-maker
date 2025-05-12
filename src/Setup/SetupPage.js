@@ -30,13 +30,18 @@ export default function SetupPage({title, setTitle, teams, setTeams, bracket, vo
                 voter.name = newName;
             }
         }
-        console.log(nextVoters)
         setVoters(nextVoters);
     }
 
+    const names = ["alpha", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel",
+                   "india", "juliette", "kilo", "lima", "mike", "november", "oscar", "papa",
+                   "quebec", "romeo", "sierra", "tango", "uniform", "victor", "whisky", "x-ray",
+                   "yankee", "zulu"]
+
     // Create a new team, with a seed one higher than the current highest and a default name
     function createTeam() {
-        let newName = "Team " + (teams.length + 1);
+        let newName = "Team " + names[(teams.length)].charAt(0).toUpperCase()
+                      + names[(teams.length)].slice(1);
         let lastTeam = teams.length > 0 ? teams.slice(-1)[0] : null;
         if (lastTeam) {
             // If the new name-to-be already exists, add 1 to it
@@ -128,7 +133,6 @@ export default function SetupPage({title, setTitle, teams, setTeams, bracket, vo
         }
         return teamsList;
     }
-
 
     return (
         <div className={"setup-cont"}>
