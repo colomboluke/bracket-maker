@@ -2,13 +2,49 @@ import React, {useEffect, useState} from "react";
 import UserRow from "./UserRow";
 import "./Voting.css";
 
-export default function VotingScreen({match, voters, updateVotes}) {
-    console.log("Matchup: ", match)
+// TODO: make this less coupled with App/CreateBracketAlgo
+// TODO: handle users clicking on a future round match that has no teams yet
+export default function VotingScreen({match, voters, updateVotes, updateWinner}) {
+    // console.log("Matchup: ", match)
+
     // Tracks which users have voted
     const [votedStates, setVotedStates] = useState(Array(voters.length).fill(0));
+    const [winner, setWinner] = useState(null)
+
+    // Update the winner when the votes change
     useEffect(() => {
-        console.log("New voting state: ", votedStates)
-    }, [votedStates]);
+        console.log("Votes changed, updating winner", votedStates)
+        setWinner(getWinner());
+        // Returns the Team that the majority of users have voted for
+        // If not everyone has voted, return nothing
+        function getWinner() {
+            let votesMap = new Map([[1, 0], [2, 0]]);
+            // Count votes
+            for (const vote of votedStates) {
+                votesMap.set(vote, votesMap.get(vote) + 1);
+            }
+            // Only return a string if everyone voted
+            if (votedStates.every(item => item !== 0)) {
+                if (votesMap.get(1) > votesMap.get(2)) { //first option wins
+                    return match.team1;
+                } else if (votesMap.get(2) > votesMap.get(1)) { //second option wins
+                    return match.team2;
+                }
+            }
+            // Either not everyone voted, or there's a tie
+            return null;
+        }
+    }, [match.team1, match.team2, votedStates]);
+
+    // When we get a new winner, call updateWinner
+    // TODO: why is this effect running infinitely?
+    // useEffect(() => {
+    //     if (winner !== null) {
+    //         console.log("New winner detected, updating bracket")
+    //         updateWinner(match.id, winner.id)
+    //     }
+    // }, [match.id, updateWinner, winner]);
+
     // Whether all users have voted
     const allSelected = votedStates.every(item => item !== 0);
     let choiceOne = match.team1.name;
@@ -54,24 +90,12 @@ export default function VotingScreen({match, voters, updateVotes}) {
         nextBtnActive = "active";
     }
 
-    // Returns the choice that the majority of users have voted for
-    // If not everyone has voted, return nothing
-    function getWinner() {
-        let votesMap = new Map([[1, 0], [2, 0]]);
-        // Count votes
-        for (const vote of votedStates) {
-            votesMap.set(vote, votesMap.get(vote) + 1);
+    function getWinnerString() {
+        if (winner === null) {
+            return "";
+        } else {
+            return winner.name;
         }
-        // Only return a string if everyone voted
-        if (votedStates.every(item => item !== 0)) {
-            if (votesMap.get(1) > votesMap.get(2)) { //first option wins
-                return choiceOne;
-            } else if (votesMap.get(2) > votesMap.get(1)) { //second option wins
-                return choiceTwo;
-            }
-        }
-        // Either not everyone voted, or there's a tie
-        return "";
     }
 
     return (
@@ -88,9 +112,9 @@ export default function VotingScreen({match, voters, updateVotes}) {
                 ))}
             </div>
             <div className={"voting-footer"}>
-                <span className={"winner-text"}>WINNER: {getWinner()}</span>
+                <span className={"winner-text"}>WINNER: {getWinnerString()}</span>
                 <button className={`next-matchup-button ${nextBtnActive}`} disabled={!allSelected}
-                        onClick={() => console.log(getWinner())}>NEXT
+                        onClick={() => console.log(getWinnerString())}>NEXT
                 </button>
             </div>
 

@@ -3,7 +3,10 @@ import PlayableBracket from "./PlayableBracket";
 import VotingScreen from "../Voting/VotingScreen";
 import {getMatch} from "../CreateBracketAlgo";
 
-export default function PlayBracketPage({title, bracket, voters, updateVotes}) {
+export default function PlayBracketPage({title, bracket, voters, updateVotes, updateWinner}) {
+
+    // TODO: function that initializes vote arrays for each Match, now that we know how many voters there are
+
 
     // TODO: track the currently selected match (using its ID)
     const [selectedMatchID, setSelectedMatchID] = useState(null);
@@ -39,7 +42,7 @@ export default function PlayBracketPage({title, bracket, voters, updateVotes}) {
     let votingScreen;
     selectedMatch === null ? votingScreen = <></> : votingScreen =
         <VotingScreen voters={voters} match={selectedMatch}
-                      updateVotes={updateVotes}/>
+                      updateVotes={updateVotes} updateWinner={updateWinner}/>
 
     return (
         <div className={"play-bracket-cont"}>

@@ -1,3 +1,79 @@
+// TODO: make a match class? would be easier to have getters/setters
+
+// Given a bracket object and a match ID, return the match corresponding to that ID
+export function getMatch(bracket, targetID) {
+    // Base case. Null bracket -> return null
+    if (bracket === null || bracket === undefined) {
+        return null;
+    }
+    // If the target match exists in this round, return it
+    let curMatches = bracket.matches;
+    for (let i = 0; i < curMatches.length; i++) {
+        if (curMatches[i].id === targetID) {
+            return curMatches[i]; //return the target match
+        }
+    }
+    // Otherwise, recurse on next round
+    return getMatch(bracket.nextRound, targetID);
+}
+
+// Replace an existing Match in the Bracket with a new one
+// Private function - do not export!
+function setMatch(bracket, targetID, newMatch) {
+    // Base case. Null bracket -> return null
+    if (bracket === null || bracket === undefined) {
+        return null;
+    }
+    // If the target match exists in this round, update it
+    let curMatches = bracket.matches;
+    for (let i = 0; i < curMatches.length; i++) {
+        if (curMatches[i].id === targetID) {
+            curMatches[i] = newMatch;
+            return bracket; //return the bracket after updating match
+        }
+    }
+    // Otherwise, recurse on next round
+    return {...bracket, nextRound: setMatch(bracket.nextRound, targetID, newMatch)};
+}
+
+// Replaces the given Match's votes array with a new array
+export function updateVotes(bracket, matchID, newVoteArr) {
+    let oldMatch = getMatch(bracket, matchID);
+    return setMatch(bracket, matchID, {...oldMatch, votes: newVoteArr});
+}
+
+// Sets the winner of a match
+export function updateMatchWinner(bracket, matchID, winner) {
+    let oldMatch = getMatch(bracket, matchID);
+    let newBracket = {...bracket};
+    if (winner !== oldMatch.winner) { //this match has a new winner
+        // Update the target match's winner
+        let newMatch = {...oldMatch, winner: winner}
+        newBracket = setMatch(newBracket, matchID, newMatch);
+        // Update the next round accordingly
+        let nextRoundMatch = getMatch(bracket, oldMatch.nextMatchID);
+        if (oldMatch.nextStatus === 0) { //becomes 'home' team for its next match
+            nextRoundMatch = {...nextRoundMatch, team1: oldMatch}
+        } else if (oldMatch.nextStatus === 1) { //becomes 'away' team
+            nextRoundMatch = {...nextRoundMatch, team2: oldMatch}
+        } else {
+            throw new Error(`Next statuses should be only 0 or 1. Found: ${oldMatch.nextStatus}`)
+        }
+        newBracket = setMatch(newBracket, nextRoundMatch.id, nextRoundMatch)
+    }
+    return newBracket;
+}
+
+// Once a match has a winner, advance it to the next round
+function advanceWinner(matchID) {
+    // get the target match and its nextMatch
+    // create a new nextMatch, have team1 (if that's taken, team2) be the target match
+    //   *if its team 2, reorder the matches so lower seed is home
+    // setMatch with the new nextMatch
+}
+
+// ~~~ BRACKET CREATING ALGO ~~~
+
 function getPresetBracket(teams) {
     if (teams.length === 0) {
         return {roundNum: 0, matches: [], nextRound: null};
@@ -58,44 +134,6 @@ function getPresetBracket(teams) {
 //      a) We recurse until we are left with 1 match.
 
 
-// Given a bracket object and a match ID, return the match corresponding to that ID
-export function getMatch(bracket, targetID) {
-    // Base case. Null bracket -> return null
-    if (bracket === null || bracket === undefined) {
-        return null;
-    }
-    // If the target match exists in this round, return it
-    let curMatches = bracket.matches;
-    for (let i = 0; i < curMatches.length; i++) {
-        if (curMatches[i].id === targetID) {
-            return curMatches[i]; //return the target match
-        }
-    }
-    // Otherwise, recurse on next round
-    return getMatch(bracket.nextRound, targetID);
-}
-
-// Replaces the given Match's votes array with a new array
-export function updateVotes(bracket, matchID, newVoteArr) {
-    console.log("Updating bracket", bracket, matchID, newVoteArr)
-    console.log(newVoteArr)
-    // Base case. Null bracket -> return null
-    if (bracket === null || bracket === undefined) {
-        return null;
-    }
-    // If the target match exists in this round, update it
-    let curMatches = bracket.matches;
-    console.log("Current matches: ", curMatches);
-    for (let i = 0; i < curMatches.length; i++) {
-        if (curMatches[i].id === matchID) {
-            curMatches[i] = {...curMatches[i], votes: newVoteArr};
-            return bracket; //return the bracket after updating match
-        }
-    }
-    // Otherwise, recurse on next round
-    return {...bracket, nextRound: updateVotes(bracket.nextRound, matchID, newVoteArr)};
-}
-
 /**
  * Constructs a bracket object from the current teams state
  * @returns a recursive bracket object {roundNum, matches, nextRound}
@@ -148,9 +186,11 @@ export function constructBracket(teams) {
             });
             // Assign next match IDs. Next match ID = ID of first match in this round + number of
             //  matches in this round, increment every 2 matches
+            // Also assign nextStatuses: 0 if i is even 1 if odd
             for (let i = 0; i < matchesWithIDs.length; i++) {
                 matchesWithIDs[i].nextMatchID =
                     matchesWithIDs[0].id + matchesWithIDs.length + Math.floor(i / 2);
+                matchesWithIDs[i].nextStatus = i % 2;
             }
             return matchesWithIDs
         }
