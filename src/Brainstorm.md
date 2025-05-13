@@ -8,16 +8,40 @@ BUGS:
 - Match IDs not starting from 0
 
 TODO:
-- Have PlayBracketPage render the bracket, and make each match clickable
-  - Upon click the VotingScreen pops up
-    - VotingScreen mutates the bracket object once there's a winner
-  - Users can click 'next' to go to the next VotingScreen, or 'back to bracket'
-- Make a zoom in/out button in the bottom right of PreviewBracket
-- IdeasPage page
-- Ensure that there can't be an even number of users
-
-Features to add:
-- Make a group stage feature
+- Basic functionality
+  - [x] VotingScreen darkens the background and doesn't let users click on it
+  - [x] Don't let users click on Matchups with no Teams inside them
+  - [x] Show winner and score on PlayableBracket (show green check?)
+  - [ ] Ensure quality check before starting bracket
+    - Even # of voters
+    - 2+ teams
+    - Title, description
+    - Display error message on the fields that need fixing
+  - [ ] Track votes so that clicking on a VotingScreen remembers the votes
+  - [ ] Have an animation/display for the winner
+  - [ ] Display final completed bracket, let users print/save
+  - [ ] Host BracketMaker on the web
+  - [ ] IdeasPage page
+- QoL
+  - [ ] Make teams draggable in SetupPage
+  - [ ] Let users close a VotingScreen by pressing escape
+  - [ ] Progress bar, showing how many matches still need to be completed
+  - [ ] Display title and description
+  - [ ] Let users choose images for each Team/Voter
+    - UI customization: toggle show icons in bracket or just in VotingScreen, toggle show icons in bracket
+  - [ ] VotingScreen has a 'reset votes' button
+  - [ ] Users can click 'next' to go to the next VotingScreen
+  - [ ] Make a zoom in/out button in the bottom right of PreviewBracket
+  - [ ] Light mode/dark mode button 
+- Advanced features
+  - [ ] Statistics:
+      - Print table of all voters' records
+      - Upset rate
+          - Adjusted upset rate: give more points for bigger upset like 1v8, less for 4v5
+      - See who disagreed with the group the most
+  - [ ] Normal bracket capabilities
+    - Choose between traditional bracket and voting bracket
+      - Traditional bracket chooses the winner of each match by comparing their scores, voting bracket lets users vote on who they want to advance
 
 Considering:
 - Change 'id' in the Team object to 'seed'

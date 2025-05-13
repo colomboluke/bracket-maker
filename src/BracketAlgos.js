@@ -42,9 +42,16 @@ export function updateVotes(bracket, matchID, newVoteArr) {
     return setMatch(bracket, matchID, {...oldMatch, votes: newVoteArr});
 }
 
-// Sets the winner of a match
-// Also advances the winning Team to the next round
+
+/**
+ * Sets the winner of a Match, and advances the winning Team to the next round
+ * @param bracket
+ * @param matchID
+ * @param winner t
+ * @returns {any}
+ */
 export function updateMatchWinner(bracket, matchID, winner) {
+    console.log(`Updating match ${matchID} to have winner ${winner}`)
     let oldMatch = getMatch(bracket, matchID);
     let newBracket = {...bracket};
     if (winner !== oldMatch.winner) { //this match has a new winner
@@ -54,12 +61,12 @@ export function updateMatchWinner(bracket, matchID, winner) {
         // Update the next round accordingly
         let nextRoundMatch = getMatch(bracket, oldMatch.nextMatchID);
         let winnerTeam; //winner as a Team object
-        if (winner === oldMatch.team1.id) {
+        if (winner === 0) {
             winnerTeam = oldMatch.team1;
-        } else if (winner === oldMatch.team2.id) {
+        } else if (winner === 1) {
             winnerTeam = oldMatch.team2;
         } else {
-            throw new Error(`Winner ID ${winner} does not match either team`)
+            throw new Error(`Winner ID ${winner} must be either 0 or 1. Found: ${winner}`)
         }
         if (oldMatch.nextStatus === 0) { //becomes 'home' team for its next match
             nextRoundMatch = {...nextRoundMatch, team1: winnerTeam}

@@ -10,7 +10,6 @@ export default function PlayBracketPage({title, bracket, voters, updateVotes, up
     const [votedStates, setVotedStates] = useState(Array(voters.length).fill(0));
     // When selectedMatchID changes, reset the votes (use has chosen a new match to vote on)
     useEffect(() => {
-        console.log("selected match ID changed")
         setVotedStates(Array(voters.length).fill(0));
     }, [selectedMatchID, voters.length])
     let selectedMatch = getMatch(bracket, selectedMatchID);
@@ -41,18 +40,23 @@ export default function PlayBracketPage({title, bracket, voters, updateVotes, up
 
     let votingScreen;
     selectedMatch === null ? votingScreen = <></> : votingScreen =
-        <VotingScreen key={selectedMatchID} voters={voters} match={selectedMatch} votedStates={votedStates} setVotedStates={setVotedStates}
-                      updateVotes={updateVotes} onWinnerChange={updateWinner} onClose={() => setSelectedMatchID(null)}/>
+        <VotingScreen key={selectedMatchID} voters={voters} match={selectedMatch}
+                      votedStates={votedStates} setVotedStates={setVotedStates}
+                      updateVotes={updateVotes} onWinnerChange={updateWinner}
+                      onClose={() => setSelectedMatchID(null)}/>
 
     return (
         <div className={"play-bracket-cont"}>
+
+            {selectedMatchID !== null && (<div className={"overlay"}></div>)}
             <h1>{newTitle}</h1>
             <button onClick={() => console.log(bracket, voters)}>Log bracket</button>
             <button onClick={() => console.log(getMatch(bracket, 2))}>Test find match</button>
             <button onClick={() => updateVotes(2, [1, 0])}>Test update votes</button>
             <PlayableBracket bracket={bracket} onClick={handleMatchClick}/>
-            {/*TODO: access a match of the bracket using the matchID*/}
             {votingScreen}
+
         </div>
+
     );
 }

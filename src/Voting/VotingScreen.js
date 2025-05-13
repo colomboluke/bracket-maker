@@ -15,10 +15,19 @@ export default function VotingScreen({match, voters, votedStates, setVotedStates
     useEffect(() => {
         // console.log("Votes changed, updating winner", votedStates)
         const newWinner = getWinner();
-        // console.log("New winner: ", newWinner, "Old winner: ", winner, newWinner === winner);
+        console.log("New winner: ", newWinner, "Old winner: ", winner, newWinner === winner);
         if (newWinner !== winner) {
             setWinner(newWinner);
-            onWinnerChange(match.id, newWinner.id); //tell parent to update bracket
+            let winnerIDArg;
+            // Update winner to be 0 if team 1 wins, 1 if team2 wins
+            if (newWinner.id === match.team1.id) {
+                winnerIDArg = 0;
+            } else if (newWinner.id === match.team2.id) {
+                winnerIDArg = 1;
+            } else {
+                throw new Error(`Winner ID ${newWinner.id} does not match either team1 (${match.team1.id}) or team2 (${match.team2.id})`)
+            }
+            onWinnerChange(match.id, winnerIDArg); //tell parent to update bracket
         }
 
         // Returns the Team that the majority of users have voted for
@@ -112,7 +121,7 @@ export default function VotingScreen({match, voters, votedStates, setVotedStates
             <div className={"voting-footer"}>
                 <span className={"winner-text"}>WINNER: {getWinnerString()}</span>
                 <button className={`next-matchup-button ${nextBtnActive}`} disabled={!allSelected}
-                        onClick={() => console.log(getWinnerString())}>NEXT
+                        onClick={onClose}>NEXT
                 </button>
             </div>
 
