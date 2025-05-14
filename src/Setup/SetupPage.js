@@ -1,12 +1,12 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useState} from "react";
 import {FaShuffle} from "react-icons/fa6";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import "./Setup.css";
-import TeamRow from "../TeamRow";
 import PreviewBracket from "../PreviewBracket/PreviewBracket";
 import Settings from "./Settings";
 import VoterRow from "./VoterRow";
+import TeamRow from "./TeamRow";
 
 export default function SetupPage({title, setTitle, teams, setTeams, bracket, voters, setVoters}) {
 
@@ -40,6 +40,7 @@ export default function SetupPage({title, setTitle, teams, setTeams, bracket, vo
 
     // Create a new team, with a seed one higher than the current highest and a default name
     function createTeam() {
+        // TODO: change this back to just "Team 1", etc, so we can extend past 26 teams
         let newName = "Team " + names[(teams.length)].charAt(0).toUpperCase()
                       + names[(teams.length)].slice(1);
         let lastTeam = teams.length > 0 ? teams.slice(-1)[0] : null;
@@ -100,7 +101,6 @@ export default function SetupPage({title, setTitle, teams, setTeams, bracket, vo
     }
 
     function removeVoter(name) {
-        console.log("removing voter with name ", name, voters)
         let nextVoters = [...voters];
         nextVoters = nextVoters.filter(item => item.name !== name);
         setVoters(nextVoters);
@@ -134,6 +134,30 @@ export default function SetupPage({title, setTitle, teams, setTeams, bracket, vo
         return teamsList;
     }
 
+    // Whether the bracket is ready to start
+    // Needs to have 2+ teams, and an odd number of voters greater than 1
+    let allowToStart = checkStartReqs();
+    let startBtnStyle = allowToStart ? "start-btn-able" : "start-btn-disabled";
+    function checkStartReqs() {
+        return teams.length >= 2 && (voters.length % 2 !== 0);
+    }
+
+    const navigate = useNavigate();
+    // Navigate to PlayBracketPage if we're allowed to start. Otherwise, show error message
+    function handleStartClick() {
+        const twoPlusTeams = teams.length >= 2;
+        const oddNumVoters = voters.length % 2 !== 0;
+        if (allowToStart) {
+            navigate('/play');
+        } else { //error handling
+            if (!twoPlusTeams) {
+                alert("A bracket needs at least two teams");
+            } else if (!oddNumVoters) {
+                alert("A voting bracket needs an odd number of voters. How else will we solve ties?");
+            }
+        }
+    }
+
     return (
         <div className={"setup-cont"}>
             <div className={"setup-left"}>
@@ -146,10 +170,7 @@ export default function SetupPage({title, setTitle, teams, setTeams, bracket, vo
                 <h1 className={"setup-title"}>Create Bracket</h1>
                 <div className={"setup-top-cont"}>
                     <h3 className={"t"}>Bracket Settings</h3>
-                    {/*TODO: quality check before starting bracket*/}
-                    <Link to={"/play"} className={"link start-btn-cont"}>
-                        <button className={"start-btn"}>Start Bracket</button>
-                    </Link>
+                    <button className={`start-btn ${startBtnStyle}`} onClick={handleStartClick}>Start Bracket</button>
                 </div>
                 <Settings numTeams={teams.length} changeNumTeams={changeNumTeams}
                           numVoters={voters.length} changeNumVoters={changeNumVoters} title={title}
@@ -185,6 +206,9 @@ export default function SetupPage({title, setTitle, teams, setTeams, bracket, vo
                         <VoterRow key={index} name={voter.name}
                                   updateName={updateVoter} removeVoter={removeVoter}></VoterRow>
                     ))}
+                    <button className={"blue-button add-voter-btn"}
+                            onClick={() => createVoter()}>Add Voter
+                    </button>
                 </div>
             </div>
             <div className={"setup-right"}>

@@ -108,7 +108,7 @@ export default function VotingScreen({match, voters, votedStates, setVotedStates
         <div className={"voting-cont"}>
             <div className={"title-cont"}>
                 <span className={"title"}>SELECT VOTES</span>
-                <button onClick={onClose} className={"close-btn"}>X</button>
+                <button onClick={onClose} className={"close-btn"}>&times;</button>
             </div>
             <div className={"voting-grid"}>
                 {title}

@@ -36,9 +36,19 @@
     cursor: pointer;
 }
 
-.start-btn:hover {
+.start-btn-able:hover {
     background-color: var(--accent-hover);
 }
+
+.start-btn-disabled {
+    background-color: grey;
+}
+
+.start-btn-disabled:hover {
+    background-color: darkgrey;
+}
+
+
 
 .setup-left {
     /*border: 2px solid blue;*/
@@ -126,7 +136,9 @@
 .team-add-grid {
     /*border: 2px solid green;*/
     display: grid;
-    grid-template-columns: 3fr 12fr 3fr 3fr 1fr;
+    /*Total: 20fr. First two columns: 15. Rest: 5*/
+    /*Setting min-max so the columns don't resize when text gets too long*/
+    grid-template-columns: 3fr 12fr minmax(0, 2fr) minmax(0, 2fr) minmax(0, 1fr);
     row-gap: 8px;
     background-color: var(--background3);
     padding: 15px 10px;
@@ -174,12 +186,6 @@
     cursor: pointer;
 }
 
-.blue-button-cont {
-    display: flex;
-    flex-flow: row;
-    grid-column: 1 / 6;
-}
-
 .blue-button {
     width: auto;
     padding-right: 20px;
@@ -192,12 +198,18 @@
     font-size: 16px;
     cursor: pointer;
     border-radius: 2px;
+    font-weight: bold;
 }
 
 .add-team-btn {
-    grid-column: 2 / 5; /*Effectively centers it b/c the ends are 1fr each*/
-    align-self: center;
-    font-weight: bold;
+    grid-column: 2 / 4; /*Effectively centers it*/
+    /*position: static;*/
+    /*left: 50%;*/
+}
+
+
+.add-voter-btn {
+    grid-column: 1 / 6;
 }
 
 .shuffle-btn {
@@ -236,3 +248,5 @@
     position: relative;
     top: 10%;
 }
+
+/*Error handling*/

@@ -8,7 +8,7 @@ export default function Settings({numTeams, changeNumTeams, numVoters, changeNum
     }
 
     function handleNumVotersChange(newVal) {
-        if (10 > newVal > 0) { //capping it at 9 just for space
+        if (newVal > 0 && newVal < 10) { //capping it at 9 just for space
             changeNumVoters(newVal);
         }
     }
