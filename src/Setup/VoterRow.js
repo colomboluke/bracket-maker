@@ -11,7 +11,7 @@ export default function VoterRow({index, name, updateName, removeVoter}) {
             <div className={"icon"}>to-do</div>
             <div className={"color"}>to-do</div>
             <div className={"remove"}><CgRemove className={"remove-btn"}
-                                                onClick={() => removeVoter(index)}/></div>
+                                                onClick={() => removeVoter(name)}/></div>
         </>
     )
 }

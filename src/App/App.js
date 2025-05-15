@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import {constructBracket, updateVotes, updateMatchWinner} from "../BracketAlgos";
+import constructBracket from "../BracketAlgos/ConstructBracket";
 import Header from "../Header/Header";
 import HomePage from "../Home/HomePage";
 import SetupPage from "../Setup/SetupPage";
@@ -28,14 +28,17 @@ function App() {
 
     // Given user input, update the votes array for a match
     function handleUpdateVotes(ID, newVoteArr) {
-        let nextBracket = updateVotes({...bracket}, ID, newVoteArr);
-        // console.log("Updated bracket: ", nextBracket)
+        let nextBracket = bracket.cleanCopy();
+        let nextMatch = nextBracket.getMatch(ID);
+        // Replace old match with a new one that's the same except for a new vote array
+        nextBracket.setMatch(nextMatch.cleanCopy({votes: newVoteArr}));
         setBracket(nextBracket);
     }
 
+    // Update the bracket when there's an update to a Match's winner
     function handleUpdateWinner(matchID, winnerID) {
-        let nextBracket = updateMatchWinner(bracket, matchID, winnerID);
-        // console.log("Updating winner: ", nextBracket)
+        let nextBracket = bracket.cleanCopy();
+        nextBracket.handleMatchWinner(matchID, winnerID);
         setBracket(nextBracket);
     }
 

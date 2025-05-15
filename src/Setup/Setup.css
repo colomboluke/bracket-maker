@@ -147,10 +147,12 @@
 .voter-add-grid {
     /*border: 2px solid green;*/
     display: grid;
-    grid-template-columns: 6fr 3fr 3fr 1fr;
+    grid-template-columns: 6fr 2fr 2fr 2fr;
     row-gap: 8px;
     background-color: var(--background3);
-    padding: 15px 10px;
+    /*Padding for the add-voter-btn*/
+    padding: 15px 10px 75px;
+    position: relative;
 }
 
 /*TODO: use this instead of just nothing for Team component*/
@@ -209,7 +211,11 @@
 
 
 .add-voter-btn {
-    grid-column: 1 / 6;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 100px;
 }
 
 .shuffle-btn {

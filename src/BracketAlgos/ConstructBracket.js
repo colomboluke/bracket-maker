@@ -1,115 +1,22 @@
-// TODO: make a match class? would be easier to have getters/setters
+import {Match, Bracket} from "./ClassDefs";
 
-// Given a bracket object and a match ID, return the match corresponding to that ID
-export function getMatch(bracket, targetID) {
-    // Base case. Null bracket -> return null
-    if (bracket === null || bracket === undefined) {
-        return null;
-    }
-    // If the target match exists in this round, return it
-    let curMatches = bracket.matches;
-    for (let i = 0; i < curMatches.length; i++) {
-        if (curMatches[i].id === targetID) {
-            return curMatches[i]; //return the target match
-        }
-    }
-    // Otherwise, recurse on next round
-    return getMatch(bracket.nextRound, targetID);
-}
-
-// Replace an existing Match in the Bracket with a new one
-// Private function - do not export!
-function setMatch(bracket, targetID, newMatch) {
-    // Base case. Null bracket -> return null
-    if (bracket === null || bracket === undefined) {
-        return null;
-    }
-    // If the target match exists in this round, update it
-    let curMatches = bracket.matches;
-    for (let i = 0; i < curMatches.length; i++) {
-        if (curMatches[i].id === targetID) {
-            curMatches[i] = newMatch;
-            return bracket; //return the bracket after updating match
-        }
-    }
-    // Otherwise, recurse on next round
-    return {...bracket, nextRound: setMatch(bracket.nextRound, targetID, newMatch)};
-}
-
-// Replaces the given Match's votes array with a new array
-export function updateVotes(bracket, matchID, newVoteArr) {
-    let oldMatch = getMatch(bracket, matchID);
-    return setMatch(bracket, matchID, {...oldMatch, votes: newVoteArr});
-}
-
-
-/**
- * Sets the winner of a Match, and advances the winning Team to the next round
- * @param bracket
- * @param matchID
- * @param winner t
- * @returns {any}
- */
-export function updateMatchWinner(bracket, matchID, winner) {
-    console.log(`Updating match ${matchID} to have winner ${winner}`)
-    let oldMatch = getMatch(bracket, matchID);
-    let newBracket = {...bracket};
-    if (winner !== oldMatch.winner) { //this match has a new winner
-        // Update the target match's winner
-        let newMatch = {...oldMatch, winner: winner}
-        newBracket = setMatch(newBracket, matchID, newMatch);
-        // Update the next round accordingly
-        let nextRoundMatch = getMatch(bracket, oldMatch.nextMatchID);
-        let winnerTeam; //winner as a Team object
-        if (winner === 0) {
-            winnerTeam = oldMatch.team1;
-        } else if (winner === 1) {
-            winnerTeam = oldMatch.team2;
-        } else {
-            throw new Error(`Winner ID ${winner} must be either 0 or 1. Found: ${winner}`)
-        }
-        if (oldMatch.nextStatus === 0) { //becomes 'home' team for its next match
-            nextRoundMatch = {...nextRoundMatch, team1: winnerTeam}
-        } else if (oldMatch.nextStatus === 1) { //becomes 'away' team
-            nextRoundMatch = {...nextRoundMatch, team2: winnerTeam}
-        } else {
-            throw new Error(`Next statuses should be only 0 or 1. Found: ${oldMatch.nextStatus}`)
-        }
-        newBracket = setMatch(newBracket, nextRoundMatch.id, nextRoundMatch)
-    }
-    return newBracket;
-}
-
-// ~~~ BRACKET CREATING ALGO ~~~
+const placeholderMatch = new Match(0, null, null, null, null, [0, 0], null);
 
 function getPresetBracket(teams) {
     if (teams.length === 0) {
-        return {roundNum: 0, matches: [], nextRound: null};
+        return new Bracket(0, [], null);
     } else if (teams.length === 1) {
-        return {
-            roundNum: 0, matches: [{
-                id: 0, winner: null, team1: teams[0],
-                team2: null, nextMatchID: null
-            }], nextRound: null
-        }
+        return new Bracket(0,
+                           [placeholderMatch.cleanCopy({team1: teams[0]})],
+                           null)
     } else if (teams.length === 2) {
-        return {
-            roundNum: 0, matches: [{
-                id: 0, winner: null, team1: teams[0],
-                team2: teams[1], nextMatchID: null
-            }], nextRound: null
-        }
+        return new Bracket(0, [placeholderMatch.cleanCopy({team1: teams[0], team2: teams[1]})],
+                           null)
     } else if (teams.length === 3) {
-        return {
-            roundNum: 0,
-            matches: [{id: 0, winner: null, team1: null, team2: null, nextMatchID: null},
-                {id: 1, winner: null, team1: teams[1], team2: teams[2], nextMatchID: 1}],
-            nextRound: {
-                roundNum: 1, matches: [{
-                    id: 1, winner: null, team1: teams[0], team2: null, nextMatchID: null
-                }], nextRound: null
-            }
-        }
+        return new Bracket(0, [placeholderMatch, placeholderMatch.cleanCopy(
+                               {id: 1, team1: teams[1], team2: teams[2], nextMatchID: 2, nextStatus: 1})],
+                           new Bracket(1, [placeholderMatch.cleanCopy({id: 1, team1: teams[0]})],
+                                       null))
     }
 }
 
@@ -141,12 +48,11 @@ function getPresetBracket(teams) {
 // 7. Repeat steps 1-6 for the next round if necessary
 //      a) We recurse until we are left with 1 match.
 
-
 /**
  * Constructs a bracket object from the current teams state
  * @returns a recursive bracket object {roundNum, matches, nextRound}
  */
-export function constructBracket(teams) {
+export default function constructBracket(teams) {
     let totalRounds = getNumOfRounds(teams.length);
     let bracket; // 0 teams => there is no bracket
     if (teams.length === 0) {
@@ -161,6 +67,7 @@ export function constructBracket(teams) {
         //roundNum = 0 indexed, first round = 0
         let matchIDCounter = 0;
         bracket = buildRoundRecursive(teams, 0, []);
+
         // Teams in round: array containing Team objects
         function buildRoundRecursive(teamsInCurRound, curRoundIdx, lastRoundByeTeams) {
             //Number of non-placeholder teams = number of bye teams, unless it's the first
@@ -173,7 +80,9 @@ export function constructBracket(teams) {
                                             numNonPlaceholderTeams, lastRoundByeTeams, teams);
             let initialMatches = seedTeamsResult[0];
             let curByeTeams = seedTeamsResult[1];
-            initialMatches = assignMatchIDs(structuredClone(initialMatches));
+            // NOTE: this line was originally assignMatchIDs(structuredClone(initialMatches)),
+            // I changed it because structuredClone() was turning each Match into a normal object.
+            initialMatches = assignMatchIDs(initialMatches);
             let curMatches = processMatches(initialMatches, curRoundIdx, lastRoundByeTeams);
             let nextRoundTeams = getNextRoundTeams(initialMatches, curRoundIdx);
             // Recurse if this isn't the finals
@@ -181,8 +90,9 @@ export function constructBracket(teams) {
             if (initialMatches.length > 1) {
                 nextRound = buildRoundRecursive(nextRoundTeams, curRoundIdx + 1, curByeTeams);
             }
-            return {roundNum: curRoundIdx, matches: curMatches, nextRound: nextRound}
+            return new Bracket(curRoundIdx, curMatches, nextRound);
         }
+
         // Assign matches their own IDs, and the IDs of the matches they feed into
         // NOTE: this function has to be in the same scope as buildRoundRecursive to sync matchIDs
         function assignMatchIDs(matchesArr) {
@@ -223,7 +133,8 @@ function getNumOfRounds(numTeams) {
 // Time complexity: O(m*(m/2))
 function seedTeams(numRounds, roundID, numNonPlaceholderTeams, lastRoundByeTeams, teams) {
     // The bracket tree gets built off the root [1,2]
-    let matches = [{team1: 1, team2: 2}];
+    let matches = [placeholderMatch.cleanCopy({team1: 1, team2: 2})];
+    // let matches = [{team1: 1, team2: 2}];
     let byes = [];
     for (let round = 1; round < numRounds; round++) {
         let curRoundMatches = [];
@@ -256,7 +167,7 @@ function createMatch(homeSeed, awaySeed, totalTeams, byes) {
         byes.push(awaySeed);
         homeSeed = null;
     }
-    return {id: null, winner: null, team1: homeSeed, team2: awaySeed, votes: [0, 0]};
+    return new Match(null, null, homeSeed, awaySeed, null, [0, 0], null);
 }
 
 // Given an array of matches, ensure that the lower seed (higher ranked) goes first
@@ -268,7 +179,7 @@ function makeLowerOnTop(matchesArray) {
         if (match.team1 == null || match.team2 == null || match.team1 < match.team2) {
             output.push(match);
         } else {    //swap order of teams
-            output.push({...match, team1: match.team2, team2: match.team1})
+            output.push(match.cleanCopy({team1: match.team2, team2: match.team1}));
         }
     }
     return output;
@@ -289,10 +200,9 @@ function convertToTeamObject(matchesList, teams) {
         if (awayTeam !== null) {
             awayTeam = teams.filter(team => team.id + 1 === awayTeam)[0];
         }
-        return {...match, team1: homeTeam, team2: awayTeam};
+        return match.cleanCopy({team1: homeTeam, team2: awayTeam});
     });
 }
-
 
 // Takes in the initial matches and processes them, returning the actual current-round matches
 //  Round 1: Remove any matches with bye teams, keep the rest as is
@@ -329,8 +239,7 @@ function processMatches(matches, roundIdx, byeTeamsFromLastRound) {
 
 // Makes both teams null, keeps everything else the same
 function convertMatchToPlaceholder(match) {
-    return {...match, team1: null, team2: null};
-
+    return match.cleanCopy({team1: null, team2: null});
 }
 
 // nextRoundTeams logic:

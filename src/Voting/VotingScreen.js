@@ -5,17 +5,15 @@ import "./Voting.css";
 // TODO: make this less coupled with App/CreateBracketAlgo
 // TODO: handle users clicking on a future round match that has no teams yet
 export default function VotingScreen({match, voters, votedStates, setVotedStates, updateVotes, onWinnerChange, onClose}) {
-    console.log("Matchup: ", match, votedStates)
 
     // Using useRef instead of State
     const [winner, setWinner] = useState(null);
 
     // Update the winner when the votes change
-    // TODO: right now, when you choose a winner in one match then switch to the next, it gets an error because there's a null winner
     useEffect(() => {
         // console.log("Votes changed, updating winner", votedStates)
         const newWinner = getWinner();
-        console.log("New winner: ", newWinner, "Old winner: ", winner, newWinner === winner);
+        // console.log("New winner: ", newWinner, "Old winner: ", winner, newWinner === winner);
         if (newWinner !== winner) {
             setWinner(newWinner);
             let winnerIDArg;
@@ -27,6 +25,7 @@ export default function VotingScreen({match, voters, votedStates, setVotedStates
             } else {
                 throw new Error(`Winner ID ${newWinner.id} does not match either team1 (${match.team1.id}) or team2 (${match.team2.id})`)
             }
+            // console.log(`Calling updateWinner with ${match.id}, ${winnerIDArg}`)
             onWinnerChange(match.id, winnerIDArg); //tell parent to update bracket
         }
 

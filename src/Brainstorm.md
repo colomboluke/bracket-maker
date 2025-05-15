@@ -23,6 +23,7 @@ TODO:
   - [ ] IdeasPage page
 - QoL
   - [ ] Make teams draggable in SetupPage
+  - [ ] In PlayBracketPage, have the hover border change colors based on whether that matchup is playable
   - [ ] Info buttons/tutorial explaining the basic idea of a voting bracket
   - [ ] Let users close a VotingScreen by pressing escape
   - [ ] Progress bar, showing how many matches still need to be completed

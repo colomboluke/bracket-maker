@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import PlayableBracket from "./PlayableBracket";
 import VotingScreen from "../Voting/VotingScreen";
-import {getMatch} from "../BracketAlgos";
 
 export default function PlayBracketPage({title, bracket, voters, updateVotes, updateWinner}) {
     // Track the currently selected match using its ID
@@ -11,8 +10,10 @@ export default function PlayBracketPage({title, bracket, voters, updateVotes, up
     // When selectedMatchID changes, reset the votes (use has chosen a new match to vote on)
     useEffect(() => {
         setVotedStates(Array(voters.length).fill(0));
-    }, [selectedMatchID, voters.length])
-    let selectedMatch = getMatch(bracket, selectedMatchID);
+    }, [selectedMatchID, voters.length]);
+
+    //TODO: bug where if you open a page to
+    let selectedMatch = bracket.getMatch(selectedMatchID);
 
     let newTitle = 'Untitled Bracket';
     if (title !== undefined && title !== null && title !== "") {
@@ -51,8 +52,6 @@ export default function PlayBracketPage({title, bracket, voters, updateVotes, up
             {selectedMatchID !== null && (<div className={"overlay"}></div>)}
             <h1>{newTitle}</h1>
             <button onClick={() => console.log(bracket, voters)}>Log bracket</button>
-            <button onClick={() => console.log(getMatch(bracket, 2))}>Test find match</button>
-            <button onClick={() => updateVotes(2, [1, 0])}>Test update votes</button>
             <PlayableBracket bracket={bracket} onClick={handleMatchClick}/>
             {votingScreen}
 
