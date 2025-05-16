@@ -1,7 +1,7 @@
 import {CgRemove} from "react-icons/cg";
 
 // Displays a team in the setup screen
-export default function TeamRow({index, name, updateName, removeTeam}) {
+export default function TeamRow({index, name, updateName, onRemove}) {
     return (
         <>
             <div className={"seed"}>{index + 1}</div>
@@ -13,7 +13,7 @@ export default function TeamRow({index, name, updateName, removeTeam}) {
             <div className={"icon"}></div>
             <div className={"color"}></div>
             <div className={"remove"}><CgRemove className={"remove-btn"}
-                                                onClick={() => removeTeam(index)}/></div>
+                                                onClick={() => onRemove()}/></div>
         </>
     )
 }

@@ -1,19 +1,26 @@
 import React from 'react';
-import {useState} from "react";
-import {FaShuffle} from "react-icons/fa6";
-import { useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import "./Setup.css";
 import PreviewBracket from "../PreviewBracket/PreviewBracket";
 import Settings from "./Settings";
-import VoterRow from "./VoterRow";
-import TeamRow from "./TeamRow";
-import {Team} from "../BracketAlgos/ClassDefs";
+import Team from "../BracketAlgos/Team";
+import TeamAddGrid from "./TeamAddGrid";
+import VoterAddGrid from "./VoterAddGrid";
 
-export default function SetupPage({title, setTitle, teams, setTeams, bracket, voters, setVoters}) {
-
-    const [desc, setDesc] = useState("");
+export default function SetupPage({
+                                      title,
+                                      setTitle,
+                                      desc,
+                                      setDesc,
+                                      teams,
+                                      setTeams,
+                                      bracket,
+                                      voters,
+                                      setVoters, onStart
+                                  }) {
 
     // ~~~~ Modifying State Functions ~~~~
+    // SetupPage has the power to edit the teams, voters, while PlayPage does not
 
     // Create a new team, with a seed one higher than the current highest and a default name
     function createTeam() {
@@ -55,6 +62,9 @@ export default function SetupPage({title, setTitle, teams, setTeams, bracket, vo
 
     // Given a target number of teams, add or remove teams to meet that target
     function changeNumTeams(targetNum) {
+        if (targetNum < 0) {
+            return;
+        }
         if (targetNum === teams.length) {
             return;
         }
@@ -84,6 +94,7 @@ export default function SetupPage({title, setTitle, teams, setTeams, bracket, vo
         setTeams(reSeed(nextTeams));
     }
 
+    // Create a new voter with a default name
     function createVoter() {
         let newName = "Voter " + (voters.length + 1);
         let lastVoter = voters.length > 0 ? voters.slice(-1)[0] : null;
@@ -96,7 +107,8 @@ export default function SetupPage({title, setTitle, teams, setTeams, bracket, vo
         setVoters([...voters, {name: newName, history: []}]);
     }
 
-    function updateVoter(oldName, newName) {
+    // Change the name of a voter
+    function updateVoterName(oldName, newName) {
         let nextVoters = [...voters];
         for (let voter of nextVoters) {
             if (voter.name === oldName) {
@@ -106,22 +118,27 @@ export default function SetupPage({title, setTitle, teams, setTeams, bracket, vo
         setVoters(nextVoters);
     }
 
+    // Remove a voter
     function removeVoter(name) {
         let nextVoters = [...voters];
         nextVoters = nextVoters.filter(item => item.name !== name);
         setVoters(nextVoters);
     }
 
+    // Public facing method to add or remove voters (has guardrails)
     function changeNumVoters(targetNum) {
+        if (targetNum < 1 || targetNum > 10) { //arbitrarily capping at 9 just for space
+            return;
+        }
         if (targetNum === voters.length) {
             return;
         }
-        if (targetNum > voters.length) { //Add more teams
+        if (targetNum > voters.length) { //Add more voters
             for (let i = voters.length; i < targetNum; i++) {
                 createVoter();
             }
         }
-        if (targetNum < voters.length) { //Remove teams
+        if (targetNum < voters.length) { //Remove voters
             for (let i = targetNum; i < voters.length; i++) {
                 let lastName = voters.slice(-1)[0].name;
                 removeVoter(lastName);
@@ -131,27 +148,25 @@ export default function SetupPage({title, setTitle, teams, setTeams, bracket, vo
 
     // Whether the bracket is ready to start
     // Needs to have 2+ teams, and an odd number of voters greater than 1
-    let allowToStart = checkStartReqs();
-    let startBtnStyle = allowToStart ? "start-btn-able" : "start-btn-disabled";
-
     function checkStartReqs() {
         return teams.length >= 2 && (voters.length % 2 !== 0);
     }
 
+    let allowToStart = checkStartReqs();
+    let startBtnStyle = allowToStart ? "start-btn-able" : "start-btn-disabled";
+
+    // Navigate to PlayPage if we're allowed to start. Otherwise, show error message
     const navigate = useNavigate();
 
-    // Navigate to PlayBracketPage if we're allowed to start. Otherwise, show error message
     function handleStartClick() {
-        const twoPlusTeams = teams.length >= 2;
-        const oddNumVoters = voters.length % 2 !== 0;
         if (allowToStart) {
+            onStart();  // Initialize votes objects now that the voters are set
             navigate('/play');
-        } else { //error handling
-            if (!twoPlusTeams) {
-                alert("A bracket needs at least two teams");
-            } else if (!oddNumVoters) {
-                alert(
-                    "A voting bracket needs an odd number of voters. How else will we solve ties?");
+        } else { //specific error handling
+            if (!(teams.length >= 2)) {
+                alert("A bracket needs at least two teams.");
+            } else if (!(voters.length % 2 !== 0)) {
+                alert("A voting bracket needs an odd number of voters, in order to solve ties.");
             }
         }
     }
@@ -176,41 +191,12 @@ export default function SetupPage({title, setTitle, teams, setTeams, bracket, vo
                           numVoters={voters.length} changeNumVoters={changeNumVoters} title={title}
                           setTitle={setTitle} desc={desc} setDesc={setDesc}/>
                 <h3>Teams</h3>
-                <div className={"team-add-grid"}>
-                    <div className={"ta-header seed"}>Seed</div>
-                    <div className={"ta-header name"}>Name</div>
-                    <div className={"ta-header icon"}>Icon</div>
-                    <div className={"ta-header color"}>Color</div>
-                    <div className={"ta-header remove"}></div>
-                    {/*TODO: Add a rearrange icon, and a delete button only when hovering*/}
-                    {teams.map((team, index) => (
-                        <TeamRow key={index} index={index} name={team.name}
-                                 updateName={updateTeamName} removeTeam={removeTeam}></TeamRow>
-                    ))}
-                    {teams.length > 0 ? (<button className={"blue-button shuffle-btn"}
-                                                 onClick={() => shuffleTeams()}>
-                        <FaShuffle className={"shuffle-icon"}/>
-                    </button>) : (<></>)}
-                    <button className={"blue-button add-team-btn"}
-                            onClick={() => createTeam()}>Add
-                        Team
-                    </button>
-                </div>
+                <TeamAddGrid teams={teams} updateTeamName={updateTeamName}
+                             changeNumTeams={changeNumTeams} createTeam={createTeam}
+                             shuffleTeams={shuffleTeams}/>
                 <h3>Voters</h3>
-                <div className={"voter-add-grid"}>
-                    <div className={"ta-header name"}>Name</div>
-                    <div className={"ta-header icon"}>Icon</div>
-                    <div className={"ta-header color"}>Color</div>
-                    <div className={"ta-header remove"}></div>
-                    {voters.map((voter, index) => (
-                        <VoterRow key={index} name={voter.name}
-                                  updateName={updateVoter} removeVoter={removeVoter}></VoterRow>
-                    ))}
-                    <button className={"blue-button add-voter-btn"}
-                            onClick={() => createVoter()}>Add Voter
-                    </button>
-
-                </div>
+                <VoterAddGrid voters={voters} changeNumVoters={changeNumVoters}
+                              createVoter={createVoter} updateVoterName={updateVoterName}/>
             </div>
             <div className={"setup-right"}>
                 <PreviewBracket bracket={bracket} roundWidth={200}/>

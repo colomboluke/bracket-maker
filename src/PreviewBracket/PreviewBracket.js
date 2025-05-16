@@ -1,5 +1,5 @@
 import "./PreviewBracket.css";
-import Matchup from "../Setup/Matchup";
+import Matchup from "./Matchup";
 
 /**
  * Takes in the data from one round and renders it, then recursively renders the next round.
@@ -10,21 +10,21 @@ import Matchup from "../Setup/Matchup";
 
 export default function PreviewBracket({bracket}) {
 
+    // Renders the bracket recursively, turning each Match into a Matchup component
     function renderRound(roundData) {
         if (roundData == null || roundData.matches.length === 0) {
             return null;
         } else {
-            // Round number, where 0 is first round, n is the nth round
-            let roundNum = roundData.roundNum;
+            let curRound = roundData.roundID;
             return (
                 <>
                     <div className={"round"}>
                         {/*Generate actual matches*/}
                         {roundData.matches.map((match, index) => (
                             <Matchup key={index} team1={match.team1}
-                                     team2={match.team2} className={roundNum}></Matchup>))}
+                                     team2={match.team2} className={curRound}/>))}
                     </div>
-                    {renderRound(roundData.nextRound, roundNum + 1)}
+                    {renderRound(roundData.nextRound, curRound + 1)}
                 </>
             )
         }

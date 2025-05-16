@@ -3,10 +3,16 @@ import {matchupSafeGet} from "../Utils";
 import "./PlayableMatchup.css";
 
 // Displays a single matchup of two teams in the bracket
-export default function ClickableMatchup({team1, team2, matchID, onClick, winner}) {
+export default function ClickableMatchup({team1, team2, matchID, onClick, winner, votesTally}) {
 
-    const topStyle = winner === 0 ? "team-winner" : ""
-    const bottomStyle = winner === 1 ? "team-winner" : ""
+    console.log(matchID, votesTally, winner);
+    function getVotesString() {
+        return `${votesTally.team1} - ${votesTally.team2}`;
+    }
+
+    // Style the text differently based on which team is the winner
+    const topStyle = winner === 1 ? "team-winner" : ""
+    const bottomStyle = winner === 2 ? "team-winner" : ""
 
     return (
         <div className={"matchup"} onClick={() => onClick(matchID)}>
@@ -17,7 +23,7 @@ export default function ClickableMatchup({team1, team2, matchID, onClick, winner
                 <span className={"team-name"}>{matchupSafeGet(team1, "name")}</span>
                 <span className={"team-votes"}>{matchupSafeGet(team1, "votes")}</span>
             </li>
-
+            {winner !== null && <span className={"votes-tally"}>{getVotesString()}</span>}
             <li className={"game game-spacer"}>&nbsp;</li>
 
             <li className={`game game-bottom ${bottomStyle}`}>

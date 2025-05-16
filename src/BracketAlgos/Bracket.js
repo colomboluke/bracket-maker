@@ -1,54 +1,4 @@
-export class Team {
-    constructor(id, name) {
-        this.id = id;
-        this.name = name;
-    }
-}
-
-export class Match {
-    /**
-     * @param id Int
-     * @param winner Int, either 0 or 1, representing team1 or team2 winning this match
-     * @param team1 Team
-     * @param team2 Team
-     * @param nextMatchID Int, representing the Match that the winner will advance to
-     * @param votesArray Int[], length 2, counting the votes for each team
-     * @param nextStatus Int, whether the winner of this match becomes the home or away team of its next
-     *     match
-     */
-    constructor(id, winner, team1, team2, nextMatchID, votesArray, nextStatus) {
-        this.id = id;
-        this.winner = winner;
-        this.team1 = team1;
-        this.team2 = team2;
-        this.nextMatchID = nextMatchID;
-        if (votesArray.length !== 2) {
-            throw new Error(`Length of votes array must be 2 (for the two teams)`);
-        } else {
-            this.votes = votesArray;
-        }
-        if (nextStatus !== 0 && nextStatus !== 1 && nextStatus !== null) {
-            throw new Error(`Next statuses should only be 0 or 1. Found: ${nextStatus}`);
-        } else {
-            this.nextStatus = nextStatus;
-        }
-    }
-
-    // Custom copy method to mimic the spread operator
-    cleanCopy({
-                  id = this.id,
-                  winner = this.winner,
-                  team1 = this.team1,
-                  team2 = this.team2,
-                  nextMatchID = this.nextMatchID,
-                  votesArray = this.votes,
-                  nextStatus = this.nextStatus
-              } = {}) {
-        return new Match(id, winner, team1, team2, nextMatchID, votesArray, nextStatus);
-    }
-}
-
-export class Bracket {
+export default class Bracket {
     /**
      * @param roundID Int
      * @param matches Match[]
@@ -110,6 +60,24 @@ export class Bracket {
         }
     }
 
+    initializeVoterObjects(voterArray) {
+        // Get the votes object which we will assign to every match.votes
+        let voterNameArr = voterArray.map(elem => {
+            return elem.name;
+        })
+        let votesObj = {};
+        voterNameArr.forEach(elem => {
+            votesObj[elem] = 0;
+        })
+        for (let i = 0; i < this.matches.length; i++) {
+            // Create a copy! Otherwise, all matches will have the same votes object
+            this.matches[i].votes = {...votesObj};
+        }
+        if (this.nextRound) {
+            this.nextRound.initializeVoterObjects(voterArray);
+        }
+    }
+
     /**
      * Sets the winner of a Match, and advances the winning Team to the next round
      * @param targetID ID of the match whose winner is being updated
@@ -127,12 +95,12 @@ export class Bracket {
             let nextRoundMatch = this.getMatch(oldMatch.nextMatchID);
             if (nextRoundMatch) {
                 let winnerTeam; //winnerInt as a Team object
-                if (winnerInt === 0) {
+                if (winnerInt === 1) {
                     winnerTeam = oldMatch.team1;
-                } else if (winnerInt === 1) {
+                } else if (winnerInt === 2) {
                     winnerTeam = oldMatch.team2;
                 } else {
-                    throw new Error(`Winner must be either 0 or 1. Found: ${winnerInt}`)
+                    throw new Error(`Winner must be either 1 or 2. Found: ${winnerInt}`)
                 }
                 if (oldMatch.nextStatus === 0) {
                     nextRoundMatch = nextRoundMatch.cleanCopy({team1: winnerTeam});

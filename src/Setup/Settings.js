@@ -1,18 +1,6 @@
 
 export default function Settings({numTeams, changeNumTeams, numVoters, changeNumVoters, title, setTitle, desc, setDesc}) {
 
-    function handleNumTeamChange(newVal) {
-        if (newVal > 0) { //Don't let there be less than 0 teams
-            changeNumTeams(newVal);
-        }
-    }
-
-    function handleNumVotersChange(newVal) {
-        if (newVal > 0 && newVal < 10) { //capping it at 9 just for space
-            changeNumVoters(newVal);
-        }
-    }
-
     return (
         <div className={"settings"}>
             <div className={"settings-item"}>
@@ -22,7 +10,7 @@ export default function Settings({numTeams, changeNumTeams, numVoters, changeNum
                 <input value={numTeams} className={"settings-input num-teams-input"}
                        type={"number"}
                        onChange={e => {
-                           handleNumTeamChange(e.target.valueAsNumber);
+                           changeNumTeams(e.target.valueAsNumber);
                        }}/>
             </div>
             <div className={"settings-item"}>
@@ -30,7 +18,7 @@ export default function Settings({numTeams, changeNumTeams, numVoters, changeNum
                 <input value={numVoters} className={"settings-input num-teams-input"}
                        type={"number"}
                        onChange={e => {
-                           handleNumVotersChange(e.target.valueAsNumber);
+                           changeNumVoters(e.target.valueAsNumber);
                        }}/>
             </div>
             <div className={"settings-item"}>

@@ -1,6 +1,7 @@
-import {Match, Bracket} from "./ClassDefs";
+import Match from "./Match";
+import Bracket from "./Bracket";
 
-const placeholderMatch = new Match(0, null, null, null, null, [0, 0], null);
+const placeholderMatch = new Match(0, null, null, null, null, {}, null);
 
 function getPresetBracket(teams) {
     if (teams.length === 0) {
@@ -167,7 +168,7 @@ function createMatch(homeSeed, awaySeed, totalTeams, byes) {
         byes.push(awaySeed);
         homeSeed = null;
     }
-    return new Match(null, null, homeSeed, awaySeed, null, [0, 0], null);
+    return new Match(null, null, homeSeed, awaySeed, null, {}, null);
 }
 
 // Given an array of matches, ensure that the lower seed (higher ranked) goes first

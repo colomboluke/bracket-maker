@@ -138,7 +138,7 @@
     display: grid;
     /*Total: 20fr. First two columns: 15. Rest: 5*/
     /*Setting min-max so the columns don't resize when text gets too long*/
-    grid-template-columns: 3fr 12fr minmax(0, 2fr) minmax(0, 2fr) minmax(0, 1fr);
+    grid-template-columns: 2fr 11fr minmax(0, 2fr) minmax(0, 2fr) minmax(0, 1fr);
     row-gap: 8px;
     background-color: var(--background3);
     padding: 15px 10px;
@@ -147,7 +147,7 @@
 .voter-add-grid {
     /*border: 2px solid green;*/
     display: grid;
-    grid-template-columns: 6fr 2fr 2fr 2fr;
+    grid-template-columns: 6fr 3fr 3fr 1fr;
     row-gap: 8px;
     background-color: var(--background3);
     /*Padding for the add-voter-btn*/
@@ -204,9 +204,8 @@
 }
 
 .add-team-btn {
-    grid-column: 2 / 4; /*Effectively centers it*/
-    /*position: static;*/
-    /*left: 50%;*/
+    /*This is off center right now but I don't think anyone will notice*/
+    grid-column: 2 / 5;
 }
 
 
@@ -214,6 +213,7 @@
     position: absolute;
     bottom: 0;
     left: 50%;
+    /*Left: only makes it start 50% left, this makes the center 50%*/
     transform: translateX(-50%);
     margin-top: 100px;
 }

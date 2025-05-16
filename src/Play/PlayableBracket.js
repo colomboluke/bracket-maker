@@ -1,6 +1,6 @@
 import "./PlayableBracket.css";
 import ClickableMatchup from "./ClickableMatch";
-import Matchup from "../Setup/Matchup";
+import Matchup from "../PreviewBracket/Matchup";
 
 /**
  * Takes in the data from one round and renders it, then recursively renders the next round.
@@ -9,30 +9,32 @@ import Matchup from "../Setup/Matchup";
  * @returns {JSX.Element|null}
  */
 
-export default function PlayableBracket({bracket, onClick}) {
+export default function PlayableBracket({bracket, onClick, getVoteCounts}) {
 
+    // Renders the bracket recursively, turning each Match into either a Matchup or
+    //  ClickableMatchup component
     function renderRound(roundData) {
         if (roundData == null || roundData.matches.length === 0) {
             return null;
         } else {
-            // Round number, where 0 is first round, n is the nth round
-            let roundNum = roundData.roundNum;
+            let curRound = roundData.roundID;
             return (
                 <>
                     <div className={"round"}>
-                        {/*if the match has Teams, make it a clickable, otherwise normal*/}
+                        {/*if the match has Teams, make it clickable, otherwise normal*/}
                         {roundData.matches.map((match, index) => {
                             if (match.team1 !== null && match.team2 !== null) {
                                 return <ClickableMatchup key={index} team1={match.team1}
-                                                         team2={match.team2} className={roundNum}
-                                                         matchID={match.id} onClick={onClick} winner={match.winner}/>;
+                                                         team2={match.team2} className={curRound}
+                                                         matchID={match.id} onClick={onClick}
+                                                         winner={match.winner} votesTally={getVoteCounts(match.votes)}/>;
                             } else {
                                 return <Matchup key={index} team1={match.team1}
-                                                team2={match.team2} className={roundNum}/>;
+                                                team2={match.team2} className={curRound}/>;
                             }
                         })}
                     </div>
-                    {renderRound(roundData.nextRound, roundNum + 1)}
+                    {renderRound(roundData.nextRound, curRound + 1)}
                 </>
             )
         }

@@ -49,6 +49,7 @@
 
 .matchup {
     display: flex;
+    position: relative;
     flex-flow: column;
     list-style: none;
     height: 100%;
@@ -85,4 +86,14 @@
 
 .game-bottom {
     border-top: 1px solid var(--text);
+}
+
+.votes-tally {
+    /*Parent needs to be relative for absolute to work*/
+    position: absolute;
+    margin: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px;
+    /*font-weight: bold;*/
 }

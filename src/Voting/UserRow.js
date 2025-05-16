@@ -1,33 +1,28 @@
-import React, {useState} from "react";
+import React from "react";
 import "./Voting.css";
 
-export default function UserRow({index, voterName, onClick}) {
-    // 0: neither selected. 1: left selected. 2: right selected
-    const [buttonState, setButtonState] = useState(0);
+// TODO: make the left/right buttons greyed out when everyone has voted
+// Vote status:
+// 0: neither selected. 1: left selected. 2: right selected
+export default function UserRow({voterName, voteStatus, onClick}) {
 
-    // Input: which button has been clicked
-    // 1 = left, 2 = right
-    function handleClick(input) {
-        // If neither is currently selected, select whichever one was clicked
-        setButtonState(input);
-        onClick(index, input);
-    }
-
-    let leftBtnStyle = buttonState === 1 ? "selected" : "unselected";
-    let rightBtnStyle = buttonState === 2 ? "selected" : "unselected";
-
+    let leftBtnStyle = voteStatus === 1 ? "selected" : "unselected";
+    let rightBtnStyle = voteStatus === 2 ? "selected" : "unselected";
     let voteBtnText = "+"
 
+    // When clicked, vote for team 1
     const leftButton = <button className={`vote-button ${leftBtnStyle}`}
-                               onClick={() => handleClick(1)}>{voteBtnText}</button>
+                               onClick={() => onClick(voterName, 1)}>{voteBtnText}</button>
+    // When clicked, vote for team 2
     const rightButton = <button className={`vote-button ${rightBtnStyle}`}
-                                onClick={() => handleClick(2)}>{voteBtnText}</button>
-    const voterNameSpan = <span className={"voter-name"}>{voterName}</span>
-    let displayArray = [leftButton, voterNameSpan, rightButton]
+                                onClick={() => onClick(voterName, 2)}>{voteBtnText}</button>
 
-    if (buttonState === 1) { //left button selected
+    const voterNameSpan = <span className={"voter-name"}>{voterName}</span>
+
+    let displayArray = [leftButton, voterNameSpan, rightButton] //default (no vote yet)
+    if (voteStatus === 1) { //left button selected
         displayArray = [voterNameSpan, leftButton, rightButton]
-    } else if (buttonState === 2) { //right button selected
+    } else if (voteStatus === 2) { //right button selected
         displayArray = [leftButton, rightButton, voterNameSpan]
     }
 

@@ -2,7 +2,9 @@ import React from "react";
 import {matchupSafeGet} from "../Utils";
 
 // Displays a single matchup of two teams in the bracket
-export default function Matchup({team1, team2, matchID}) {
+export default function Matchup({team1, team2}) {
+
+
 
     return (
         <div className={"matchup"}>

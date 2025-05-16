@@ -13,9 +13,10 @@ TODO:
   - [x] Don't let users click on Matchups with no Teams inside them
   - [x] Show winner and score on PlayableBracket (show green check?)
   - [x] Ensure quality check before starting bracket
-  - [ ] CODE AUDIT: go through every file and refactor/clean up code as much as possible
-    - [ ] Make Match, Team, Bracket classes (if appropriate)
-  - [ ] Track votes so that clicking on a VotingScreen remembers the votes
+  - [x] CODE AUDIT: go through every file and refactor/clean up code as much as possible
+    - [x] Make Match, Team, Bracket classes (if appropriate)
+  - [ ] Reset button in SetupPage with an "are you sure" step
+  - [x] Track votes so that clicking on a VotingScreen remembers the votes
   - [ ] Have an animation/display for the winner
   - [ ] USER TESTING!
   - [ ] Display final completed bracket, let users print/save
@@ -23,15 +24,17 @@ TODO:
   - [ ] IdeasPage page
 - QoL
   - [ ] Make teams draggable in SetupPage
-  - [ ] In PlayBracketPage, have the hover border change colors based on whether that matchup is playable
+  - [ ] Let users click 'next' or 'prev' to move between VotingScreens
+  - [ ] VotingScreen has a 'reset votes' button
+  - [ ] In PlayPage, have the hover border change colors based on whether that matchup is playable
   - [ ] Info buttons/tutorial explaining the basic idea of a voting bracket
   - [ ] Let users close a VotingScreen by pressing escape
+  - [ ] In SetupPage, have the remove Team/Voter button only when hovering 
   - [ ] Progress bar, showing how many matches still need to be completed
   - [ ] Display title and description
+    - I think description might be nice for the final printout
   - [ ] Let users choose images for each Team/Voter
     - UI customization: toggle show icons in bracket or just in VotingScreen, toggle show icons in bracket, choose overall color scheme for the bracket (from set of options)
-  - [ ] VotingScreen has a 'reset votes' button
-  - [ ] Users can click 'next' to go to the next VotingScreen
   - [ ] Make a zoom in/out button in the bottom right of PreviewBracket
   - [ ] Light mode/dark mode button 
 - Advanced features
