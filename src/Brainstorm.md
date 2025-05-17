@@ -1,11 +1,15 @@
-OBJECTS:
-Team: {id: Int, name: String, votes: Int}
-Match: {id: Int, winner: Team, team1: Team, team2: Team, nextMatchID: Int}
-Bracket: {roundNum: Int, matches: Array<Match>, nextRound: Bracket}
 
+On a scale of 1-3, how much would you want this feature?
+- Choosing images for each Team
+- Choosing colors for each Team
+- Choosing images for each Voter
+- Choosing colors for each Voter
+- 'Reset votes' button in voting screen
+- When hovering over a matchup, have the colors change depending on if its playable/placeholder/future match
+- Progress bar, showing how many matches still need to be completed
+- 'Next' and 'Previous' buttons to navigate between matchups, rather than going back to the bracket each time
+- Light mode/dark mode 
 
-BUGS:
-- Match IDs not starting from 0
 
 TODO:
 - Basic functionality
@@ -28,7 +32,7 @@ TODO:
   - [ ] VotingScreen has a 'reset votes' button
   - [ ] In PlayPage, have the hover border change colors based on whether that matchup is playable
   - [ ] Info buttons/tutorial explaining the basic idea of a voting bracket
-  - [ ] Let users close a VotingScreen by pressing escape
+  - [x] Let users close a VotingScreen by pressing escape
   - [ ] In SetupPage, have the remove Team/Voter button only when hovering 
   - [ ] Progress bar, showing how many matches still need to be completed
   - [ ] Display title and description

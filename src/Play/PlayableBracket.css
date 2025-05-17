@@ -97,3 +97,31 @@
     right: 10px;
     /*font-weight: bold;*/
 }
+
+.final-round {
+    /*justify-content: center;*/
+    /*border: 1px solid purple;*/
+}
+
+.team-winner {
+    font-weight: bold;
+    color: var(--accent);
+}
+
+.winner-name {
+    /*height: 20px;*/
+    font-weight: bold;
+    color: var(--accent);
+}
+
+.winner-stub {
+    height: 20px;
+    width: 100%;
+    border-bottom: 1px solid white;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+
+    display: flex;
+    justify-content: center;
+}

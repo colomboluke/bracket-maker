@@ -1,7 +1,22 @@
 import UserRow from "./UserRow";
 import "./Voting.css";
+import {useEffect} from "react";
 
 export default function VotingScreen({match, voters, onVote, onClose}) {
+
+    // Close on 'esc' key press
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown);
+        function handleKeyDown(e) {
+            if (e.key === 'Escape') {
+                onClose();
+            }
+        }
+        // Clean up listener when component unmounts
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [onClose]);
 
     // Whether all users have voted
     function allSelected() {

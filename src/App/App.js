@@ -77,7 +77,6 @@ function App() {
         return counts;
     }
 
-
     // Given a votes object, return 1 if the winner is team1, 2 if the winner is team2, or
     //  null if there is no winner
     function getWinner(votesObj) {

@@ -1,11 +1,10 @@
 import React from "react";
 import {matchupSafeGet} from "../Utils";
-import "./PlayableMatchup.css";
+import "./PlayableBracket.css";
 
 // Displays a single matchup of two teams in the bracket
 export default function ClickableMatchup({team1, team2, matchID, onClick, winner, votesTally}) {
 
-    console.log(matchID, votesTally, winner);
     function getVotesString() {
         return `${votesTally.team1} - ${votesTally.team2}`;
     }
