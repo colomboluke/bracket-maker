@@ -56,7 +56,7 @@
     width: 100%;
 }
 
-.matchup:hover {
+.clickable:hover {
     border: 2px solid var(--text);
     cursor: pointer;
 }

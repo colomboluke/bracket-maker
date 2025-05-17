@@ -4,13 +4,6 @@ import {Link} from "react-router-dom";
 import "./Home.css";
 
 function HomePage() {
-    // return (
-    //     <div className={"home-cont"}>
-    //         <h1>HomePage Page</h1>
-    //         <p>Welcome to the HomePage Page</p>
-    //     </div>
-    // );
-
     return (
         <div className={"home-cont"}>
             <div className={"home-title-card"}>

@@ -19,12 +19,12 @@ TODO:
   - [x] Ensure quality check before starting bracket
   - [x] CODE AUDIT: go through every file and refactor/clean up code as much as possible
     - [x] Make Match, Team, Bracket classes (if appropriate)
-  - [ ] Reset button in SetupPage with an "are you sure" step
+  - 1. [x] Reset button in SetupPage with an "are you sure" step
   - [x] Track votes so that clicking on a VotingScreen remembers the votes
   - [ ] Have an animation/display for the winner
   - [ ] USER TESTING!
-  - [ ] Display final completed bracket, let users print/save
-  - [ ] Host BracketMaker on the web
+  - 3. [ ] Display final completed bracket, let users print/save
+  - 4. [ ] Host BracketMaker on the web
   - [ ] IdeasPage page
 - QoL
   - [ ] Make teams draggable in SetupPage
@@ -33,7 +33,7 @@ TODO:
   - [ ] In PlayPage, have the hover border change colors based on whether that matchup is playable
   - [ ] Info buttons/tutorial explaining the basic idea of a voting bracket
   - [x] Let users close a VotingScreen by pressing escape
-  - [ ] In SetupPage, have the remove Team/Voter button only when hovering 
+  - 2. [x] In SetupPage, have the remove Team/Voter button only when hovering 
   - [ ] Progress bar, showing how many matches still need to be completed
   - [ ] Display title and description
     - I think description might be nice for the final printout

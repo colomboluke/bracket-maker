@@ -1,5 +1,36 @@
 
-export default function Settings({numTeams, changeNumTeams, numVoters, changeNumVoters, title, setTitle, desc, setDesc}) {
+export default function Settings({numTeams, createTeam, removeLastTeam, numVoters, createVoter, removeLastVoter, title, setTitle, desc, setDesc}) {
+
+    function changeNumTeams(targetNum) {
+        if (targetNum < 1) {
+            return;
+        }
+        if (targetNum === numTeams) {
+            return;
+        }
+        if (targetNum > numTeams) { //Add more teams
+            createTeam();
+        }
+        if (targetNum < numTeams) { //Remove teams
+            removeLastTeam();
+        }
+    }
+
+    function changeNumVoters(targetNum) {
+        if (targetNum < 1 || targetNum > 10) { //arbitrarily capping at 9 just for space
+            return;
+        }
+        if (targetNum === numVoters) {
+            return;
+        }
+        if (targetNum > numVoters) { //Add more voters
+            createVoter()
+        }
+        if (targetNum < numVoters) { //Remove voters
+            console.log(`Removing the last voter (total voters: ${numVoters})`)
+            removeLastVoter()
+        }
+    }
 
     return (
         <div className={"settings"}>

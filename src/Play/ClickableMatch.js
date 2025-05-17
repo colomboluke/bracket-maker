@@ -14,7 +14,7 @@ export default function ClickableMatchup({team1, team2, matchID, onClick, winner
     const bottomStyle = winner === 2 ? "team-winner" : ""
 
     return (
-        <div className={"matchup"} onClick={() => onClick(matchID)}>
+        <div className={"matchup clickable"} onClick={() => onClick(matchID)}>
             <li className={"spacer top"}>&nbsp;</li>
 
             <li className={`game game-top ${topStyle}`}>

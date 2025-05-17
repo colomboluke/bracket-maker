@@ -2,14 +2,15 @@
     /*border: 3px solid #3ea45e;*/
     border: 3px solid white;
     background-color: var(--background4);
-    width: 600px;
+    width: 500px;
     margin: auto;
     display: flex;
     flex-flow: column nowrap;
     /*Overlay on top of bracket*/
     position: absolute;
     top: 0;
-    left: 25%;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 11;
 }
 

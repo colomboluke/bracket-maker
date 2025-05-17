@@ -19,20 +19,29 @@ export default function SetupPage({
                                       setVoters, onStart
                                   }) {
 
+    // TODO: all functions that modify state should go in TournamentContext, which wraps the App
+    //  component and can then get imported into any file
     // ~~~~ Modifying State Functions ~~~~
     // SetupPage has the power to edit the teams, voters, while PlayPage does not
 
+    // Creates a new team name, ensures that it's not taken
+    function validateName() {
+        let nameValid = false; //Is this new name ok? (not taken)
+        let counter = 1;
+        let newName;
+        while (!nameValid) {
+            newName = "Team " + counter; //try new name
+            let nameTaken = teams.map(team => team.name).includes(newName); // Check if taken
+            nameValid = !nameTaken;
+            counter++; //try next number up
+        }
+        return newName;
+    }
+
     // Create a new team, with a seed one higher than the current highest and a default name
     function createTeam() {
-        let newName = "Team " + (teams.length + 1);
-        let lastTeam = teams.length > 0 ? teams.slice(-1)[0] : null;
-        if (lastTeam) {
-            // If the new name-to-be already exists, add 1 to it
-            if (lastTeam.name === newName) {
-                newName = "Team " + (parseInt(lastTeam.name.slice(-1)) + 1);
-            }
-        }
-        const newTeam = new Team(teams.length, newName);
+        const validatedName = validateName()
+        const newTeam = new Team(teams.length, validatedName);
         setTeams([...teams, newTeam]);
     }
 
@@ -60,25 +69,9 @@ export default function SetupPage({
         setTeams(reSeed(nextTeams));
     }
 
-    // Given a target number of teams, add or remove teams to meet that target
-    function changeNumTeams(targetNum) {
-        if (targetNum < 0) {
-            return;
-        }
-        if (targetNum === teams.length) {
-            return;
-        }
-        if (targetNum > teams.length) { //Add more teams
-            for (let i = teams.length; i < targetNum; i++) {
-                createTeam();
-            }
-        }
-        if (targetNum < teams.length) { //Remove teams
-            for (let i = targetNum; i < teams.length; i++) {
-                let lastID = teams.slice(-1)[0].id;
-                removeTeam(lastID);
-            }
-        }
+    // Remove the last team in the array
+    function removeLastTeam() {
+        removeTeam(teams.slice(-1)[0].id);
     }
 
     // Randomize the order of the existing teams
@@ -92,6 +85,14 @@ export default function SetupPage({
         }
         // Re-seed so that it changes the team objects' IDs, not just their order in the teams array
         setTeams(reSeed(nextTeams));
+    }
+
+    // Reset the teams list to an empty list
+    // TODO: make my own confirmation window rather than the basic one (see chat)
+    function resetTeams() {
+        if (window.confirm('Are you sure you want to completely reset teams?')) {
+            setTeams([]);
+        }
     }
 
     // Create a new voter with a default name
@@ -125,25 +126,9 @@ export default function SetupPage({
         setVoters(nextVoters);
     }
 
-    // Public facing method to add or remove voters (has guardrails)
-    function changeNumVoters(targetNum) {
-        if (targetNum < 1 || targetNum > 10) { //arbitrarily capping at 9 just for space
-            return;
-        }
-        if (targetNum === voters.length) {
-            return;
-        }
-        if (targetNum > voters.length) { //Add more voters
-            for (let i = voters.length; i < targetNum; i++) {
-                createVoter();
-            }
-        }
-        if (targetNum < voters.length) { //Remove voters
-            for (let i = targetNum; i < voters.length; i++) {
-                let lastName = voters.slice(-1)[0].name;
-                removeVoter(lastName);
-            }
-        }
+    // Remove the last voter in the array
+    function removeLastVoter() {
+        removeVoter(voters.slice(-1)[0].name);
     }
 
     // Whether the bracket is ready to start
@@ -187,15 +172,15 @@ export default function SetupPage({
                             onClick={handleStartClick}>Start Bracket
                     </button>
                 </div>
-                <Settings numTeams={teams.length} changeNumTeams={changeNumTeams}
-                          numVoters={voters.length} changeNumVoters={changeNumVoters} title={title}
+                <Settings numTeams={teams.length} createTeam={createTeam} removeLastTeam={removeLastTeam}
+                          numVoters={voters.length} createVoter={createVoter} removeLastVoter={removeLastVoter} title={title}
                           setTitle={setTitle} desc={desc} setDesc={setDesc}/>
                 <h3>Teams</h3>
                 <TeamAddGrid teams={teams} updateTeamName={updateTeamName}
-                             changeNumTeams={changeNumTeams} createTeam={createTeam}
-                             shuffleTeams={shuffleTeams}/>
+                             removeTeam={removeTeam} createTeam={createTeam}
+                             shuffleTeams={shuffleTeams} resetTeams={resetTeams}/>
                 <h3>Voters</h3>
-                <VoterAddGrid voters={voters} changeNumVoters={changeNumVoters}
+                <VoterAddGrid voters={voters} removeVoter={removeVoter}
                               createVoter={createVoter} updateVoterName={updateVoterName}/>
             </div>
             <div className={"setup-right"}>

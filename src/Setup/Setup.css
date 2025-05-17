@@ -133,126 +133,17 @@
     margin-left: 20px;
 }
 
-.team-add-grid {
-    /*border: 2px solid green;*/
-    display: grid;
-    /*Total: 20fr. First two columns: 15. Rest: 5*/
-    /*Setting min-max so the columns don't resize when text gets too long*/
-    grid-template-columns: 2fr 11fr minmax(0, 2fr) minmax(0, 2fr) minmax(0, 1fr);
-    row-gap: 8px;
-    background-color: var(--background3);
-    padding: 15px 10px;
-}
 
-.voter-add-grid {
-    /*border: 2px solid green;*/
-    display: grid;
-    grid-template-columns: 6fr 3fr 3fr 1fr;
-    row-gap: 8px;
-    background-color: var(--background3);
-    /*Padding for the add-voter-btn*/
-    padding: 15px 10px 75px;
-    position: relative;
-}
 
 /*TODO: use this instead of just nothing for Team component*/
-.team-add-row {
-    display: flex;
-    flex-flow: row wrap;
-    border: 2px solid gold;
-}
-
-.ta-header {
-    text-align: center;
-    /*border: 1px solid white;*/
-    padding: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    margin: auto;
-}
-
-.seed, .name, .icon, .color, .remove {
-    text-align: center;
-    /*border: 1px solid white;*/
-    margin: auto;
-}
-
-.remove {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.remove-btn {
-    font-size: 18px;
-    cursor: pointer;
-}
-
-.blue-button {
-    width: auto;
-    padding-right: 20px;
-    padding-left: 20px;
-    margin: 20px auto 10px;
-    height: 35px;
-    background-color: var(--primary);
-    color: var(--text);
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 2px;
-    font-weight: bold;
-}
-
-.add-team-btn {
-    /*This is off center right now but I don't think anyone will notice*/
-    grid-column: 2 / 5;
-}
 
 
-.add-voter-btn {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    /*Left: only makes it start 50% left, this makes the center 50%*/
-    transform: translateX(-50%);
-    margin-top: 100px;
-}
 
-.shuffle-btn {
-    grid-column: 1 / 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: min-content;
-    padding-right: 10px;
-    padding-left: 10px;
-}
 
-.shuffle-icon {
-    font-size: 20px;
-}
 
-.add-team-btn:hover, .shuffle-btn:hover {
-    background-color: var(--primary-hover);
-}
 
-.setup-right {
-    overflow: scroll;
-    width: 70%;
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: baseline;
-}
 
-.round-column {
-    height: 100%;
-    /*height: fit-content;*/
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: space-around;
-    align-items: center;
-    position: relative;
-    top: 10%;
-}
+
+
 
 /*Error handling*/

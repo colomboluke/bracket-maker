@@ -1,0 +1,119 @@
+.add-cont {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+    background-color: var(--background3);
+    position: relative;
+    /*Padding-bottom adjusts gap between blue buttons and actual grid*/
+    padding: 15px 10px 75px;
+}
+
+.add-row {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    flex-flow: row wrap;
+}
+
+.team-add-row {
+    grid-template-columns: 2fr 11fr minmax(0, 2fr) minmax(0, 2fr) minmax(0, 1fr);
+}
+
+.voter-add-row {
+    grid-template-columns: 6fr minmax(0, 3fr) minmax(0, 3fr) minmax(0, 1fr);
+}
+
+.blue-button {
+    width: auto;
+    padding-right: 20px;
+    padding-left: 20px;
+    margin: 20px auto 10px;
+    height: 35px;
+    background-color: var(--primary);
+    color: var(--text);
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 2px;
+    font-weight: bold;
+}
+
+.buttons-cont {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+}
+
+/*TODO: make this a different color*/
+.reset-teams-btn {
+    /*grid-column: 2 / 6;*/
+}
+
+.shuffle-btn {
+    /*grid-column: 1 / 2;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: min-content;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.shuffle-icon {
+    font-size: 20px;
+}
+
+.add-team-btn:hover, .shuffle-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.setup-right {
+    overflow: scroll;
+    width: 70%;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: baseline;
+}
+
+.round-column {
+    height: 100%;
+    /*height: fit-content;*/
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    top: 10%;
+}
+
+.ta-header {
+    text-align: center;
+    /*border: 1px solid white;*/
+    padding: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    margin: auto;
+}
+
+.seed, .name, .icon, .color, .remove {
+    text-align: center;
+    /*border: 1px solid white;*/
+    margin: auto;
+}
+
+.remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove-btn {
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.hide-remove {
+    display: none;
+}
