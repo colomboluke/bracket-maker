@@ -24,11 +24,12 @@ TODO:
   - [ ] Have an animation/display for the winner
   - [ ] USER TESTING!
   - 3. [ ] Display final completed bracket, let users print/save
-  - 4. [ ] Host BracketMaker on the web
+  - [ ] Host BracketMaker on the web
   - [ ] IdeasPage page
 - QoL
   - [ ] Make teams draggable in SetupPage
   - [ ] Let users click 'next' or 'prev' to move between VotingScreens
+  - [ ] When trying to click 'next' on VotingScreen, highlight the rows that still need to vote
   - [ ] VotingScreen has a 'reset votes' button
   - [ ] In PlayPage, have the hover border change colors based on whether that matchup is playable
   - [ ] Info buttons/tutorial explaining the basic idea of a voting bracket
@@ -42,12 +43,12 @@ TODO:
   - [ ] Make a zoom in/out button in the bottom right of PreviewBracket
   - [ ] Light mode/dark mode button 
 - Advanced features
-  - [ ] Statistics:
+  - 4. [ ] Statistics:
       - Print table of all voters' records
       - Upset rate
           - Adjusted upset rate: give more points for bigger upset like 1v8, less for 4v5
       - See who disagreed with the group the most
-  - [ ] Normal bracket capabilities
+  - 5. [ ] Normal bracket capabilities
     - Choose between traditional bracket and voting bracket
       - Traditional bracket chooses the winner of each match by comparing their scores, voting bracket lets users vote on who they want to advance
 

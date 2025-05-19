@@ -16,7 +16,7 @@ function getPresetBracket(teams) {
     } else if (teams.length === 3) {
         return new Bracket(0, [placeholderMatch, placeholderMatch.cleanCopy(
                                {id: 1, team1: teams[1], team2: teams[2], nextMatchID: 2, nextStatus: 1})],
-                           new Bracket(1, [placeholderMatch.cleanCopy({id: 1, team1: teams[0]})],
+                           new Bracket(1, [placeholderMatch.cleanCopy({id: 2, team1: teams[0]})],
                                        null))
     }
 }

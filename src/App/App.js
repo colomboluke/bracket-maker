@@ -95,13 +95,6 @@ function App() {
         }
     }
 
-    // Update the bracket when there's an update to a Match's winner
-    function handleUpdateWinner(matchID, winnerID) {
-        let nextBracket = bracket.cleanCopy();
-        nextBracket.handleMatchWinner(matchID, winnerID);
-        setBracket(nextBracket);
-    }
-
     return (
         <Router>
             <Routes>
@@ -118,7 +111,7 @@ function App() {
                     <Route path="play" element={<PlayPage title={title} bracket={bracket}
                                                           voters={voters}
                                                           onVote={handleVote}
-                                                          updateWinner={handleUpdateWinner} getVoteCounts={getVoteCounts}/>}/>
+                                                          getVoteCounts={getVoteCounts}/>}/>
                 </Route>
             </Routes>
         </Router>

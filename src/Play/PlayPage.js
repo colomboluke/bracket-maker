@@ -21,6 +21,7 @@ export default function PlayPage({title, bracket, voters, onVote, getVoteCounts}
 
             {selectedMatchID !== null && (<div className={"overlay"}></div>)}
             <h1>{newTitle}</h1>
+            <button onClick={() => window.print()}>Test</button>
             {/*<input type="color" value={"pick color"}/>*/}
             <button onClick={() => console.log(bracket, voters)}>Log bracket</button>
             <PlayableBracket bracket={bracket} onClick={handleMatchClick} getVoteCounts={getVoteCounts}/>

@@ -86,7 +86,6 @@ export default class Bracket {
     handleMatchWinner(targetID, winnerInt) {
         let oldMatch = this.getMatch(targetID); //match to be updated
         if (winnerInt !== oldMatch.winner) { //if match has a new winner
-
             // Update the old match's winner field
             const newMatch = oldMatch.cleanCopy({winner: winnerInt});
             this.setMatch(newMatch);

@@ -17,7 +17,7 @@ export default function Settings({numTeams, createTeam, removeLastTeam, numVoter
     }
 
     function changeNumVoters(targetNum) {
-        if (targetNum < 1 || targetNum > 10) { //arbitrarily capping at 9 just for space
+        if (targetNum < 1 || targetNum > 9) { //arbitrarily capping at 9 just for space
             return;
         }
         if (targetNum === numVoters) {
