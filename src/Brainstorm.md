@@ -9,6 +9,16 @@ On a scale of 1-3, how much would you want this feature?
 - Progress bar, showing how many matches still need to be completed
 - 'Next' and 'Previous' buttons to navigate between matchups, rather than going back to the bracket each time
 - Light mode/dark mode 
+- Make the voting screen more intuitive
+- New method of adding Teams/Voters
+- New method of removing Teams/Voters
+- Additional display for the winner (animation?)
+
+If you wanted to print/save a bracket after fully completing it, what would you want included in that file?
+- The bracket itself
+- Title
+- Description
+- Scores of each game
 
 
 TODO:
@@ -24,8 +34,13 @@ TODO:
   - [ ] Have an animation/display for the winner
   - [ ] USER TESTING!
   - 3. [ ] Display final completed bracket, let users print/save
-  - [ ] Host BracketMaker on the web
+  - [x] Host BracketMaker on the web
   - [ ] IdeasPage page
+  - [ ] Category: drop down menu of sports teams, movies, shows, songs, foods, etc, have this be the default name instead of "team X" every time
+  - [ ] Format on mobile!
+  - Ideas Page
+    - [ ] Button that generates a random category, maybe with some examples
+    - [ ] Screenshot of my paper bracket?
 - QoL
   - [ ] Make teams draggable in SetupPage
   - [ ] Let users click 'next' or 'prev' to move between VotingScreens
@@ -42,6 +57,7 @@ TODO:
     - UI customization: toggle show icons in bracket or just in VotingScreen, toggle show icons in bracket, choose overall color scheme for the bracket (from set of options)
   - [ ] Make a zoom in/out button in the bottom right of PreviewBracket
   - [ ] Light mode/dark mode button 
+  - 6. [ ] Automated testing for bracket functions
 - Advanced features
   - 4. [ ] Statistics:
       - Print table of all voters' records
@@ -51,6 +67,7 @@ TODO:
   - 5. [ ] Normal bracket capabilities
     - Choose between traditional bracket and voting bracket
       - Traditional bracket chooses the winner of each match by comparing their scores, voting bracket lets users vote on who they want to advance
+  - [ ] Let users create a bracket, then save that on the site and let other people play it
 
 Considering:
 - Change 'id' in the Team object to 'seed'

@@ -145,8 +145,10 @@ export default function SetupPage({
 
     function handleStartClick() {
         if (allowToStart) {
-            onStart();  // Initialize votes objects now that the voters are set
-            navigate('/play');
+            if (window.confirm("Are you sure you want to start playing the bracket?")) {
+                onStart();  // Initialize votes objects now that the voters are set
+                navigate('/play');
+            }
         } else { //specific error handling
             if (!(teams.length >= 2)) {
                 alert("A bracket needs at least two teams.");
@@ -159,12 +161,12 @@ export default function SetupPage({
     return (
         <div className={"setup-cont"}>
             <div className={"setup-left"}>
-                <button onClick={() => {
-                    console.log("Teams:", teams);
-                    console.log("Voters:", voters);
-                    console.log("Bracket:", bracket);
-                }}>Testing button
-                </button>
+                {/*<button onClick={() => {*/}
+                {/*    console.log("Teams:", teams);*/}
+                {/*    console.log("Voters:", voters);*/}
+                {/*    console.log("Bracket:", bracket);*/}
+                {/*}}>Testing button*/}
+                {/*</button>*/}
                 <h1 className={"setup-title"}>Create Bracket</h1>
                 <div className={"setup-top-cont"}>
                     <h3 className={"t"}>Bracket Settings</h3>

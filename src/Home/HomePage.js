@@ -9,16 +9,18 @@ function HomePage() {
             <div className={"home-title-card"}>
                 <h1 className={"home-title"}>Welcome to <span className={"title-color"}>Bracket Maker!</span>
                 </h1>
-                <h3 className={"home-subtitle"}>Lorem ipsum dolor sit amet, consectetur
-                    adipisicing elit. Atque commodi dolor eos nihil optio qui repellat. At
-                    consectetur eum exercitationem illo incidunt perspiciatis repellat
-                    sunt?</h3>
+                <h3 className={"home-subtitle"}>Bracket Maker lets you create and play March
+                    Madness-style tournament brackets. Create a list of movies, songs, foods, or
+                    anything else you can think of, get a group to vote for the winner of each
+                    matchup, and Bracket Maker will help you decide your group's overall champion.</h3>
             </div>
             <div className={"home-main"}>
                 <Link className={"link new-bracket-btn"}
                       to={"/create"}>New Bracket
                 </Link>
-                <button className={"home-ideas-btn"}>Need ideas? Click here</button>
+                <Link to={"/help"}>
+                    <button className={"home-ideas-btn"}>Need ideas? Click here</button>
+                </Link>
             </div>
             <div className={"home-footer"}>
                 <p className={"footer-p1"}>Made by Luke Colombo</p>
