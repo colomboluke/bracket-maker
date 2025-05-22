@@ -1,12 +1,15 @@
 import {Link, Outlet, useLocation} from "react-router-dom";
 import React from "react";
-import {FaGithub, FaMousePointer} from "react-icons/fa";
+import {FaGithub, FaMousePointer, FaPrint} from "react-icons/fa";
 import "./Header.css";
 
 export default function Header({title}) {
     const location = useLocation();
     const titleDisplay = (title === "" ? <h3 className={"bracket-title"}>Untitled Bracket</h3> :
                           <h3 className={"bracket-title"}>{title}</h3>)
+
+
+
     return (
         <>
             <div className={"header"}>
@@ -20,7 +23,7 @@ export default function Header({title}) {
                           to={"/create"}>New Bracket
                     </Link>
                     <Link className={"link header-ideas-btn"} to={"/help"}>Get Ideas</Link>
-                    {(location.pathname === "/create") && titleDisplay}
+                    {(location.pathname === "/create" || location.pathname === "/play") && titleDisplay}
                 </div>
                 <div className={"header-right"}>
                     {/*<p>Made by Luke Colombo</p>*/}

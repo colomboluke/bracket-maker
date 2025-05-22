@@ -1,6 +1,7 @@
 .play-bracket-cont {
     position: relative;
     /*border: 2px solid gold;*/
+
 }
 
 .overlay {
@@ -20,6 +21,7 @@
     /*Do I want it to start in the middle or from the top?*/
     margin-top: 20px;
     margin-left: 20px;
+    background-color: var(--background);
 }
 
 .round {

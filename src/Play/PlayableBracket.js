@@ -2,16 +2,14 @@ import "./PlayableBracket.css";
 import ClickableMatchup from "./ClickableMatch";
 import Matchup from "../PreviewBracket/Matchup";
 import WinnerStub from "./WinnerStub";
+import {forwardRef} from "react";
 
 /**
- * Takes in the data from one round and renders it, then recursively renders the next round.
- * The right side of the setup screen, giving a preview of what the bracket will look like.
- * @param roundData
- * @returns {JSX.Element|null}
+ * PreviewBracket but playable - matches will be clickable, and displays a winner at the end
  */
+function PlayableBracket(props, ref) {
 
-export default function PlayableBracket({bracket, onClick, getVoteCounts}) {
-
+    const {bracket, onClick, getVoteCounts} = props;
     // The final winner of the bracket
     let ultimateWinner;
 
@@ -60,9 +58,12 @@ export default function PlayableBracket({bracket, onClick, getVoteCounts}) {
     }
 
     return (
-        <div className={"tournament"}>
+        <div className={"tournament"} ref={ref}>
             {renderRound(bracket)}
         </div>
 
     )
 }
+
+export default forwardRef(PlayableBracket);
+

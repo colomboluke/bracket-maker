@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import constructBracket from "../BracketAlgos/ConstructBracket";
 import Header from "../Header/Header";
@@ -6,6 +6,7 @@ import HomePage from "../Home/HomePage";
 import SetupPage from "../Setup/SetupPage";
 import IdeasPage from "../Ideas/IdeasPage";
 import PlayPage from "../Play/PlayPage";
+import {useReactToPrint} from "react-to-print";
 
 /**
  * Top level component

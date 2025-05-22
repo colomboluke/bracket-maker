@@ -1,14 +1,15 @@
 .voting-cont {
     /*border: 3px solid #3ea45e;*/
-    border: 3px solid white;
+    border: 3px solid lightgray;
     background-color: var(--background4);
     width: 500px;
     margin: auto;
     display: flex;
     flex-flow: column nowrap;
     /*Overlay on top of bracket*/
-    position: absolute;
-    top: 0;
+    /*TODO: make the top: 0 relative to the screen, not the bracket*/
+    position: fixed;
+    top: var(--header-height);
     left: 50%;
     transform: translateX(-50%);
     z-index: 11;
