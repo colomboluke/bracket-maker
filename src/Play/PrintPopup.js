@@ -24,7 +24,7 @@ export default function PrintPopup({fileName, setFileName, orientation, setOrien
                 <button onClick={onClose} className={"new-close-btn"}>&times;</button>
             </div>
             <div className={"file-name-cont"}>
-                <h4>Layout</h4>
+                <h4>Orientation</h4>
                 <label>
                     <input type="radio" value={"portrait"} checked={orientation === "portrait"}
                            onChange={e => setOrientation(e.target.value)}/>

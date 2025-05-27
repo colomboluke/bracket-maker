@@ -84,7 +84,7 @@ export default class Bracket {
      * @param winnerInt 0 or 1, referring to team1 or team2 winning the match
      */
     handleMatchWinner(targetID, winnerInt) {
-        let oldMatch = this.getMatch(targetID); //match to be updated
+        const oldMatch = this.getMatch(targetID); //match to be updated
         if (winnerInt !== oldMatch.winner) { //if match has a new winner
             // Update the old match's winner field
             const newMatch = oldMatch.cleanCopy({winner: winnerInt});
@@ -93,14 +93,8 @@ export default class Bracket {
             // Advance the winning Team to the next round (if there is a next round)
             let nextRoundMatch = this.getMatch(oldMatch.nextMatchID);
             if (nextRoundMatch) {
-                let winnerTeam; //winnerInt as a Team object
-                if (winnerInt === 1) {
-                    winnerTeam = oldMatch.team1;
-                } else if (winnerInt === 2) {
-                    winnerTeam = oldMatch.team2;
-                } else {
-                    throw new Error(`Winner must be either 1 or 2. Found: ${winnerInt}`)
-                }
+                let winnerTeam = getWinnerTeamObject(winnerInt, oldMatch);
+                // Update team1/team2 depending on which one corresponds to the winner of oldMatch
                 if (oldMatch.nextStatus === 0) {
                     nextRoundMatch = nextRoundMatch.cleanCopy({team1: winnerTeam});
                 } else if (oldMatch.nextStatus === 1) {
@@ -111,4 +105,34 @@ export default class Bracket {
         }
     }
 
+    // I could combine this into handleMatchWinner and just have it be a winnerInt of -1 or null
+    handleMatchReset(targetID) {
+        // Reset the target match's winner
+        const oldMatch = this.getMatch(targetID);
+        this.setMatch(oldMatch.cleanCopy({winner: null}));
+
+        //Reset the next match's teams
+        let nextRoundMatch = this.getMatch(oldMatch.nextMatchID);
+        if (nextRoundMatch) {
+            if (oldMatch.nextStatus === 0) {
+                nextRoundMatch = nextRoundMatch.cleanCopy({team1: null});
+            } else if (oldMatch.nextStatus === 1) {
+                nextRoundMatch = nextRoundMatch.cleanCopy({team2: null});
+            }
+            this.setMatch(nextRoundMatch);
+        }
+    }
+
+}
+
+// Static/util function
+// Turn winnerInt into a Team object
+function getWinnerTeamObject(winnerInt, match) {
+    if (winnerInt === 1) {
+        return match.team1;
+    } else if (winnerInt === 2) {
+        return match.team2;
+    } else {
+        throw new Error(`Winner must be either 1 or 2. Found: ${winnerInt}`)
+    }
 }

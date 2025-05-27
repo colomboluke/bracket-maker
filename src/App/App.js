@@ -96,6 +96,19 @@ function App() {
         }
     }
 
+    function resetVotes(matchID) {
+        let nextBracket = bracket.cleanCopy();
+        // Update match's votes
+        const match = nextBracket.getMatch(matchID);
+        match.resetVotes();
+        nextBracket.setMatch(match);
+
+        // Update rest of bracket to reflect the outcome of this match
+        nextBracket.handleMatchReset(matchID);
+
+        setBracket(nextBracket);
+    }
+
     return (
         <Router>
             <Routes>
@@ -112,7 +125,7 @@ function App() {
                     <Route path="play" element={<PlayPage title={title} bracket={bracket}
                                                           voters={voters}
                                                           onVote={handleVote}
-                                                          getVoteCounts={getVoteCounts}/>}/>
+                                                          getVoteCounts={getVoteCounts} resetVotes={resetVotes}/>}/>
                 </Route>
             </Routes>
         </Router>

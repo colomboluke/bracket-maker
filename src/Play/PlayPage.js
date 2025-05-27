@@ -7,7 +7,7 @@ import PrintPopup from "./PrintPopup";
 import {FaDownload, FaPrint} from "react-icons/fa";
 import "./PlayPage.css";
 
-export default function PlayPage({title, bracket, voters, onVote, getVoteCounts}) {
+export default function PlayPage({title, bracket, voters, onVote, getVoteCounts, resetVotes}) {
     // Track the currently selected match using its ID
     const [selectedMatchID, setSelectedMatchID] = useState(null);
     let selectedMatch = bracket.getMatch(selectedMatchID);
@@ -67,7 +67,8 @@ export default function PlayPage({title, bracket, voters, onVote, getVoteCounts}
             {/*Voting screen popup*/}
             {selectedMatch !== null && <VotingScreen voters={voters} match={selectedMatch}
                                                      onVote={onVote}
-                                                     onClose={() => setSelectedMatchID(null)}/>}
+                                                     onClose={() => setSelectedMatchID(null)}
+                                                     onReset={() => resetVotes(selectedMatchID)}/>}
 
             {/*Download/Print popup*/}
             {showPrintMenu && <PrintPopup onClose={handlePrintPopupClose} fileName={pdfFileName}

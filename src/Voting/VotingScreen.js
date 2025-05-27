@@ -2,16 +2,18 @@ import UserRow from "./UserRow";
 import "./Voting.css";
 import {useEffect} from "react";
 
-export default function VotingScreen({match, voters, onVote, onClose}) {
+export default function VotingScreen({match, voters, onVote, onClose, onReset}) {
 
     // Close on 'esc' key press
     useEffect(() => {
         document.addEventListener('keydown', handleKeyDown);
+
         function handleKeyDown(e) {
             if (e.key === 'Escape') {
                 onClose();
             }
         }
+
         // Clean up listener when component unmounts
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
@@ -23,7 +25,18 @@ export default function VotingScreen({match, voters, onVote, onClose}) {
         // Make sure every value of match.votes is not 0
         return Object.values(match.votes).every(item => item !== 0);
     }
-    let nextBtnActive = allSelected() ? "active" : "";
+
+    // Whether any users have voted (no votes -> false)
+    function anySelected() {
+        return Object.values(match.votes).some(item => item !== 0);
+    }
+
+    let nextBtnStyle = allSelected() ? "active" : "";
+    let resetBtnStyle = anySelected() ? "active" : "";
+
+    function reset() {
+        onReset(match.id);
+    }
 
     function getWinnerString() {
         if (match.winner === null) {
@@ -69,13 +82,17 @@ export default function VotingScreen({match, voters, onVote, onClose}) {
                 <div className={"voting-spacer"}></div>
                 {voters.map((voter, idx) => (
                     // Receive vote status from the match object
-                    <UserRow key={idx} voterName={voter.name} voteStatus={match.votes[voter.name]} onClick={handleVoteLocal}/>
+                    <UserRow key={idx} voterName={voter.name} voteStatus={match.votes[voter.name]}
+                             onClick={handleVoteLocal}/>
                 ))}
             </div>
             <div className={"voting-footer"}>
                 <span className={"winner-text"}>WINNER: {getWinnerString()}</span>
-                <button className={`next-matchup-button ${nextBtnActive}`} disabled={!allSelected()}
+                <button className={`next-matchup-button ${nextBtnStyle}`} disabled={!allSelected()}
                         onClick={onClose}>NEXT
+                </button>
+                <button className={`next-matchup-button ${resetBtnStyle} reset`} disabled={!anySelected()}
+                        onClick={onReset}>RESET VOTES
                 </button>
             </div>
 

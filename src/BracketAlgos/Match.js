@@ -38,10 +38,17 @@ export default class Match {
         return new Match(id, winner, team1, team2, nextMatchID, votes, nextStatus);
     }
 
-    // Abstracting this in case I change the representation here, App shouldn't have to change
+    // Abstracting these in case I change the representation here, App shouldn't have to change
+
+    // Updates
     updateVotes(voterName, vote) {
         // console.log(`Match ${this.id} updating votes`)
         this.votes[voterName] = vote;
+    }
+
+    // Resets the votes object to default
+    resetVotes() {
+        this.votes = {};
     }
 
 }

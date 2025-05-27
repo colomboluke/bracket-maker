@@ -145,7 +145,7 @@ export default function SetupPage({
 
     function handleStartClick() {
         if (allowToStart) {
-            if (window.confirm("Are you sure you want to start playing the bracket?")) {
+            if (window.confirm("The bracket cannot be changed once started. Are you sure?")) {
                 onStart();  // Initialize votes objects now that the voters are set
                 navigate('/play');
             }

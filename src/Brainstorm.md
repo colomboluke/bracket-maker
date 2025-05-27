@@ -5,16 +5,25 @@ On a scale of 1-3, how much would you want this feature?
 - Choosing images for each Voter
 - Choosing colors for each Voter
 - 'Reset votes' button in voting screen
+  - Yes from maya
 - When hovering over a matchup, have the colors change depending on if its playable/placeholder/future match
 - Progress bar, showing how many matches still need to be completed
+  - yes from maya
 - 'Next' and 'Previous' buttons to navigate between matchups, rather than going back to the bracket each time
-- Light mode/dark mode 
+  - yes from maya
 - Make the voting screen more intuitive
+  - change plus to new symbol (check?)
 - New method of adding Teams/Voters
+  - not necessary
 - New method of removing Teams/Voters
+  - make symbol red instead of white
 - Additional display for the winner (animation?)
+  - yes from maya
 - Prettier alerts
+  - yes from maya
 
+Handle even number of voters (button that pops up saying break tie, randomly pick one)
+- Warn the user: if you have an even number of voters, bracket maker will choose randomly to break ties
 
 TODO:
 - Basic functionality
@@ -46,7 +55,7 @@ TODO:
   - [ ] Make teams draggable in SetupPage
   - [ ] Let users click 'next' or 'prev' to move between VotingScreens
   - [ ] When trying to click 'next' on VotingScreen, highlight the rows that still need to vote
-  - [ ] VotingScreen has a 'reset votes' button
+  - [x] VotingScreen has a 'reset votes' button
   - [ ] In PlayPage, have the hover border change colors based on whether that matchup is playable
   - [ ] Info buttons/tutorial explaining the basic idea of a voting bracket
   - [x] Let users close a VotingScreen by pressing escape
