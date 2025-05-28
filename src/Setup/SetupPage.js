@@ -4,8 +4,8 @@ import "./Setup.css";
 import PreviewBracket from "../PreviewBracket/PreviewBracket";
 import Settings from "./Settings";
 import Team from "../BracketAlgos/Team";
-import TeamAddGrid from "./TeamAddGrid";
-import VoterAddGrid from "./VoterAddGrid";
+import TeamAddGrid from "../TeamVoterAdd/TeamAddGrid";
+import VoterAddGrid from "../TeamVoterAdd/VoterAddGrid";
 
 export default function SetupPage({
                                       title,

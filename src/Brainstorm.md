@@ -37,7 +37,7 @@ TODO:
   - [x] Track votes so that clicking on a VotingScreen remembers the votes
   - [ ] Have an animation/display for the winner
   - [ ] USER TESTING!
-  - 3. [ ] Display final completed bracket, let users print/save
+  - 3. [x] Display final completed bracket, let users print/save
     - create pop-up screen (make this its own component) that asks for user input:
       - file name
       - show title or not
@@ -60,21 +60,21 @@ TODO:
   - [ ] Info buttons/tutorial explaining the basic idea of a voting bracket
   - [x] Let users close a VotingScreen by pressing escape
   - 2. [x] In SetupPage, have the remove Team/Voter button only when hovering 
-  - [ ] Progress bar, showing how many matches still need to be completed
+  - 5. [ ] Progress bar, showing how many matches still need to be completed
   - [ ] Display title and description
     - I think description might be nice for the final printout
   - [ ] Let users choose images for each Team/Voter
     - UI customization: toggle show icons in bracket or just in VotingScreen, toggle show icons in bracket, choose overall color scheme for the bracket (from set of options)
   - [ ] Make a zoom in/out button in the bottom right of PreviewBracket
   - [ ] Light mode/dark mode button 
-  - 7. [ ] Automated testing for bracket functions
+  - [ ] Automated testing for bracket functions
 - Advanced features
-  - 5. [ ] Statistics:
+  - 6. [ ] Statistics:
       - Print table of all voters' records
       - Upset rate
           - Adjusted upset rate: give more points for bigger upset like 1v8, less for 4v5
       - See who disagreed with the group the most
-  - 6. [ ] Normal bracket capabilities
+  - 7.[ ] Normal bracket capabilities
     - Choose between traditional bracket and voting bracket
       - Traditional bracket chooses the winner of each match by comparing their scores, voting bracket lets users vote on who they want to advance
   - [ ] Let users create a bracket, then save that on the site and let other people play it

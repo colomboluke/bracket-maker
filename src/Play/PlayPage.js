@@ -3,7 +3,7 @@ import PlayableBracket from "./PlayableBracket";
 import VotingScreen from "../Voting/VotingScreen";
 import {useReactToPrint} from "react-to-print";
 import {Margin, Resolution, usePDF} from "react-to-pdf";
-import PrintPopup from "./PrintPopup";
+import PrintPopup from "../PrintScreen/PrintPopup";
 import {FaDownload, FaPrint} from "react-icons/fa";
 import "./PlayPage.css";
 
