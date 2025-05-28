@@ -1,5 +1,5 @@
-import React from 'react';
-import {useNavigate} from "react-router-dom";
+import React, {useEffect} from 'react';
+import {useNavigate, useLocation} from "react-router-dom";
 import "./Setup.css";
 import PreviewBracket from "../PreviewBracket/PreviewBracket";
 import Settings from "./Settings";
@@ -16,13 +16,11 @@ export default function SetupPage({
                                       setTeams,
                                       bracket,
                                       voters,
-                                      setVoters, onStart
+                                      setVoters, onStart, reset
                                   }) {
 
     // TODO: all functions that modify state should go in TournamentContext, which wraps the App
     //  component and can then get imported into any file
-    // ~~~~ Modifying State Functions ~~~~
-    // SetupPage has the power to edit the teams, voters, while PlayPage does not
 
     // Creates a new team name, ensures that it's not taken
     function validateName() {
@@ -158,6 +156,14 @@ export default function SetupPage({
         }
     }
 
+    function handleReset() {
+        if (window.confirm("Are you sure you wish to reset the bracket?")) {
+            reset();
+        }
+    }
+
+    const canReset = (teams.length > 0) || (voters.length > 0) || (title !== "") || (desc !== "");
+
     return (
         <div className={"setup-cont"}>
             <div className={"setup-left"}>
@@ -170,12 +176,19 @@ export default function SetupPage({
                 <h1 className={"setup-title"}>Create Bracket</h1>
                 <div className={"setup-top-cont"}>
                     <h3 className={"t"}>Bracket Settings</h3>
-                    <button className={`start-btn ${startBtnStyle}`}
-                            onClick={handleStartClick}>Start Bracket
-                    </button>
+                    <div className={"start-and-reset-cont"}>
+                        <button className={`start-btn ${startBtnStyle}`}
+                                onClick={handleStartClick}>Start Bracket
+                        </button>
+                        {canReset && <button className={'reset-btn'}
+                                             onClick={handleReset}>Reset</button>}
+                    </div>
                 </div>
-                <Settings numTeams={teams.length} createTeam={createTeam} removeLastTeam={removeLastTeam}
-                          numVoters={voters.length} createVoter={createVoter} removeLastVoter={removeLastVoter} title={title}
+
+                <Settings numTeams={teams.length} createTeam={createTeam}
+                          removeLastTeam={removeLastTeam}
+                          numVoters={voters.length} createVoter={createVoter}
+                          removeLastVoter={removeLastVoter} title={title}
                           setTitle={setTitle} desc={desc} setDesc={setDesc}/>
                 <h3>Teams</h3>
                 <TeamAddGrid teams={teams} updateTeamName={updateTeamName}

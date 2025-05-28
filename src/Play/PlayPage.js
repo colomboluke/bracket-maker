@@ -41,12 +41,12 @@ export default function PlayPage({title, bracket, voters, onVote, getVoteCounts,
     // Download function
     const {toPDF, targetRef} = usePDF({
                                           filename: pdfFileName.toString(),
-                                          resolution: Resolution.MEDIUM,
                                           page: {
                                               margin: Margin.NONE,
-                                              format: pdfFormat,
-                                              orientation: pdfOrientation
-                                          }
+                                              format: pdfFormat.toString(),
+                                              orientation: pdfOrientation.toString()
+                                          },
+                                          resolution: Resolution.MEDIUM
                                       });
 
     return (

@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, useLocation} from 'react-router-dom';
 import constructBracket from "../BracketAlgos/ConstructBracket";
 import Header from "../Header/Header";
 import HomePage from "../Home/HomePage";
@@ -21,7 +21,7 @@ function App() {
     const [voters, setVoters] = useState([]);
 
     // constructBracket(): takes teams array and turns it into a bracket
-    // This is tate because it changes over time from user input (vote tallies)
+    // Bracket is state because it changes over time from user input (vote tallies)
     const [bracket, setBracket] = useState(() => constructBracket(teams));
     useEffect(() => {
         setBracket(constructBracket(teams));
@@ -109,26 +109,41 @@ function App() {
         setBracket(nextBracket);
     }
 
+    // Reset the state when user navigates back to the SetupPage
+    // const loc = useLocation();
+    // useEffect(() => {
+    //     if (loc.pathname === "/create") {
+
+    //     }
+    // }, [loc.pathname]);
+
+    function resetState() {
+        setTitle("");
+        setDesc("");
+        setTeams([]);
+        setVoters([]);
+    }
+
     return (
-        <Router>
-            <Routes>
-                <Route element={<Header title={title}/>}>
-                    <Route path="/" element={<HomePage/>}/>
-                    <Route path="create" element={<SetupPage title={title} setTitle={setTitle}
-                                                             desc={desc} setDesc={setDesc}
-                                                             teams={teams} setTeams={setTeams}
-                                                             voters={voters}
-                                                             setVoters={setVoters}
-                                                             bracket={bracket}
-                                                             onStart={handleInitializeVotes}/>}/>
-                    <Route path="help" element={<IdeasPage/>}/>
-                    <Route path="play" element={<PlayPage title={title} bracket={bracket}
-                                                          voters={voters}
-                                                          onVote={handleVote}
-                                                          getVoteCounts={getVoteCounts} resetVotes={resetVotes}/>}/>
-                </Route>
-            </Routes>
-        </Router>
+        <Routes>
+            <Route element={<Header title={title}/>}>
+                <Route path="/" element={<HomePage/>}/>
+                <Route path="create" element={<SetupPage title={title} setTitle={setTitle}
+                                                         desc={desc} setDesc={setDesc}
+                                                         teams={teams} setTeams={setTeams}
+                                                         voters={voters}
+                                                         setVoters={setVoters}
+                                                         bracket={bracket}
+                                                         onStart={handleInitializeVotes}
+                                                         reset={resetState}/>}/>
+                <Route path="help" element={<IdeasPage/>}/>
+                <Route path="play" element={<PlayPage title={title} bracket={bracket}
+                                                      voters={voters}
+                                                      onVote={handleVote}
+                                                      getVoteCounts={getVoteCounts}
+                                                      resetVotes={resetVotes}/>}/>
+            </Route>
+        </Routes>
     );
 }
 

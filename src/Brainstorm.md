@@ -21,6 +21,7 @@ On a scale of 1-3, how much would you want this feature?
   - yes from maya
 - Prettier alerts
   - yes from maya
+- Do you want the teams/voters to reset when you go from PlayPage to SetupPage?
 
 Handle even number of voters (button that pops up saying break tie, randomly pick one)
 - Warn the user: if you have an even number of voters, bracket maker will choose randomly to break ties

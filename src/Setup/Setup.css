@@ -7,7 +7,7 @@
     /*border: 2px solid gold;*/
     display: flex;
     flex-flow: row;
-    height: 100% - var(--header-height);
+    height: 100% -var(--header-height);
 }
 
 .setup-title {
@@ -36,6 +36,30 @@
     cursor: pointer;
 }
 
+.start-and-reset-cont {
+    display: flex;
+    flex-flow: column;
+    gap: 15px;
+    align-items: flex-end;
+    /*align-items: center;*/
+}
+
+.reset-btn {
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: bold;
+    background-color: #c54d48;
+    color: var(--text);
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    right: 0;
+}
+
 .start-btn-able:hover {
     background-color: var(--accent-hover);
 }
@@ -49,7 +73,6 @@
 }
 
 
-
 .setup-left {
     /*border: 2px solid blue;*/
     width: 30%;
@@ -58,6 +81,8 @@
     padding-bottom: 30px;
     overflow: scroll;
     height: 100%;
+    position: relative;
+
 }
 
 .settings {
@@ -134,16 +159,7 @@
 }
 
 
-
 /*TODO: use this instead of just nothing for Team component*/
-
-
-
-
-
-
-
-
 
 
 /*Error handling*/
