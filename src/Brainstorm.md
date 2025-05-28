@@ -22,6 +22,7 @@ On a scale of 1-3, how much would you want this feature?
 - Prettier alerts
   - yes from maya
 - Do you want the teams/voters to reset when you go from PlayPage to SetupPage?
+- Have them play around with resetting stuff, switching pages, put weird inputs, basically try to break it
 
 Handle even number of voters (button that pops up saying break tie, randomly pick one)
 - Warn the user: if you have an even number of voters, bracket maker will choose randomly to break ties
@@ -43,16 +44,15 @@ TODO:
       - file name
       - show title or not
       - show game data or not
-  - 4. [ ] Clear state when navigating between pages
-    - 'are you sure?' check so that user knows this will interrupt their current bracket
   - [x] Host BracketMaker on the web
   - [ ] IdeasPage page
   - [ ] Category: drop down menu of sports teams, movies, shows, songs, foods, etc, have this be the default name instead of "team X" every time
   - [ ] Format on mobile!
-  - Ideas Page
+  - 6. Ideas Page
     - [ ] Button that generates a random category, maybe with some examples
     - [ ] Screenshot of my paper bracket?
 - QoL
+  - [ ] Differentiate between the 3 different 'reset' buttons
   - [ ] Make teams draggable in SetupPage
   - [ ] Let users click 'next' or 'prev' to move between VotingScreens
   - [ ] When trying to click 'next' on VotingScreen, highlight the rows that still need to vote
@@ -61,7 +61,7 @@ TODO:
   - [ ] Info buttons/tutorial explaining the basic idea of a voting bracket
   - [x] Let users close a VotingScreen by pressing escape
   - 2. [x] In SetupPage, have the remove Team/Voter button only when hovering 
-  - 5. [ ] Progress bar, showing how many matches still need to be completed
+  - 4.[x] Progress bar, showing how many matches still need to be completed
   - [ ] Display title and description
     - I think description might be nice for the final printout
   - [ ] Let users choose images for each Team/Voter
@@ -70,12 +70,12 @@ TODO:
   - [ ] Light mode/dark mode button 
   - [ ] Automated testing for bracket functions
 - Advanced features
-  - 6. [ ] Statistics:
+  - 5.[ ] Statistics:
       - Print table of all voters' records
       - Upset rate
           - Adjusted upset rate: give more points for bigger upset like 1v8, less for 4v5
       - See who disagreed with the group the most
-  - 7.[ ] Normal bracket capabilities
+  - [ ] Normal bracket capabilities
     - Choose between traditional bracket and voting bracket
       - Traditional bracket chooses the winner of each match by comparing their scores, voting bracket lets users vote on who they want to advance
   - [ ] Let users create a bracket, then save that on the site and let other people play it

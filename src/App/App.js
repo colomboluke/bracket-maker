@@ -96,6 +96,7 @@ function App() {
         }
     }
 
+    // Reset the votes for one match
     function resetVotes(matchID) {
         let nextBracket = bracket.cleanCopy();
         // Update match's votes
@@ -109,14 +110,6 @@ function App() {
         setBracket(nextBracket);
     }
 
-    // Reset the state when user navigates back to the SetupPage
-    // const loc = useLocation();
-    // useEffect(() => {
-    //     if (loc.pathname === "/create") {
-
-    //     }
-    // }, [loc.pathname]);
-
     function resetState() {
         setTitle("");
         setDesc("");
@@ -124,9 +117,17 @@ function App() {
         setVoters([]);
     }
 
+    // Reset all matches in a bracket
+    function resetAllBracketVotes() {
+        let nextBracket = bracket.cleanCopy();
+        nextBracket.resetAllVotes();
+        console.log(nextBracket);
+        setBracket(nextBracket);
+    }
+
     return (
         <Routes>
-            <Route element={<Header title={title}/>}>
+            <Route element={<Header title={title} resetBracketVotes={resetAllBracketVotes}/>}>
                 <Route path="/" element={<HomePage/>}/>
                 <Route path="create" element={<SetupPage title={title} setTitle={setTitle}
                                                          desc={desc} setDesc={setDesc}
@@ -141,7 +142,7 @@ function App() {
                                                       voters={voters}
                                                       onVote={handleVote}
                                                       getVoteCounts={getVoteCounts}
-                                                      resetVotes={resetVotes}/>}/>
+                                                      resetVotes={resetVotes} resetBracket={resetAllBracketVotes}/>}/>
             </Route>
         </Routes>
     );

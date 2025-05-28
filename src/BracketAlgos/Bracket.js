@@ -109,17 +109,82 @@ export default class Bracket {
     handleMatchReset(targetID) {
         // Reset the target match's winner
         const oldMatch = this.getMatch(targetID);
+        // TODO: why does this work even if I don't reset votes here?
         this.setMatch(oldMatch.cleanCopy({winner: null}));
 
         //Reset the next match's teams
         let nextRoundMatch = this.getMatch(oldMatch.nextMatchID);
-        if (nextRoundMatch) {
-            if (oldMatch.nextStatus === 0) {
-                nextRoundMatch = nextRoundMatch.cleanCopy({team1: null});
-            } else if (oldMatch.nextStatus === 1) {
-                nextRoundMatch = nextRoundMatch.cleanCopy({team2: null});
+        this.resetFutureRounds(nextRoundMatch, oldMatch);
+    }
+
+    // Resets next round's match and all future rounds
+    resetFutureRounds(curMatch, oldMatch) {
+        if (!curMatch || (curMatch.team1 === null && curMatch.team2 === null)) {
+            return;
+        }
+        if (oldMatch.nextStatus === 0) {
+            curMatch = curMatch.cleanCopy({team1: null})
+        } else if (oldMatch.nextStatus === 1) {
+            curMatch = curMatch.cleanCopy({team2: null})
+        }
+        this.setMatch(curMatch);
+        //Recurse
+        let nextMatch = this.getMatch(curMatch.nextMatchID);
+        this.resetFutureRounds(nextMatch, curMatch);
+    }
+
+    // Counts how many total non-bye matches are in this bracket
+    countMatches() {
+        return this.countMatchesAcc(0);
+    }
+
+    // Accumulator function
+    countMatchesAcc(count) {
+        this.matches.forEach(match => {
+            if (this.roundID === 0) {   //if this is round 1, don't count bye matches
+                if (match.team1 !== null && match.team2 !== null) {
+                    count++;
+                }
+            } else {                    //otherwise, count every match
+                count++;
             }
-            this.setMatch(nextRoundMatch);
+        });
+        // console.log(`Count after round ${this.roundID}: ${count}`);
+        if (this.nextRound) {                       // recurse
+            return this.nextRound.countMatchesAcc(count);
+        } else {                                    //return count if this is the last round
+            return count;
+        }
+    }
+
+    // Counts the number of matches who have a non-null winner
+    countCompleteMatches() {
+        return this.countCompleteMatchesAcc(0);
+    }
+
+    countCompleteMatchesAcc(count) {
+        this.matches.forEach(match => {
+            if (match.winner !== null) { //count any match with a winner
+                count++;
+            }
+        });
+        if (this.nextRound) {
+            return this.nextRound.countCompleteMatchesAcc(count);
+        } else {
+            return count;
+        }
+    }
+
+    resetAllVotes() {
+        this.matches.forEach(match => {
+            // Set the counts for each voter to 0 (indicating they haven't voted)
+            for (const property in match.votes) {
+                match.votes[property] = 0;
+            }
+            this.handleMatchReset(match.id);
+        })
+        if (this.nextRound) {
+            this.nextRound.resetAllVotes();
         }
     }
 

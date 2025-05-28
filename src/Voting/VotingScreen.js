@@ -12,13 +12,17 @@ export default function VotingScreen({match, voters, onVote, onClose, onReset}) 
             if (e.key === 'Escape') {
                 onClose();
             }
+            // Pressing enter closes it only if all votes are in
+            if (e.key === 'Enter' && Object.values(match.votes).every(item => item !== 0)) {
+                onClose();
+            }
         }
 
         // Clean up listener when component unmounts
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [onClose]);
+    }, [onClose, match]);
 
     // Whether all users have voted
     function allSelected() {

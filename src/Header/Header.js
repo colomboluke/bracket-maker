@@ -3,7 +3,7 @@ import React from "react";
 import {FaGithub, FaMousePointer, FaPrint} from "react-icons/fa";
 import "./Header.css";
 
-export default function Header({title}) {
+export default function Header({title, resetBracketVotes}) {
     const location = useLocation();
     const titleDisplay = (title === "" ? <h3 className={"bracket-title"}>Untitled Bracket</h3> :
                           <h3 className={"bracket-title"}>{title}</h3>)
@@ -15,6 +15,7 @@ export default function Header({title}) {
         if (location.pathname === "/play") {
             if (window.confirm(
                 "Navigating away from a bracket will lose all progress. Are you sure?")) {
+                resetBracketVotes();
                 navigate(toPath);
             }
         } else {
@@ -32,7 +33,8 @@ export default function Header({title}) {
                         </span>
                     <span className={"link header-new-bracket-btn"}
                           onClick={() => handleNavigateAway('/create')}>New Bracket</span>
-                    <span className={"link header-ideas-btn"} onClick={() => handleNavigateAway("/help")}>Get Ideas</span>
+                    <span className={"link header-ideas-btn"}
+                          onClick={() => handleNavigateAway("/help")}>Get Ideas</span>
                     {(location.pathname === "/create" || location.pathname === "/play")
                      && titleDisplay}
                 </div>

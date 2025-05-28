@@ -4,8 +4,11 @@ import "./PlayableBracket.css";
 
 // Displays a single matchup of two teams in the bracket
 export default function ClickableMatchup({team1, team2, matchID, onClick, winner, votesTally}) {
-
+    console.log("Votes tally: ", votesTally)
     function getVotesString() {
+        if (!votesTally) {
+            return "";
+        }
         return `${votesTally.team1} - ${votesTally.team2}`;
     }
 

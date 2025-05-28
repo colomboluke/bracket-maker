@@ -6,8 +6,9 @@ import {Margin, Resolution, usePDF} from "react-to-pdf";
 import PrintPopup from "../PrintScreen/PrintPopup";
 import {FaDownload, FaPrint} from "react-icons/fa";
 import "./PlayPage.css";
+import PlaySidebar from "./PlaySidebar";
 
-export default function PlayPage({title, bracket, voters, onVote, getVoteCounts, resetVotes}) {
+export default function PlayPage({title, bracket, voters, onVote, getVoteCounts, resetVotes, resetBracket}) {
     // Track the currently selected match using its ID
     const [selectedMatchID, setSelectedMatchID] = useState(null);
     let selectedMatch = bracket.getMatch(selectedMatchID);
@@ -49,16 +50,25 @@ export default function PlayPage({title, bracket, voters, onVote, getVoteCounts,
                                           resolution: Resolution.MEDIUM
                                       });
 
+    const totalMatches = bracket.countMatches();
+    const completeMatches = bracket.countCompleteMatches();
+
+    function handleResetWholeBracket() {
+        if (window.confirm("Are you sure you wish you reset the votes of every match in the bracket?")) {
+            resetBracket();
+        }
+    }
+
     return (
         <div className={"play-bracket-cont"}>
             {/*Show overlay if VotingScreen or PrintMenu is displayed*/}
             {(selectedMatchID !== null || showPrintMenu) && (<div className={"overlay"}></div>)}
-            <div className={"play-bracket-title-cont"}>
-                <button onClick={() => setShowPrintMenu(true)} className={"print-btn"}><FaPrint
-                    className={"print-btn-icon"}/></button>
-            </div>
+            {/*<div className={"play-bracket-title-cont"}>*/}
+            {/*</div>*/}
+            <PlaySidebar setShowPrintMenu={setShowPrintMenu} matchesComplete={completeMatches}
+                         totalMatches={totalMatches} onReset={handleResetWholeBracket}/>
             {/*<input type="color" value={"pick color"}/>*/}
-            {/*<button onClick={() => console.log(bracket, voters)}>Log bracket</button>*/}
+            <button onClick={() => console.log(bracket, voters)}>Log bracket</button>
 
             {/*This gets the ref because this is what will be printed*/}
             <PlayableBracket bracket={bracket} onClick={handleMatchClick}

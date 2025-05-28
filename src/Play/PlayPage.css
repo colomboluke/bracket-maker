@@ -1,21 +1,23 @@
 .play-bracket-cont {
     display: flex;
-    flex-flow: column;
+    flex-flow: row;
     padding-top: 15px;
 }
 
 .print-btn {
     height: 40px;
     width: 35px;
-    position: absolute;
-    right: 35px;
-    top: 5px;
+    /*position: absolute;*/
+    /*right: 35px;*/
+    /*top: 5px;*/
     cursor: pointer;
     border: none;
     display: flex;
     justify-content: center;
     align-items: center;
     /*box-shadow: none;*/
+    /*background-color: var(--primary);*/
+    /*color: white;*/
 }
 
 .print-btn:hover {
@@ -35,4 +37,54 @@
     /*flex-flow: row;*/
     justify-content: space-between;
     align-items: center;
+}
+
+.play-sidebar {
+    border: 1px solid var(--background2);
+    background-color: var(--background3);
+    width: 200px;
+    margin-left: 15px;
+    display: flex;
+    flex-flow: column;
+    gap: 30px;
+    height: fit-content;
+    padding: 10px 5px 25px 5px;
+}
+
+.progress-cont {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.progress-bar-outer {
+    height: 20px;
+    width: 75%;
+    border: 1px solid grey;
+    background-color: grey;
+    border-radius: 9px;
+}
+
+.progress-bar-inner {
+    background-color: var(--primary-hover);
+    height: 20px;
+    border-radius: 9px;
+    width: 50%;
+    z-index: 5;
+}
+
+.sidebar-btns {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-evenly;
+    align-items: center;
+    /*border: 1px solid gold;*/
+}
+
+.instruction-text {
+    text-align: left;
+    padding-left: 10px;
+    padding-right: 10px;
 }
