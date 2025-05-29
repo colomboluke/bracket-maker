@@ -23,7 +23,7 @@ export default function PlaySidebar({setShowPrintMenu, matchesComplete, totalMat
                     className={"print-btn-icon"}/></button>
                 <button className={"reset-btn"} onClick={onReset}>Reset</button>
             </div>
-            <span className={"instruction-text"}>Click on a match or team to get started</span>
+            <span className={"instruction-text"}>Click on a match to get started</span>
         {/*    TODO: mechanism to hide/show this screen*/}
         </div>
     )

@@ -16,7 +16,7 @@ export default function SetupPage({
                                       setTeams,
                                       bracket,
                                       voters,
-                                      setVoters, onStart, reset
+                                      setVoters, onStart, reset, setTeamImage
                                   }) {
 
     // TODO: all functions that modify state should go in TournamentContext, which wraps the App
@@ -28,7 +28,7 @@ export default function SetupPage({
         let counter = 1;
         let newName;
         while (!nameValid) {
-            newName = "Team " + counter; //try new name
+            newName = "Item " + counter; //try new name
             let nameTaken = teams.map(team => team.name).includes(newName); // Check if taken
             nameValid = !nameTaken;
             counter++; //try next number up
@@ -88,7 +88,7 @@ export default function SetupPage({
     // Reset the teams list to an empty list
     // TODO: make my own confirmation window rather than the basic one (see chat)
     function resetTeams() {
-        if (window.confirm('Are you sure you want to completely reset teams?')) {
+        if (window.confirm('Are you sure you want to completely reset contenders?')) {
             setTeams([]);
         }
     }
@@ -180,8 +180,6 @@ export default function SetupPage({
                         <button className={`start-btn ${startBtnStyle}`}
                                 onClick={handleStartClick}>Start Bracket
                         </button>
-                        {canReset && <button className={'reset-btn'}
-                                             onClick={handleReset}>Reset</button>}
                     </div>
                 </div>
 
@@ -190,13 +188,17 @@ export default function SetupPage({
                           numVoters={voters.length} createVoter={createVoter}
                           removeLastVoter={removeLastVoter} title={title}
                           setTitle={setTitle} desc={desc} setDesc={setDesc}/>
-                <h3>Teams</h3>
+                <h3>Contenders</h3>
                 <TeamAddGrid teams={teams} updateTeamName={updateTeamName}
                              removeTeam={removeTeam} createTeam={createTeam}
-                             shuffleTeams={shuffleTeams} resetTeams={resetTeams}/>
+                             shuffleTeams={shuffleTeams} resetTeams={resetTeams} setTeamImage={setTeamImage}/>
                 <h3>Voters</h3>
                 <VoterAddGrid voters={voters} removeVoter={removeVoter}
                               createVoter={createVoter} updateVoterName={updateVoterName}/>
+                <div className={"reset-cont"}>
+                    {canReset && <button className={'reset-btn'}
+                                         onClick={handleReset}>Reset Bracket</button>}
+                </div>
             </div>
             <div className={"setup-right"}>
                 <PreviewBracket bracket={bracket} roundWidth={200}/>

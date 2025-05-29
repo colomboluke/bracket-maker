@@ -103,7 +103,12 @@
     border-radius: 50%;
     height: 120px;
     width: 120px;
-    background-color: white;
+    /*background-color: white;*/
+}
+
+.voting-image {
+    height: 100%;
+    width: 100%;
 }
 
 .vs {
@@ -186,6 +191,8 @@
 .reset:disabled {
     display: none;
 }
+
+
 
 
 

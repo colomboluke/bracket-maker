@@ -1,9 +1,7 @@
 
-On a scale of 1-3, how much would you want this feature?
-- Choosing images for each Team
-- Choosing colors for each Team
-- Choosing images for each Voter
-- Choosing colors for each Voter
+Things to get people's thoughts on:
+- Displaying images for Teams in the bracket
+- Displaying images/icons for Voters 
 - 'Reset votes' button in voting screen
   - Yes from maya
 - When hovering over a matchup, have the colors change depending on if its playable/placeholder/future match
@@ -57,7 +55,6 @@ TODO:
   - [ ] Let users click 'next' or 'prev' to move between VotingScreens
   - [ ] When trying to click 'next' on VotingScreen, highlight the rows that still need to vote
   - [x] VotingScreen has a 'reset votes' button
-  - [ ] In PlayPage, have the hover border change colors based on whether that matchup is playable
   - [ ] Info buttons/tutorial explaining the basic idea of a voting bracket
   - [x] Let users close a VotingScreen by pressing escape
   - 2. [x] In SetupPage, have the remove Team/Voter button only when hovering 

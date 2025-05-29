@@ -64,14 +64,18 @@ export default function VotingScreen({match, voters, onVote, onClose, onReset}) 
     const header = <div className={"voter-row"}>
         <div className={"voter-col"}>
             <div className={"option-title"}>{choiceOneName}</div>
-            <div className={"option-icon"}></div>
+            <div className={"option-icon"}>
+                <img src={match.team1.image} alt="Team 1" className={"voting-image"}/>
+            </div>
         </div>
         <div className={"voter-col"}>
             <span className={"vs"}>VS.</span>
         </div>
         <div className={"voter-col"}>
             <div className={"option-title"}>{choiceTwoName}</div>
-            <div className={"option-icon"}></div>
+            <div className={"option-icon"}>
+                <img src={match.team2.image} alt="Team 2" className={"voting-image"}/>
+            </div>
         </div>
     </div>
 

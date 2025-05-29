@@ -35,7 +35,7 @@ export default function Settings({numTeams, createTeam, removeLastTeam, numVoter
     return (
         <div className={"settings"}>
             <div className={"settings-item"}>
-                <h4>Number of Teams </h4>
+                <h4>Number of Contenders</h4>
                 {/*TODO: change the number adjuster thing in CSS*/}
                 {/*TODO: add a 'presets' dropdown which lets you pick any power of 2*/}
                 <input value={numTeams} className={"settings-input num-teams-input"}

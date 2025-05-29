@@ -44,6 +44,24 @@ export default class Bracket {
         }
     }
 
+    getTeam(teamID) {
+        console.log(`Received id ${teamID}`)
+        for (let i = 0; i < this.matches.length; i++) {
+            console.log(this.matches[i].team1, this.matches[i].team2)
+            if (this.matches[i].team1 && this.matches[i].team1.id === teamID) {
+                return this.matches[i].team1;
+            }
+            if (this.matches[i].team2 && this.matches[i].team2.id === teamID) {
+                return this.matches[i].team2;
+            }
+        }
+        if (this.nextRound) {                       // recurse
+            return this.nextRound.getMatch(teamID);
+        } else {
+            return null;                            // Team not found
+        }
+    }
+
     /**
      * Replace an existing match with a new one
      * The new match must have the same ID as the old one

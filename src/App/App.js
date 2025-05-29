@@ -121,7 +121,13 @@ function App() {
     function resetAllBracketVotes() {
         let nextBracket = bracket.cleanCopy();
         nextBracket.resetAllVotes();
-        console.log(nextBracket);
+        setBracket(nextBracket);
+    }
+
+    function setTeamImage(teamID, image) {
+        let nextBracket = bracket.cleanCopy();
+        const team = nextBracket.getTeam(teamID);
+        team.setImage(image);
         setBracket(nextBracket);
     }
 
@@ -136,7 +142,8 @@ function App() {
                                                          setVoters={setVoters}
                                                          bracket={bracket}
                                                          onStart={handleInitializeVotes}
-                                                         reset={resetState}/>}/>
+                                                         reset={resetState}
+                setTeamImage={setTeamImage}/>}/>
                 <Route path="help" element={<IdeasPage/>}/>
                 <Route path="play" element={<PlayPage title={title} bracket={bracket}
                                                       voters={voters}

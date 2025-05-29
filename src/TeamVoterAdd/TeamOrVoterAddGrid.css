@@ -16,7 +16,8 @@
 }
 
 .team-add-row {
-    grid-template-columns: 2fr 11fr minmax(0, 2fr) minmax(0, 2fr) minmax(0, 1fr);
+    /*height: 38px;*/
+    grid-template-columns: 2fr 11fr minmax(0, 4fr) minmax(0, 1fr);
 }
 
 .voter-add-row {
@@ -116,4 +117,38 @@
 
 .hide-remove {
     display: none;
+}
+
+
+.icon {
+    height: 50%;
+    /*width: 100%;*/
+    /*border: 1px solid gold;*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-display {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.team-icon-preview {
+    height: 40%;
+    width: 40%;
+    border-radius: 50%;
+}
+
+.upload-img-placeholder {
+    border: 1px solid grey;
+    border-radius: 50%;
+    height: 38px;
+    width: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
 }

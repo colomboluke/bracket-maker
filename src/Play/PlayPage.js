@@ -68,7 +68,7 @@ export default function PlayPage({title, bracket, voters, onVote, getVoteCounts,
             <PlaySidebar setShowPrintMenu={setShowPrintMenu} matchesComplete={completeMatches}
                          totalMatches={totalMatches} onReset={handleResetWholeBracket}/>
             {/*<input type="color" value={"pick color"}/>*/}
-            <button onClick={() => console.log(bracket, voters)}>Log bracket</button>
+            {/*<button onClick={() => console.log(bracket, voters)}>Log bracket</button>*/}
 
             {/*This gets the ref because this is what will be printed*/}
             <PlayableBracket bracket={bracket} onClick={handleMatchClick}
