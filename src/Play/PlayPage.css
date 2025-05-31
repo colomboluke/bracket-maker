@@ -5,13 +5,11 @@
 }
 
 .print-btn {
-    height: 40px;
-    width: 35px;
-    /*position: absolute;*/
-    /*right: 35px;*/
-    /*top: 5px;*/
+    height: 35px;
+    width: 40px;
     cursor: pointer;
     border: none;
+    border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -49,6 +47,8 @@
     gap: 30px;
     height: fit-content;
     padding: 10px 5px 25px 5px;
+    position: absolute;
+    right: 20px;
 }
 
 .progress-cont {

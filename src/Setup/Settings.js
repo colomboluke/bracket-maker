@@ -2,7 +2,7 @@
 export default function Settings({numTeams, createTeam, removeLastTeam, numVoters, createVoter, removeLastVoter, title, setTitle, desc, setDesc}) {
 
     function changeNumTeams(targetNum) {
-        if (targetNum < 1) {
+        if (targetNum < 0) {
             return;
         }
         if (targetNum === numTeams) {
@@ -17,7 +17,7 @@ export default function Settings({numTeams, createTeam, removeLastTeam, numVoter
     }
 
     function changeNumVoters(targetNum) {
-        if (targetNum < 1 || targetNum > 9) { //arbitrarily capping at 9 just for space
+        if (targetNum < 0 || targetNum > 9) { //arbitrarily capping at 9 just for space
             return;
         }
         if (targetNum === numVoters) {
@@ -27,7 +27,6 @@ export default function Settings({numTeams, createTeam, removeLastTeam, numVoter
             createVoter()
         }
         if (targetNum < numVoters) { //Remove voters
-            console.log(`Removing the last voter (total voters: ${numVoters})`)
             removeLastVoter()
         }
     }

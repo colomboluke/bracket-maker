@@ -41,7 +41,7 @@ export default function Header({title, resetBracketVotes}) {
                 <div className={"header-right"}>
                     {/*<p>Made by Luke Colombo</p>*/}
                     {/*TODO: when these are hovered, make text pop out that says "GitHub" or "Personal Portfolio"*/}
-                    <a href="https://github.com/lukecolombo03" target={"_blank"}
+                    <a href="https://github.com/colomboluke" target={"_blank"}
                        rel="noreferrer">
                         <FaGithub className={"header-github"}/>
                     </a>

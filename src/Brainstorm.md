@@ -53,6 +53,7 @@ TODO:
   - [ ] Differentiate between the 3 different 'reset' buttons
   - [ ] Make teams draggable in SetupPage
   - [ ] Let users click 'next' or 'prev' to move between VotingScreens
+  - [ ] Select votes with right/left arrow keys
   - [ ] When trying to click 'next' on VotingScreen, highlight the rows that still need to vote
   - [x] VotingScreen has a 'reset votes' button
   - [ ] Info buttons/tutorial explaining the basic idea of a voting bracket
