@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {BrowserRouter as Router, Routes, Route, useLocation} from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, useLocation, useNavigate} from 'react-router-dom';
 import constructBracket from "../BracketAlgos/ConstructBracket";
 import Header from "../Header/Header";
 import HomePage from "../Home/HomePage";
@@ -7,6 +7,7 @@ import SetupPage from "../Setup/SetupPage";
 import IdeasPage from "../Ideas/IdeasPage";
 import PlayPage from "../Play/PlayPage";
 import {useReactToPrint} from "react-to-print";
+import {getVoteCounts} from "../Utils.mjs";
 
 /**
  * Top level component
@@ -58,24 +59,6 @@ function App() {
         nextBracket.handleMatchWinner(matchID, getWinner(nextMatch.votes));
 
         setBracket(nextBracket);
-    }
-
-    // Given a votes object (record of who voted for what), tally the votes for each team
-    function getVoteCounts(votesObj) {
-        let counts = {team1: 0, team2: 0}
-        for (const voter in votesObj) {
-            let vote = votesObj[voter]
-            if (vote === 1) {//vote for team 1
-                counts.team1 += 1;
-            } else if (vote === 2) { //vote for team 2
-                counts.team2 += 1;
-            } else if (vote === 0) {    //someone hasn't voted yet
-                return null;
-            } else {
-                throw new Error(`Votes should only be 0, 1, or 2. Found: ${vote}`);
-            }
-        }
-        return counts;
     }
 
     // Given a votes object, return 1 if the winner is team1, 2 if the winner is team2, or

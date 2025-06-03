@@ -1,5 +1,5 @@
 import React from "react";
-import {matchupSafeGet} from "../Utils";
+import {matchupSafeGet} from "../Utils.mjs";
 
 // Displays a single matchup of two teams in the bracket
 export default function Matchup({team1, team2}) {

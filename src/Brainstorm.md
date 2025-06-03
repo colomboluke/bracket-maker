@@ -36,7 +36,6 @@ TODO:
   - 1. [x] Reset button in SetupPage with an "are you sure" step
   - [x] Track votes so that clicking on a VotingScreen remembers the votes
   - [ ] Have an animation/display for the winner
-  - [ ] USER TESTING!
   - 3. [x] Display final completed bracket, let users print/save
     - create pop-up screen (make this its own component) that asks for user input:
       - file name
@@ -50,6 +49,7 @@ TODO:
     - [ ] Button that generates a random category, maybe with some examples
     - [ ] Screenshot of my paper bracket?
 - QoL
+  - [ ] Let users change the order/seed of an individual team in SetupPage
   - [ ] Differentiate between the 3 different 'reset' buttons
   - [ ] Make teams draggable in SetupPage
   - [ ] Let users click 'next' or 'prev' to move between VotingScreens

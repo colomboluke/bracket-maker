@@ -1,0 +1,30 @@
+//Gets the property of the object unless object is null, in which case it returns null
+// Also formats the seed to add a period at the end
+// This is in Utils so both Matchup and ClickableMatchup can access it
+export function matchupSafeGet(object, property) {
+    if (object !== null && object !== undefined) {
+        if (property === "id") {
+            return object[property] + 1 + ".";
+        }
+        return object[property];
+    }
+    return "";
+}
+
+// Given a votes object (record of who voted for what), tally the votes for each team
+export function getVoteCounts(votesObj) {
+    let counts = {team1: 0, team2: 0}
+    for (const voter in votesObj) {
+        let vote = votesObj[voter]
+        if (vote === 1) {//vote for team 1
+            counts.team1 += 1;
+        } else if (vote === 2) { //vote for team 2
+            counts.team2 += 1;
+        } else if (vote === 0) {    //someone hasn't voted yet
+            return null;
+        } else {
+            throw new Error(`Votes should only be 0, 1, or 2. Found: ${vote}`);
+        }
+    }
+    return counts;
+}

@@ -7,6 +7,7 @@ import PrintPopup from "../PrintScreen/PrintPopup";
 import {FaDownload, FaPrint} from "react-icons/fa";
 import "./PlayPage.css";
 import PlaySidebar from "./PlaySidebar";
+import { LineChart, Line } from 'recharts';
 
 export default function PlayPage({title, bracket, voters, onVote, getVoteCounts, resetVotes, resetBracket}) {
     // Track the currently selected match using its ID
@@ -59,6 +60,15 @@ export default function PlayPage({title, bracket, voters, onVote, getVoteCounts,
         }
     }
 
+
+    const data = [{name: 'Page A', score: 20}, {name: 'Page B', score: 30}, {name: 'Page C', score: 10}];
+
+    const renderLineChart = (
+        <LineChart width={400} height={400} data={data} className={"chart"}>
+            <Line type="monotone" dataKey="score" stroke="#8884d8" />
+        </LineChart>
+    );
+
     return (
         <div className={"play-bracket-cont"}>
             {/*Show overlay if VotingScreen or PrintMenu is displayed*/}
@@ -69,6 +79,7 @@ export default function PlayPage({title, bracket, voters, onVote, getVoteCounts,
                          totalMatches={totalMatches} onReset={handleResetWholeBracket}/>
             {/*<input type="color" value={"pick color"}/>*/}
             {/*<button onClick={() => console.log(bracket, voters)}>Log bracket</button>*/}
+            {renderLineChart}
 
             {/*This gets the ref because this is what will be printed*/}
             <PlayableBracket bracket={bracket} onClick={handleMatchClick}
