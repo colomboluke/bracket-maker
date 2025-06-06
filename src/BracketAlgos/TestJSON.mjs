@@ -992,7 +992,7 @@ export const voters = [
     }
 ]
 
-export const sevenVoters = {
+export const sevenVotersBracket = {
     "roundID": 0,
     "matches": [
         {
@@ -1175,6 +1175,202 @@ export const sevenVoters = {
                         "Gabe": 1,
                         "Ivan": 1,
                         "Connor": 1
+                    },
+                    "nextStatus": 0
+                }
+            ],
+            "nextRound": null
+        }
+    }
+}
+
+export const fiveVoters = [
+    {
+        "name": "Luke"
+    },
+    {
+        "name": "Jake"
+    },
+    {
+        "name": "Aidan"
+    },
+    {
+        "name": "Zach"
+    },
+    {
+        "name": "Gabe"
+    }
+]
+
+export const videoGames = {
+    "roundID": 0,
+    "matches": [
+        {
+            "id": 0,
+            "winner": 1,
+            "team1": {
+                "id": 0,
+                "name": "Minecraft",
+                "image": null
+            },
+            "team2": {
+                "id": 7,
+                "name": "Zelda",
+                "image": null
+            },
+            "nextMatchID": 4,
+            "votes": {
+                "Luke": 1,
+                "Jake": 1,
+                "Aidan": 1,
+                "Zach": 1,
+                "Gabe": 2
+            },
+            "nextStatus": 0
+        },
+        {
+            "id": 1,
+            "winner": 1,
+            "team1": {
+                "id": 3,
+                "name": "Super Smash Bros",
+                "image": null
+            },
+            "team2": {
+                "id": 4,
+                "name": "Fornite",
+                "image": null
+            },
+            "nextMatchID": 4,
+            "votes": {
+                "Luke": 2,
+                "Jake": 2,
+                "Aidan": 1,
+                "Zach": 1,
+                "Gabe": 1
+            },
+            "nextStatus": 1
+        },
+        {
+            "id": 2,
+            "winner": 1,
+            "team1": {
+                "id": 2,
+                "name": "Mario Kart",
+                "image": null
+            },
+            "team2": {
+                "id": 5,
+                "name": "Valorant",
+                "image": null
+            },
+            "nextMatchID": 5,
+            "votes": {
+                "Luke": 2,
+                "Jake": 2,
+                "Aidan": 1,
+                "Zach": 1,
+                "Gabe": 1
+            },
+            "nextStatus": 0
+        },
+        {
+            "id": 3,
+            "winner": 1,
+            "team1": {
+                "id": 1,
+                "name": "Overwatch",
+                "image": null
+            },
+            "team2": {
+                "id": 6,
+                "name": "Civ 6",
+                "image": null
+            },
+            "nextMatchID": 5,
+            "votes": {
+                "Luke": 2,
+                "Jake": 1,
+                "Aidan": 1,
+                "Zach": 1,
+                "Gabe": 2
+            },
+            "nextStatus": 1
+        }
+    ],
+    "nextRound": {
+        "roundID": 1,
+        "matches": [
+            {
+                "id": 4,
+                "winner": 1,
+                "team1": {
+                    "id": 0,
+                    "name": "Minecraft",
+                    "image": null
+                },
+                "team2": {
+                    "id": 3,
+                    "name": "Super Smash Bros",
+                    "image": null
+                },
+                "nextMatchID": 6,
+                "votes": {
+                    "Luke": 1,
+                    "Jake": 1,
+                    "Aidan": 2,
+                    "Zach": 2,
+                    "Gabe": 1
+                },
+                "nextStatus": 0
+            },
+            {
+                "id": 5,
+                "winner": 1,
+                "team1": {
+                    "id": 2,
+                    "name": "Mario Kart",
+                    "image": null
+                },
+                "team2": {
+                    "id": 1,
+                    "name": "Overwatch",
+                    "image": null
+                },
+                "nextMatchID": 6,
+                "votes": {
+                    "Luke": 1,
+                    "Jake": 2,
+                    "Aidan": 2,
+                    "Zach": 1,
+                    "Gabe": 1
+                },
+                "nextStatus": 1
+            }
+        ],
+        "nextRound": {
+            "roundID": 2,
+            "matches": [
+                {
+                    "id": 6,
+                    "winner": 1,
+                    "team1": {
+                        "id": 0,
+                        "name": "Minecraft",
+                        "image": null
+                    },
+                    "team2": {
+                        "id": 2,
+                        "name": "Mario Kart",
+                        "image": null
+                    },
+                    "nextMatchID": 7,
+                    "votes": {
+                        "Luke": 1,
+                        "Jake": 1,
+                        "Aidan": 1,
+                        "Zach": 1,
+                        "Gabe": 1
                     },
                     "nextStatus": 0
                 }

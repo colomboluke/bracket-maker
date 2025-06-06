@@ -5,7 +5,7 @@ import {Margin, Resolution, usePDF} from "react-to-pdf";
 import PrintPopup from "../PrintScreen/PrintPopup";
 import "./PlayPage.css";
 import PlaySidebar from "./PlaySidebar";
-import {animatedMovies, sevenVoters,} from "../BracketAlgos/TestJSON.mjs";
+import {animatedMovies, sevenVotersBracket,} from "../BracketAlgos/TestJSON.mjs";
 import "../Charts/Charts.css";
 import Dropdown from "../Charts/Dropdown";
 import ChartContainer from "../Charts/ChartContainer";
@@ -95,8 +95,7 @@ export default function PlayPage({
                          totalMatches={totalMatches} onReset={handleResetWholeBracket}
                          onShowChart={handleShowChartClick} showInsights={showInsights}/>
             {/*<input type="color" value={"pick color"}/>*/}
-            {/*<button onClick={() => console.log(bracket, voters)}>Log bracket</button>*/}
-
+            <button onClick={() => console.log(bracket, voters)}>Log bracket</button>
             {/*This gets the ref because this is what will be printed*/}
             <PlayableBracket bracket={bracket} onClick={handleMatchClick}
                              getVoteCounts={getVoteCounts} ref={targetRef}/>

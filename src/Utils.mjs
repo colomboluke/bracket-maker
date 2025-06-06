@@ -33,3 +33,8 @@ export function getVoteCounts(votesObj) {
 export function filterOutByes(listOfMatches) {
     return listOfMatches.filter(match => match.team1 && match.team2);
 }
+
+// Turns two strings into one, to use as a key
+export function convertToStringKey(name1, name2) {
+    return `${name1}${name2.slice(0,1).toUpperCase().concat(name2.slice(1))}`
+}

@@ -1,8 +1,14 @@
 import {Bar, BarChart, Rectangle, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
 import React from "react";
-import {marginOfVictory, voterOutlier} from "../BracketAlgos/PostGameStats.mjs";
+import {marginOfVictory, voterOutlier, voterSimilarity} from "../BracketAlgos/PostGameStats.mjs";
 import "../BracketAlgos/Bracket.mjs"
-import {animatedMovies, popArtists, sevenVoters, testBracket1} from "../BracketAlgos/TestJSON.mjs";
+import {
+    animatedMovies, fiveVoters,
+    popArtists,
+    sevenVotersBracket,
+    testBracket1, videoGames
+} from "../BracketAlgos/TestJSON.mjs";
+import {convertToStringKey} from "../Utils.mjs";
 
 export default function ChartContainer({activeChart, bracket, voters, totalMatches}) {
 
@@ -30,6 +36,7 @@ export default function ChartContainer({activeChart, bracket, voters, totalMatch
                     <span className={"stat-content"}>{`Outlier Score: ${payload[0].value.toFixed(
                         2)}`}</span>
                     <span className={"stat-blurb"}>How strongly this voter's choices differed from the group</span>
+                    {/*<span className={"stat-blurb"}>On average, this voter disagreed with {(payload[0].value * 100).toFixed(0)}% of the group</span>*/}
                     <div className={"stat-spacer"}></div>
                     <span className={"stat-content"}>{`Disagreement Rate: ${(payload[1].value
                                                                              * 100).toFixed(0)
@@ -44,7 +51,6 @@ export default function ChartContainer({activeChart, bracket, voters, totalMatch
 
     function voterOutlierChart() {
         const dataProcessed = voterOutlier(bracket, voters);
-        const maxScore = (voters.length - 1) * totalMatches;
         const barSize = 55
         const barGap = 35
         const chartWidth = dataProcessed.length * (barSize + barGap) + 100;
@@ -55,7 +61,7 @@ export default function ChartContainer({activeChart, bracket, voters, totalMatch
                 height={300}
             >
                 <XAxis dataKey="name"/>
-                <YAxis domain={[0, maxScore]}/>
+                <YAxis domain={[0, 1]}/>
                 <Tooltip content={<OutlierTooltip/>} coordinate={{x: 600, y: 200}}/>
                 <Bar dataKey="score" fill="#4d6ef3"
                      activeBar={<Rectangle fill="orange" stroke="gray"/>} barSize={40}/>
@@ -65,9 +71,29 @@ export default function ChartContainer({activeChart, bracket, voters, totalMatch
         );
     }
 
-    const voterSimilarityChart = (
-        <span>Voter similarity chart</span>
-    );
+    function voterSimilarityChart() {
+        const data = voterSimilarity(videoGames, fiveVoters);
+        return (
+            <table>
+                <thead>
+                <tr>
+                    <th>Voter 1</th>
+                    <th>Voter 2</th>
+                    <th>Score</th>
+                </tr>
+                </thead>
+                <tbody>
+                {data.map(row => (
+                    <tr key={convertToStringKey(row.voter1, row.voter2)}>
+                        <td>{row.voter1}</td>
+                        <td>{row.voter2}</td>
+                        <td>{row.score}</td>
+                    </tr>
+                ))}
+                </tbody>
+            </table>
+        );
+    }
 
     // TODO; adjust the bar sizes more based on data length
     function getWinStrengthChart() {
@@ -98,6 +124,6 @@ export default function ChartContainer({activeChart, bracket, voters, totalMatch
         return voterOutlierChart();
     }
     if (activeChart === 2) {
-        return voterSimilarityChart;
+        return voterSimilarityChart();
     }
 }

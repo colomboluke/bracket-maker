@@ -36,7 +36,7 @@ export default function Dropdown({options, setActiveChart, activeChart}) {
                 <ul className={"dropdown-options-cont"}>
                     {options.map((option, index) => (
                         <li onClick={() => handleOptionClick(index)}
-                            className={"dropdown-el"}>{option}</li>
+                            className={"dropdown-el"} key={index}>{option}</li>
                     ))}
                 </ul>
             )}

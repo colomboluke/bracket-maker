@@ -1,12 +1,5 @@
-import {
-    animatedMovies,
-    popArtists,
-    sevenVoters,
-    testBracket1,
-    testBracketActual,
-    voters
-} from "./TestJSON.mjs";
 import {filterOutByes, getVoteCounts} from "../Utils.mjs";
+import {fiveVoters, videoGames} from "./TestJSON.mjs";
 
 // ~~ Voter Outlier Score ~~
 // Blurb 1: Who disagreed with the group the most, who had the "hottest takes"
@@ -59,6 +52,47 @@ function voterOutlierAcc(bracket, voter, voterScore, losses) {
 //  side. Highest score -> most similar. Divide each score by number of voters * number of matches
 //  Number of pairs = n(n-1) / 2
 // Chart: ranked table
+export function voterSimilarity(bracket, voters) {
+    let pairs = []
+    let counter = 0
+    for (let i = 0; i < voters.length; i++) {
+        //start counting from i to avoid redudancy
+        for (let j = i; j < voters.length; j++) {
+            if (j !== i) {
+                pairs[counter] = {voter1: voters[i].name, voter2: voters[j].name, score: 0}
+                counter++;
+                // pairs[convertToStringKey(voters[i].name, voters[j].name)] = ;
+            }
+        }
+    }
+    // console.log(pairs)
+    pairs.forEach(pair => {
+        pair.score = voterSimilarityAcc(bracket, pair, 0);
+    })
+    pairs.sort((a, b) => {
+        return b.score - a.score;
+    })
+    return pairs;
+}
+
+// Gets the similarity score for one pair
+function voterSimilarityAcc(bracket, pair, score) {
+    filterOutByes(bracket.matches).forEach(match => {
+        // console.log(match.votes)
+        if (match.votes[pair.voter1] === match.votes[pair.voter2]) { //this pair voted the same
+            // console.log(`${pair.voter1} and ${pair.voter2} voted the same`)
+            score++;
+        }
+    })
+    if (bracket.nextRound) {
+        return voterSimilarityAcc(bracket.nextRound, pair, score);
+    } else {
+        return score;
+    }
+}
+
+
+console.log(voterSimilarity(videoGames, fiveVoters))
 
 // ~~ Contender Win Strength ~~
 // Blurb 1: Which contenders won easily each round, which ones barely scraped by
@@ -81,6 +115,7 @@ export function marginOfVictory(bracket) {
         counts[contender]["Win strength"] =
             (counts[contender]["percentage"] * 100).toString().concat("%");
     }
+    // console.log("MoV result", counts)
     return counts;
 }
 
