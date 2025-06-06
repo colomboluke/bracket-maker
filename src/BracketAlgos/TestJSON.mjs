@@ -812,3 +812,167 @@ export const animatedMovies = {
         }
     }
 }
+
+export const popArtists = {
+    "roundID": 0,
+    "matches": [
+        {
+            "id": 0,
+            "winner": 1,
+            "team1": {
+                "id": 0,
+                "name": "Dua Lipa",
+                "image": null
+            },
+            "team2": {
+                "id": 7,
+                "name": "Taylor Swift",
+                "image": null
+            },
+            "nextMatchID": 4,
+            "votes": {
+                "Luke": 2,
+                "Jake": 1,
+                "Aidan": 1
+            },
+            "nextStatus": 0
+        },
+        {
+            "id": 1,
+            "winner": 2,
+            "team1": {
+                "id": 3,
+                "name": "Ariana Grande",
+                "image": null
+            },
+            "team2": {
+                "id": 4,
+                "name": "Katy Perry",
+                "image": null
+            },
+            "nextMatchID": 4,
+            "votes": {
+                "Luke": 2,
+                "Jake": 2,
+                "Aidan": 1
+            },
+            "nextStatus": 1
+        },
+        {
+            "id": 2,
+            "winner": 2,
+            "team1": {
+                "id": 2,
+                "name": "Beyonce",
+                "image": null
+            },
+            "team2": {
+                "id": 5,
+                "name": "Rihanna",
+                "image": null
+            },
+            "nextMatchID": 5,
+            "votes": {
+                "Luke": 1,
+                "Jake": 2,
+                "Aidan": 2
+            },
+            "nextStatus": 0
+        },
+        {
+            "id": 3,
+            "winner": 1,
+            "team1": {
+                "id": 1,
+                "name": "Adele",
+                "image": null
+            },
+            "team2": {
+                "id": 6,
+                "name": "Olivia Rodrigo",
+                "image": null
+            },
+            "nextMatchID": 5,
+            "votes": {
+                "Luke": 1,
+                "Jake": 1,
+                "Aidan": 1
+            },
+            "nextStatus": 1
+        }
+    ],
+    "nextRound": {
+        "roundID": 1,
+        "matches": [
+            {
+                "id": 4,
+                "winner": 1,
+                "team1": {
+                    "id": 0,
+                    "name": "Dua Lipa",
+                    "image": null
+                },
+                "team2": {
+                    "id": 4,
+                    "name": "Katy Perry",
+                    "image": null
+                },
+                "nextMatchID": 6,
+                "votes": {
+                    "Luke": 2,
+                    "Jake": 1,
+                    "Aidan": 1
+                },
+                "nextStatus": 0
+            },
+            {
+                "id": 5,
+                "winner": 1,
+                "team1": {
+                    "id": 5,
+                    "name": "Rihanna",
+                    "image": null
+                },
+                "team2": {
+                    "id": 1,
+                    "name": "Adele",
+                    "image": null
+                },
+                "nextMatchID": 6,
+                "votes": {
+                    "Luke": 2,
+                    "Jake": 1,
+                    "Aidan": 1
+                },
+                "nextStatus": 1
+            }
+        ],
+        "nextRound": {
+            "roundID": 2,
+            "matches": [
+                {
+                    "id": 6,
+                    "winner": 1,
+                    "team1": {
+                        "id": 0,
+                        "name": "Dua Lipa",
+                        "image": null
+                    },
+                    "team2": {
+                        "id": 5,
+                        "name": "Rihanna",
+                        "image": null
+                    },
+                    "nextMatchID": 7,
+                    "votes": {
+                        "Luke": 2,
+                        "Jake": 1,
+                        "Aidan": 1
+                    },
+                    "nextStatus": 0
+                }
+            ],
+            "nextRound": null
+        }
+    }
+}

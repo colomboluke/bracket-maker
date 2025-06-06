@@ -1,7 +1,9 @@
 .play-bracket-cont {
     display: flex;
-    flex-flow: row;
+    flex-flow: column;
     padding-top: 15px;
+    padding-left: 10px;
+    gap: 100px;
 }
 
 .print-btn {
@@ -89,6 +91,17 @@
     padding-right: 10px;
 }
 
-.chart {
-    border: 1px solid gold;
+.insights-btn {
+    /*width: 50px;*/
+    width: fit-content;
+    margin: auto;
+    padding: 5px;
+    border-radius: 3px;
+    font-size: 15px;
+    border: none;
+}
+
+.insights-btn:hover {
+    background-color: lightgray;
+    cursor: pointer;
 }

@@ -25,24 +25,16 @@ Things to get people's thoughts on:
 Handle even number of voters (button that pops up saying break tie, randomly pick one)
 - Warn the user: if you have an even number of voters, bracket maker will choose randomly to break ties
 
+
+BUGS:
+- Something is up with resetting votes - sometimes it says there's a tie when only two people have voted
+
 TODO:
 - Basic functionality
-  - [x] VotingScreen darkens the background and doesn't let users click on it
-  - [x] Don't let users click on Matchups with no Teams inside them
-  - [x] Show winner and score on PlayableBracket (show green check?)
-  - [x] Ensure quality check before starting bracket
-  - [x] CODE AUDIT: go through every file and refactor/clean up code as much as possible
-    - [x] Make Match, Team, Bracket classes (if appropriate)
-  - 1. [x] Reset button in SetupPage with an "are you sure" step
-  - [x] Track votes so that clicking on a VotingScreen remembers the votes
+  - [ ] Style chart selection menu
+  - [ ] Implement other two insights algorithms
   - [ ] Have an animation/display for the winner
-  - 3. [x] Display final completed bracket, let users print/save
-    - create pop-up screen (make this its own component) that asks for user input:
-      - file name
-      - show title or not
-      - show game data or not
-  - [x] Host BracketMaker on the web
-  - [ ] IdeasPage page
+  - [ ] Style IdeasPage page
   - [ ] Category: drop down menu of sports teams, movies, shows, songs, foods, etc, have this be the default name instead of "team X" every time
   - [ ] Format on mobile!
   - 6. Ideas Page
@@ -55,11 +47,7 @@ TODO:
   - [ ] Let users click 'next' or 'prev' to move between VotingScreens
   - [ ] Select votes with right/left arrow keys
   - [ ] When trying to click 'next' on VotingScreen, highlight the rows that still need to vote
-  - [x] VotingScreen has a 'reset votes' button
   - [ ] Info buttons/tutorial explaining the basic idea of a voting bracket
-  - [x] Let users close a VotingScreen by pressing escape
-  - 2. [x] In SetupPage, have the remove Team/Voter button only when hovering 
-  - 4.[x] Progress bar, showing how many matches still need to be completed
   - [ ] Display title and description
     - I think description might be nice for the final printout
   - [ ] Let users choose images for each Team/Voter
@@ -77,6 +65,3 @@ TODO:
     - Choose between traditional bracket and voting bracket
       - Traditional bracket chooses the winner of each match by comparing their scores, voting bracket lets users vote on who they want to advance
   - [ ] Let users create a bracket, then save that on the site and let other people play it
-
-Considering:
-- Change 'id' in the Team object to 'seed'

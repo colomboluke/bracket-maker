@@ -1,15 +1,24 @@
 import React, {useEffect, useRef, useState} from 'react';
 import PlayableBracket from "./PlayableBracket";
 import VotingScreen from "../Voting/VotingScreen";
-import {useReactToPrint} from "react-to-print";
 import {Margin, Resolution, usePDF} from "react-to-pdf";
 import PrintPopup from "../PrintScreen/PrintPopup";
-import {FaDownload, FaPrint} from "react-icons/fa";
 import "./PlayPage.css";
 import PlaySidebar from "./PlaySidebar";
-import { LineChart, Line } from 'recharts';
+import {animatedMovies,} from "../BracketAlgos/TestJSON.mjs";
+import "../Charts/Charts.css";
+import Dropdown from "../Charts/Dropdown";
+import ChartContainer from "../Charts/ChartContainer";
 
-export default function PlayPage({title, bracket, voters, onVote, getVoteCounts, resetVotes, resetBracket}) {
+export default function PlayPage({
+                                     title,
+                                     bracket,
+                                     voters,
+                                     onVote,
+                                     getVoteCounts,
+                                     resetVotes,
+                                     resetBracket
+                                 }) {
     // Track the currently selected match using its ID
     const [selectedMatchID, setSelectedMatchID] = useState(null);
     let selectedMatch = bracket.getMatch(selectedMatchID);
@@ -55,19 +64,27 @@ export default function PlayPage({title, bracket, voters, onVote, getVoteCounts,
     const completeMatches = bracket.countCompleteMatches();
 
     function handleResetWholeBracket() {
-        if (window.confirm("Are you sure you wish you reset the votes of every match in the bracket?")) {
+        if (window.confirm(
+            "Are you sure you wish you reset the votes of every match in the bracket?")) {
             resetBracket();
         }
     }
 
+    const [showInsights, setShowInsights] = useState(false);
+    const [chartID, setChartID] = useState(0);
+    const chartDiv = useRef();
 
-    const data = [{name: 'Page A', score: 20}, {name: 'Page B', score: 30}, {name: 'Page C', score: 10}];
+    function handleShowChartClick() {
+        setShowInsights(!showInsights);
+    }
 
-    const renderLineChart = (
-        <LineChart width={400} height={400} data={data} className={"chart"}>
-            <Line type="monotone" dataKey="score" stroke="#8884d8" />
-        </LineChart>
-    );
+    // Only scroll once the charts container is rendered
+    useEffect(() => {
+        if (showInsights) {
+            chartDiv.current?.scrollIntoView({behavior: "smooth", block: "start"});
+        }
+    }, [showInsights]);
+
 
     return (
         <div className={"play-bracket-cont"}>
@@ -76,10 +93,10 @@ export default function PlayPage({title, bracket, voters, onVote, getVoteCounts,
             {/*<div className={"play-bracket-title-cont"}>*/}
             {/*</div>*/}
             <PlaySidebar setShowPrintMenu={setShowPrintMenu} matchesComplete={completeMatches}
-                         totalMatches={totalMatches} onReset={handleResetWholeBracket}/>
+                         totalMatches={totalMatches} onReset={handleResetWholeBracket}
+                         onShowChart={handleShowChartClick} showInsights={showInsights}/>
             {/*<input type="color" value={"pick color"}/>*/}
             {/*<button onClick={() => console.log(bracket, voters)}>Log bracket</button>*/}
-            {renderLineChart}
 
             {/*This gets the ref because this is what will be printed*/}
             <PlayableBracket bracket={bracket} onClick={handleMatchClick}
@@ -95,8 +112,14 @@ export default function PlayPage({title, bracket, voters, onVote, getVoteCounts,
             {showPrintMenu && <PrintPopup onClose={handlePrintPopupClose} fileName={pdfFileName}
                                           setFileName={setPdfFileName} orientation={pdfOrientation}
                                           setOrientation={setPdfOrientation}
-                                          onDownload={handleDownloadRequest} format={pdfFormat} setFormat={setPdfFormat}/>}
-
+                                          onDownload={handleDownloadRequest} format={pdfFormat}
+                                          setFormat={setPdfFormat}/>}
+            <div className={"chart-cont"} ref={chartDiv}>
+                {showInsights && <Dropdown
+                    options={["Win Strength", "Voter Outlier", "Voter Similarity"]}
+                    setActiveChart={setChartID} activeChart={chartID}/>}
+                {showInsights && <ChartContainer bracket={bracket} activeChart={chartID}/>}
+            </div>
         </div>
 
     );

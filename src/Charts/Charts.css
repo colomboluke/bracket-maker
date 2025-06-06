@@ -1,0 +1,106 @@
+/* Dropdown menu */
+.dropdown-cont {
+    /*border: 1px solid grey;*/
+    width: 250px;
+    margin-bottom: 40px;
+    margin-left: 20px;
+}
+
+.dropdown-btn {
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+
+}
+
+.dropdown-main {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 10px;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 8px;
+    border: 1px solid var(--background3);
+    color: var(--background2);
+    width: 180px;
+    position: relative;
+}
+
+.dropdown-symbol {
+    position: absolute;
+    right: 10px;
+}
+
+.dropdown-main:hover {
+    border: 1px solid var(--primary);
+}
+
+.dropdown-options-cont {
+    background-color: whitesmoke;
+    color: var(--background2);
+    margin: 10px 0 0;
+    padding: 5px;
+    border-radius: 5px;
+    width: 170px;
+}
+
+.dropdown-el {
+    list-style-type: none;
+    width: 95%;
+    padding: 5px;
+    border-radius: 5px;
+    /*border: 1px solid gold;*/
+}
+
+.dropdown-el:hover {
+    background-color: lightgray;
+}
+
+/* Charts */
+
+.chart-cont {
+    width: 90%;
+    overflow-x: auto;
+}
+
+.win-strength-chart {
+    border: 1px solid gold;
+}
+
+/*TODO: style the tooltip*/
+.custom-tooltip {
+    background-color: white;
+    padding: 5px;
+    color: grey;
+    width: 200px;
+    /*height: 100px;*/
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    gap: 0;
+    min-height: 20px;
+
+}
+
+.stat-label {
+    font-weight: bold;
+    margin: 0;
+    padding-bottom: 3px;
+    border-bottom: 1px solid lightgray;
+}
+
+.stat-content {
+    /*border: 1px solid red;*/
+    margin-top: 5px;
+}
+
+.stat-blurb {
+    font-size: 14px;
+    font-style: italic;
+    margin: 0;
+}
+
+
+.win-strength-chart {
+    /*margin-top: 100px;*/
+}
