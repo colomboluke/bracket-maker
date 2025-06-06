@@ -28,3 +28,8 @@ export function getVoteCounts(votesObj) {
     }
     return counts;
 }
+
+// Filters out any incomplete matches
+export function filterOutByes(listOfMatches) {
+    return listOfMatches.filter(match => match.team1 && match.team2);
+}

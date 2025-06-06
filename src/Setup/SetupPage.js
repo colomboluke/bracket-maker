@@ -103,7 +103,7 @@ export default function SetupPage({
                 newName = "Voter " + (parseInt(lastVoter.name.slice(-1)) + 1);
             }
         }
-        setVoters([...voters, {name: newName, history: []}]);
+        setVoters([...voters, {name: newName}]);
     }
 
     // Change the name of a voter

@@ -1,11 +1,12 @@
 import {Bar, BarChart, Rectangle, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
 import React from "react";
-import {marginOfVictory} from "../BracketAlgos/PostGameStats.mjs";
-import {animatedMovies, popArtists, testBracket1} from "../BracketAlgos/TestJSON.mjs";
+import {marginOfVictory, voterOutlier} from "../BracketAlgos/PostGameStats.mjs";
+import "../BracketAlgos/Bracket.mjs"
+import {animatedMovies, popArtists, sevenVoters, testBracket1} from "../BracketAlgos/TestJSON.mjs";
 
-export default function ChartContainer({activeChart, bracket}) {
+export default function ChartContainer({activeChart, bracket, voters, totalMatches}) {
 
-    const CustomTooltip = ({active, payload, label}) => {
+    const WinStrengthTooltip = ({active, payload, label}) => {
         if (active && payload && payload.length) {
             return (
                 <div className="custom-tooltip">
@@ -18,13 +19,51 @@ export default function ChartContainer({activeChart, bracket}) {
                 </div>
             );
         }
+        return null;
+    };
+
+    const OutlierTooltip = ({active, payload, label}) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className="custom-tooltip">
+                    <span className={"stat-label"}>{label}</span>
+                    <span className={"stat-content"}>{`Outlier Score: ${payload[0].value.toFixed(
+                        2)}`}</span>
+                    <span className={"stat-blurb"}>How strongly this voter's choices differed from the group</span>
+                    <div className={"stat-spacer"}></div>
+                    <span className={"stat-content"}>{`Disagreement Rate: ${(payload[1].value
+                                                                             * 100).toFixed(0)
+                        .toString().concat("%")}`}</span>
+                    <span className={"stat-blurb"}>How often this voter was in the minority</span>
+                </div>
+            );
+        }
 
         return null;
     };
 
-    const voterOutlierChart = (
-        <span>Voter outlier chart</span>
-    );
+    function voterOutlierChart() {
+        const dataProcessed = voterOutlier(bracket, voters);
+        const maxScore = (voters.length - 1) * totalMatches;
+        const barSize = 55
+        const barGap = 35
+        const chartWidth = dataProcessed.length * (barSize + barGap) + 100;
+        return (
+            <BarChart
+                data={dataProcessed}
+                width={chartWidth}
+                height={300}
+            >
+                <XAxis dataKey="name"/>
+                <YAxis domain={[0, maxScore]}/>
+                <Tooltip content={<OutlierTooltip/>} coordinate={{x: 600, y: 200}}/>
+                <Bar dataKey="score" fill="#4d6ef3"
+                     activeBar={<Rectangle fill="orange" stroke="gray"/>} barSize={40}/>
+                <Bar dataKey="lossRate" fill="#3ea45e"
+                     activeBar={<Rectangle fill="yellow" stroke="gray"/>} barSize={40}/>
+            </BarChart>
+        );
+    }
 
     const voterSimilarityChart = (
         <span>Voter similarity chart</span>
@@ -45,8 +84,7 @@ export default function ChartContainer({activeChart, bracket}) {
             >
                 <XAxis dataKey="name"/>
                 <YAxis domain={[0, 1]}/>
-                <Tooltip viewBox={{width: 400, height: 100}}
-                         content={<CustomTooltip/>}/>
+                <Tooltip content={<WinStrengthTooltip/>}/>
                 <Bar dataKey="percentage" fill="#8884d8"
                      activeBar={<Rectangle fill="pink" stroke="blue"/>} barSize={barSize}/>
             </BarChart>
@@ -57,7 +95,7 @@ export default function ChartContainer({activeChart, bracket}) {
         return getWinStrengthChart();
     }
     if (activeChart === 1) {
-        return voterOutlierChart;
+        return voterOutlierChart();
     }
     if (activeChart === 2) {
         return voterSimilarityChart;

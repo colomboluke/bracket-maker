@@ -31,6 +31,7 @@ BUGS:
 
 TODO:
 - Basic functionality
+  - [ ] Display voters in SetupScreen
   - [ ] Style chart selection menu
   - [ ] Implement other two insights algorithms
   - [ ] Have an animation/display for the winner

@@ -38,7 +38,8 @@ export default function PlaySidebar({
             </div>
             {!bracketComplete && <span className={"instruction-text"}>Click on a match to get started</span>}
             {bracketComplete && <button onClick={() => onShowChart()} className={"insights-btn"}>{insightsBtnText}</button>}
-            <button onClick={() => onShowChart()} className={"insights-btn"}>{insightsBtnText}</button>
+            {/*For ease of testing*/}
+            {/*<button onClick={() => onShowChart()} className={"insights-btn"}>{insightsBtnText}</button>*/}
         </div>
     )
 }

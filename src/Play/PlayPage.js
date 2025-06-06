@@ -5,7 +5,7 @@ import {Margin, Resolution, usePDF} from "react-to-pdf";
 import PrintPopup from "../PrintScreen/PrintPopup";
 import "./PlayPage.css";
 import PlaySidebar from "./PlaySidebar";
-import {animatedMovies,} from "../BracketAlgos/TestJSON.mjs";
+import {animatedMovies, sevenVoters,} from "../BracketAlgos/TestJSON.mjs";
 import "../Charts/Charts.css";
 import Dropdown from "../Charts/Dropdown";
 import ChartContainer from "../Charts/ChartContainer";
@@ -85,7 +85,6 @@ export default function PlayPage({
         }
     }, [showInsights]);
 
-
     return (
         <div className={"play-bracket-cont"}>
             {/*Show overlay if VotingScreen or PrintMenu is displayed*/}
@@ -118,7 +117,9 @@ export default function PlayPage({
                 {showInsights && <Dropdown
                     options={["Win Strength", "Voter Outlier", "Voter Similarity"]}
                     setActiveChart={setChartID} activeChart={chartID}/>}
-                {showInsights && <ChartContainer bracket={bracket} activeChart={chartID}/>}
+                {showInsights && <ChartContainer bracket={bracket} activeChart={chartID}
+                                                 voters={voters}
+                                                 totalMatches={totalMatches}/>}
             </div>
         </div>
 

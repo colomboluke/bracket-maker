@@ -1,3 +1,4 @@
+import Bracket from "./Bracket.mjs";
 export const testBracket1 = {
     "roundID": 0,
     "matches": [
@@ -72,6 +73,8 @@ export const testBracket1 = {
         "nextRound": null
     }
 }
+
+// export const testBracketActual = new Bracket(testBracket1.roundID, testBracket1.matches, testBracket1.nextRound)
 
 export const animatedMovies = {
     "roundID": 0,
@@ -968,6 +971,210 @@ export const popArtists = {
                         "Luke": 2,
                         "Jake": 1,
                         "Aidan": 1
+                    },
+                    "nextStatus": 0
+                }
+            ],
+            "nextRound": null
+        }
+    }
+}
+
+export const voters = [
+    {
+        "name": "Luke"
+    },
+    {
+        "name": "Jake"
+    },
+    {
+        "name": "Aidan"
+    }
+]
+
+export const sevenVoters = {
+    "roundID": 0,
+    "matches": [
+        {
+            "id": 0,
+            "winner": 1,
+            "team1": {
+                "id": 0,
+                "name": "Spiderverse 1",
+                "image": null
+            },
+            "team2": {
+                "id": 7,
+                "name": "Storks",
+                "image": null
+            },
+            "nextMatchID": 4,
+            "votes": {
+                "Luke": 1,
+                "Jake": 1,
+                "Aidan": 1,
+                "Zach": 1,
+                "Gabe": 1,
+                "Ivan": 2,
+                "Connor": 1
+            },
+            "nextStatus": 0
+        },
+        {
+            "id": 1,
+            "winner": 1,
+            "team1": {
+                "id": 3,
+                "name": "Cars",
+                "image": null
+            },
+            "team2": {
+                "id": 4,
+                "name": "Shrek",
+                "image": null
+            },
+            "nextMatchID": 4,
+            "votes": {
+                "Luke": 2,
+                "Jake": 2,
+                "Aidan": 1,
+                "Zach": 1,
+                "Gabe": 2,
+                "Ivan": 1,
+                "Connor": 1
+            },
+            "nextStatus": 1
+        },
+        {
+            "id": 2,
+            "winner": 1,
+            "team1": {
+                "id": 2,
+                "name": "Moana",
+                "image": null
+            },
+            "team2": {
+                "id": 5,
+                "name": "Spirited Away",
+                "image": null
+            },
+            "nextMatchID": 5,
+            "votes": {
+                "Luke": 2,
+                "Jake": 2,
+                "Aidan": 1,
+                "Zach": 1,
+                "Gabe": 2,
+                "Ivan": 1,
+                "Connor": 1
+            },
+            "nextStatus": 0
+        },
+        {
+            "id": 3,
+            "winner": 1,
+            "team1": {
+                "id": 1,
+                "name": "Puss in Boots 2",
+                "image": null
+            },
+            "team2": {
+                "id": 6,
+                "name": "Frozen",
+                "image": null
+            },
+            "nextMatchID": 5,
+            "votes": {
+                "Luke": 1,
+                "Jake": 1,
+                "Aidan": 1,
+                "Zach": 2,
+                "Gabe": 1,
+                "Ivan": 2,
+                "Connor": 2
+            },
+            "nextStatus": 1
+        }
+    ],
+    "nextRound": {
+        "roundID": 1,
+        "matches": [
+            {
+                "id": 4,
+                "winner": 1,
+                "team1": {
+                    "id": 0,
+                    "name": "Spiderverse 1",
+                    "image": null
+                },
+                "team2": {
+                    "id": 3,
+                    "name": "Cars",
+                    "image": null
+                },
+                "nextMatchID": 6,
+                "votes": {
+                    "Luke": 1,
+                    "Jake": 1,
+                    "Aidan": 1,
+                    "Zach": 2,
+                    "Gabe": 1,
+                    "Ivan": 1,
+                    "Connor": 2
+                },
+                "nextStatus": 0
+            },
+            {
+                "id": 5,
+                "winner": 1,
+                "team1": {
+                    "id": 2,
+                    "name": "Moana",
+                    "image": null
+                },
+                "team2": {
+                    "id": 1,
+                    "name": "Puss in Boots 2",
+                    "image": null
+                },
+                "nextMatchID": 6,
+                "votes": {
+                    "Luke": 1,
+                    "Jake": 2,
+                    "Aidan": 2,
+                    "Zach": 1,
+                    "Gabe": 2,
+                    "Ivan": 1,
+                    "Connor": 1
+                },
+                "nextStatus": 1
+            }
+        ],
+        "nextRound": {
+            "roundID": 2,
+            "matches": [
+                {
+                    "id": 6,
+                    "winner": 1,
+                    "team1": {
+                        "id": 0,
+                        "name": "Spiderverse 1",
+                        "image": null
+                    },
+                    "team2": {
+                        "id": 2,
+                        "name": "Moana",
+                        "image": null
+                    },
+                    "nextMatchID": 7,
+                    "votes": {
+                        "Luke": 1,
+                        "Jake": 1,
+                        "Aidan": 1,
+                        "Zach": 2,
+                        "Gabe": 1,
+                        "Ivan": 1,
+                        "Connor": 1
                     },
                     "nextStatus": 0
                 }

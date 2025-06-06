@@ -1,5 +1,5 @@
 import Match from "./Match";
-import Bracket from "./Bracket";
+import Bracket from "./Bracket.mjs";
 
 const placeholderMatch = new Match(0, null, null, null, null, {}, null);
 

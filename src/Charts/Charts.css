@@ -70,15 +70,14 @@
 /*TODO: style the tooltip*/
 .custom-tooltip {
     background-color: white;
-    padding: 5px;
+    padding: 8px 5px 10px 5px;
     color: grey;
     width: 200px;
-    /*height: 100px;*/
     display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
+    flex-flow: column;
+    justify-content: space-evenly;
     gap: 0;
-    min-height: 20px;
+    border: 3px solid pink;
 
 }
 
@@ -92,15 +91,16 @@
 .stat-content {
     /*border: 1px solid red;*/
     margin-top: 5px;
+    margin-bottom: 8px;
 }
 
 .stat-blurb {
     font-size: 14px;
     font-style: italic;
     margin: 0;
+    /*border: 1px solid blue;*/
 }
 
-
-.win-strength-chart {
-    /*margin-top: 100px;*/
+.stat-spacer {
+    height: 10px;
 }
