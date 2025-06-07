@@ -60,14 +60,12 @@
 
 .chart-cont {
     width: 90%;
+    height: 100%;
     overflow-x: auto;
+    /*border: 1px solid gold;*/
 }
 
-.win-strength-chart {
-    border: 1px solid gold;
-}
 
-/*TODO: style the tooltip*/
 .custom-tooltip {
     background-color: white;
     padding: 8px 5px 10px 5px;
@@ -77,8 +75,6 @@
     flex-flow: column;
     justify-content: space-evenly;
     gap: 0;
-    border: 3px solid pink;
-
 }
 
 .stat-label {
@@ -103,4 +99,60 @@
 
 .stat-spacer {
     height: 10px;
+}
+
+.voter-similarity-chart {
+    border: 2px solid white;
+    /*width: 300px;*/
+    margin-left: 20px;
+    margin-bottom: 40px;
+    padding: 10px;
+    font-size: 18px;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 7px 35px;
+    /*border: 1px solid white;*/
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.header-row {
+    margin-bottom: 10px;
+    background-color: #403e3e;
+    /*color: var(--background2);*/
+}
+
+.body-row {
+    background-color: #4c4b4b;
+    /*color: dark;*/
+    font-weight: bold;
+    position: relative;
+}
+
+.body-row:hover {
+    background-color: var(--primary);
+    cursor: default;
+}
+
+.body-row:hover .tooltip-text {
+    visibility: visible;
+}
+
+.tooltip-text {
+    visibility: hidden;
+
+    background-color: white;
+    padding: 8px 8px;
+    color: grey;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: normal;
+    width: 150px;
+
+    position: absolute;
+    top: -20px;
+    right: -150px;
+    z-index: 1;
 }

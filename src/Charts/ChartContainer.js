@@ -72,11 +72,11 @@ export default function ChartContainer({activeChart, bracket, voters, totalMatch
     }
 
     function voterSimilarityChart() {
-        const data = voterSimilarity(videoGames, fiveVoters);
+        const data = voterSimilarity(bracket, voters, totalMatches);
         return (
-            <table>
+            <table className={"voter-similarity-chart"}>
                 <thead>
-                <tr>
+                <tr className={"header-row"}>
                     <th>Voter 1</th>
                     <th>Voter 2</th>
                     <th>Score</th>
@@ -84,10 +84,13 @@ export default function ChartContainer({activeChart, bracket, voters, totalMatch
                 </thead>
                 <tbody>
                 {data.map(row => (
-                    <tr key={convertToStringKey(row.voter1, row.voter2)}>
+                    <tr key={convertToStringKey(row.voter1, row.voter2)} className={"body-row"}>
                         <td>{row.voter1}</td>
                         <td>{row.voter2}</td>
                         <td>{row.score}</td>
+                        <span className={"tooltip-text"}>{row.voter1} and {row.voter2} voted together {(row.score
+                                                                                                        * 100).toFixed(0).toString()
+                            .concat("%")} of the time</span>
                     </tr>
                 ))}
                 </tbody>

@@ -52,7 +52,7 @@ function voterOutlierAcc(bracket, voter, voterScore, losses) {
 //  side. Highest score -> most similar. Divide each score by number of voters * number of matches
 //  Number of pairs = n(n-1) / 2
 // Chart: ranked table
-export function voterSimilarity(bracket, voters) {
+export function voterSimilarity(bracket, voters, totalMatches) {
     let pairs = []
     let counter = 0
     for (let i = 0; i < voters.length; i++) {
@@ -61,13 +61,12 @@ export function voterSimilarity(bracket, voters) {
             if (j !== i) {
                 pairs[counter] = {voter1: voters[i].name, voter2: voters[j].name, score: 0}
                 counter++;
-                // pairs[convertToStringKey(voters[i].name, voters[j].name)] = ;
             }
         }
     }
-    // console.log(pairs)
+    // Normalize by dividing by number of matches
     pairs.forEach(pair => {
-        pair.score = voterSimilarityAcc(bracket, pair, 0);
+        pair.score = (voterSimilarityAcc(bracket, pair, 0) / totalMatches).toFixed(2);
     })
     pairs.sort((a, b) => {
         return b.score - a.score;
