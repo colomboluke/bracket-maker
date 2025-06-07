@@ -1,0 +1,15 @@
+.ideas-cont {
+    padding-left: 20px;
+}
+
+
+.ideas-header {
+    margin-left: 5px;
+}
+
+.ideas-text {
+    margin-left: 5px;
+    width: 50%;
+    /*border: 2px solid white;*/
+    padding: 6px;
+}
