@@ -45,9 +45,7 @@ export default class Bracket {
     }
 
     getTeam(teamID) {
-        console.log(`Received id ${teamID}`)
         for (let i = 0; i < this.matches.length; i++) {
-            console.log(this.matches[i].team1, this.matches[i].team2)
             if (this.matches[i].team1 && this.matches[i].team1.id === teamID) {
                 return this.matches[i].team1;
             }
@@ -56,7 +54,7 @@ export default class Bracket {
             }
         }
         if (this.nextRound) {                       // recurse
-            return this.nextRound.getMatch(teamID);
+            return this.nextRound.getTeam(teamID);
         } else {
             return null;                            // Team not found
         }

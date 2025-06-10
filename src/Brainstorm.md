@@ -29,6 +29,7 @@ Handle even number of voters (button that pops up saying break tie, randomly pic
 BUGS:
 - Something is up with resetting votes - sometimes it says there's a tie when only two people have voted
 - When going back from play screen to home screen, it removes any teams that have byes
+- In a bracket with 6 teams, when rearranging teams, it removes any teams with byes
 
 TODO:
 - Basic functionality
@@ -43,6 +44,7 @@ TODO:
   - [ ] Let users change the order/seed of an individual team in SetupPage
   - [ ] Differentiate between the 3 different 'reset' buttons
   - [ ] Make teams draggable in SetupPage
+    - Get grid style working
   - [ ] Let users click 'next' or 'prev' to move between VotingScreens
   - [ ] Select votes with right/left arrow keys
   - [ ] When trying to click 'next' on VotingScreen, highlight the rows that still need to vote

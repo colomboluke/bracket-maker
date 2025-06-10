@@ -17,7 +17,6 @@ export function voterOutlier(bracket, voters) {
                 score: (accResult[0] / (numMatches * voters.length)),
                 lossRate: (accResult[1] / numMatches)
             };
-        console.log(`${voter.name} done`, counts)
     })
     return counts;
 }
@@ -77,9 +76,7 @@ export function voterSimilarity(bracket, voters, totalMatches) {
 // Gets the similarity score for one pair
 function voterSimilarityAcc(bracket, pair, score) {
     filterOutByes(bracket.matches).forEach(match => {
-        // console.log(match.votes)
         if (match.votes[pair.voter1] === match.votes[pair.voter2]) { //this pair voted the same
-            // console.log(`${pair.voter1} and ${pair.voter2} voted the same`)
             score++;
         }
     })
@@ -90,8 +87,6 @@ function voterSimilarityAcc(bracket, pair, score) {
     }
 }
 
-
-console.log(voterSimilarity(videoGames, fiveVoters))
 
 // ~~ Contender Win Strength ~~
 // Blurb 1: Which contenders won easily each round, which ones barely scraped by

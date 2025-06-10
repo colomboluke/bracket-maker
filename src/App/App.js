@@ -110,9 +110,11 @@ function App() {
     function setTeamImage(teamID, image) {
         let nextBracket = bracket.cleanCopy();
         const team = nextBracket.getTeam(teamID);
+        console.log("Setting image of team:", team)
         team.setImage(image);
         setBracket(nextBracket);
     }
+
 
     return (
         <Routes>

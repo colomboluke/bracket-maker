@@ -30,7 +30,6 @@ export default function TeamRow({index, name, updateName, onRemove, teamImage, s
                        updateName(index, e.target.value);
                    }}
                    placeholder={"Add Name"}/>
-            {/*TODO: Bug: when there's multiple teams, there's only one image that's changeable*/}
             <div className={"icon"}>
                 {/*Hidden file input*/}
                 {/*Input ID and label htmlFor must be unique across TeamRows*/}

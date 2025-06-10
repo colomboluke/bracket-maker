@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigate, useLocation} from "react-router-dom";
 import "./Setup.css";
 import PreviewBracket from "../PreviewBracket/PreviewBracket";
@@ -6,6 +6,9 @@ import Settings from "./Settings";
 import Team from "../BracketAlgos/Team";
 import TeamAddGrid from "../TeamVoterAdd/TeamAddGrid";
 import VoterAddGrid from "../TeamVoterAdd/VoterAddGrid";
+import DragAndDrop from "./DragAndDrop";
+import {arrayMove} from "@dnd-kit/sortable";
+import DragAndDrop2 from "./Drag2";
 
 export default function SetupPage({
                                       title,
@@ -39,7 +42,8 @@ export default function SetupPage({
     // Create a new team, with a seed one higher than the current highest and a default name
     function createTeam() {
         const validatedName = validateName()
-        const newTeam = new Team(teams.length, validatedName);
+        const highestID = teams.length === 0 ? 0 : Math.max(...teams.map(team => team.id))
+        const newTeam = new Team(highestID + 1, validatedName, teams.length);
         setTeams([...teams, newTeam]);
     }
 
@@ -54,7 +58,7 @@ export default function SetupPage({
     // Seeds will always go from 0-n (n = num teams), with no gaps
     function reSeed(teamsList) {
         for (let i = 0; i < teamsList.length; i++) {
-            teamsList[i].id = i;
+            teamsList[i].position = i;
         }
         return teamsList;
     }
@@ -69,7 +73,7 @@ export default function SetupPage({
 
     // Remove the last team in the array
     function removeLastTeam() {
-        removeTeam(teams.slice(-1)[0].id);
+        removeTeam(teams.slice(-1)[0].position);
     }
 
     // Randomize the order of the existing teams
@@ -92,6 +96,25 @@ export default function SetupPage({
             setTeams([]);
         }
     }
+
+    // Allows teams to be reordered via dragging
+    function handleDragEnd(event) {
+        const {active, over} = event;
+        if (!over || active.id === over.id) {
+            return;
+        }
+
+        // Reorder the frontend display of the teams
+        const oldIndex = teams.findIndex(item => item.id === active.id);
+        const newIndex = teams.findIndex(item => item.id === over.id);
+        const reorderedTeams = arrayMove(teams, oldIndex, newIndex);
+
+        // Update the team's seed to reflect this
+        const reseededTeams = reorderedTeams.map((team, idx) => (new Team(team.id, team.name, idx)))
+
+        setTeams(reseededTeams);
+    }
+
 
     // Create a new voter with a default name
     function createVoter() {
@@ -167,12 +190,6 @@ export default function SetupPage({
     return (
         <div className={"setup-cont"}>
             <div className={"setup-left"}>
-                {/*<button onClick={() => {*/}
-                {/*    console.log("Teams:", teams);*/}
-                {/*    console.log("Voters:", voters);*/}
-                {/*    console.log("Bracket:", bracket);*/}
-                {/*}}>Testing button*/}
-                {/*</button>*/}
                 <h1 className={"setup-title"}>Create Bracket</h1>
                 <div className={"setup-top-cont"}>
                     <h3 className={"t"}>Bracket Settings</h3>
@@ -182,16 +199,28 @@ export default function SetupPage({
                         </button>
                     </div>
                 </div>
-
                 <Settings numTeams={teams.length} createTeam={createTeam}
                           removeLastTeam={removeLastTeam}
                           numVoters={voters.length} createVoter={createVoter}
                           removeLastVoter={removeLastVoter} title={title}
                           setTitle={setTitle} desc={desc} setDesc={setDesc}/>
+                <button onClick={() => {
+                    console.log("Teams:", teams);
+                    // console.log("Voters:", voters);
+                    console.log("Bracket:", bracket);
+                }}>Testing button
+                </button>
+                <button onClick={() => {
+                    for (let i = 0; i < teams.length; i++) {
+                        bracket.getTeam(i);
+                    }
+                }}>Find teams</button>
                 <h3>Contenders</h3>
-                <TeamAddGrid teams={teams} updateTeamName={updateTeamName}
-                             removeTeam={removeTeam} createTeam={createTeam}
-                             shuffleTeams={shuffleTeams} resetTeams={resetTeams} setTeamImage={setTeamImage}/>
+                {/*<DragAndDrop2 items={items} handleDragEnd={handleDragEnd2}/>*/}
+                <DragAndDrop teams={teams} handleDragEnd={handleDragEnd} removeTeam={removeTeam}
+                             shuffleTeams={shuffleTeams} createTeam={createTeam}
+                             resetTeams={resetTeams} updateTeamName={updateTeamName}
+                             setTeamImage={setTeamImage}/>
                 <h3>Voters</h3>
                 <VoterAddGrid voters={voters} removeVoter={removeVoter}
                               createVoter={createVoter} updateVoterName={updateVoterName}/>

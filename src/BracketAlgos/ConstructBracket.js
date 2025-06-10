@@ -195,11 +195,12 @@ function convertToTeamObject(matchesList, teams) {
         // Match IDs from seeding algo are 1-indexed, have to adjust
         let homeTeam = match.team1;
         if (homeTeam !== null) {
-            homeTeam = teams.filter(team => team.id + 1 === match.team1)[0];
+            // Find the team by using it's position in the teams array
+            homeTeam = teams.filter(team => team.position + 1 === match.team1)[0];
         }
         let awayTeam = match.team2;
         if (awayTeam !== null) {
-            awayTeam = teams.filter(team => team.id + 1 === awayTeam)[0];
+            awayTeam = teams.filter(team => team.position + 1 === awayTeam)[0];
         }
         return match.cleanCopy({team1: homeTeam, team2: awayTeam});
     });

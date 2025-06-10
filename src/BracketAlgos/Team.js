@@ -1,10 +1,15 @@
 /**
  * A single team.
- * Unique ID acts as its seed
+ * ID is just a unique identifier
+ * Seed corresponds to its position in the teams array
  */
+// Note to self: calling any function that relies on the team's position in the array
+// (array index) should be called with team.position. Anything that relies on bracket functions
+// like getTeam should be called with team.id
 export default class Team {
-    constructor(id, name) {
+    constructor(id, name, position) {
         this.id = id;
+        this.position = position;
         this.name = name;
         this.image = null;
     }
