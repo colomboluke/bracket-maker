@@ -28,15 +28,15 @@ function getPresetBracket(teams) {
 //      previous round. 1 turns into [1,4], 2 turns into [3,2]. Both of these add up to 5. When
 //      creating these feeder matches, the original seed alternates its placement: first left, then
 //      right, etc. If a team should have a bye, that's represented as it playing against a null
-//      opponent. his repeats for n number of rounds. Final result: a properly seeded, full bracket
+//      opponent. This repeats for n number of rounds. Final result: a properly seeded, full bracket
 //      with n rounds.
-// 2. Sort matches so that lower team is always home
+// 2. Sort matches so that the lower team is always home
 // 3. Convert each Int inside the Match to a Team
 //      a) Before this stage, each 'team' was just an integer. [1,2] would be the match between the
 //      1 and two seeds.
 // 4. Assign match IDs to these initial matches
 //      a) Initial match ID: simple increment by 1
-//      b) Next match ID (the ID of the match that winner of this one will play in): ID of first
+//      b) Next match ID (the ID of the match that the winner of this one will play in): ID of first
 //      match in this round + number of matches in this round, increment every 2 matches
 // 5. Post-process the initial matches: handle byes here
 //      a) The initial matches created in steps 1-4 assume a 'full' bracket. So if we have anywhere
@@ -67,10 +67,12 @@ export default function constructBracket(teams) {
     } else {  // MAIN CASE: 4+ teams
         //roundNum = 0 indexed, first round = 0
         let matchIDCounter = 0;
+        console.log(`${teams.length} TEAM BRACKET`)
         bracket = buildRoundRecursive(teams, 0, []);
 
         // Teams in round: array containing Team objects
         function buildRoundRecursive(teamsInCurRound, curRoundIdx, lastRoundByeTeams) {
+            console.log(`Building round ${curRoundIdx} with teams`, teamsInCurRound, "Last round's bye teams: ", lastRoundByeTeams)
             //Number of non-placeholder teams = number of bye teams, unless it's the first
             // round, where it = number of teams in current round
             let numNonPlaceholderTeams = lastRoundByeTeams.length;
@@ -79,12 +81,14 @@ export default function constructBracket(teams) {
             }
             let seedTeamsResult = seedTeams(totalRounds - curRoundIdx, curRoundIdx,
                                             numNonPlaceholderTeams, lastRoundByeTeams, teams);
+            console.log("Seed teams result: ", seedTeamsResult)
             let initialMatches = seedTeamsResult[0];
             let curByeTeams = seedTeamsResult[1];
             // NOTE: this line was originally assignMatchIDs(structuredClone(initialMatches)),
             // I changed it because structuredClone() was turning each Match into a normal object.
             initialMatches = assignMatchIDs(initialMatches);
             let curMatches = processMatches(initialMatches, curRoundIdx, lastRoundByeTeams);
+            console.log("Current matches", curMatches)
             let nextRoundTeams = getNextRoundTeams(initialMatches, curRoundIdx);
             // Recurse if this isn't the finals
             let nextRound;
@@ -132,6 +136,7 @@ function getNumOfRounds(numTeams) {
 // Given the desired number of rounds, returns the properly seeded first round
 //  with 2^numRounds teams in it
 // Time complexity: O(m*(m/2))
+// Also returns byesCreated, which is a list of team.positions representing the teams with byes
 function seedTeams(numRounds, roundID, numNonPlaceholderTeams, lastRoundByeTeams, teams) {
     // The bracket tree gets built off the root [1,2]
     let matches = [placeholderMatch.cleanCopy({team1: 1, team2: 2})];
@@ -196,7 +201,7 @@ function convertToTeamObject(matchesList, teams) {
         let homeTeam = match.team1;
         if (homeTeam !== null) {
             // Find the team by using it's position in the teams array
-            homeTeam = teams.filter(team => team.position + 1 === match.team1)[0];
+            homeTeam = teams.filter(team => team.position + 1 === homeTeam)[0];
         }
         let awayTeam = match.team2;
         if (awayTeam !== null) {
@@ -225,8 +230,8 @@ function processMatches(matches, roundIdx, byeTeamsFromLastRound) {
             }
         } else if (roundIdx === 1) { //Round 2
             // Find which teams were bye teams from last round (adjust by 1 for indexing)
-            let team1IsByeTeam = team1 !== null && byeTeamsFromLastRound.includes(team1.id + 1);
-            let team2IsByeTeam = team2 !== null && byeTeamsFromLastRound.includes(team2.id + 1);
+            let team1IsByeTeam = team1 !== null && byeTeamsFromLastRound.includes(team1.position + 1);
+            let team2IsByeTeam = team2 !== null && byeTeamsFromLastRound.includes(team2.position + 1);
             if (team1IsByeTeam || team2IsByeTeam) {
                 curMatches.push(match);
             } else {

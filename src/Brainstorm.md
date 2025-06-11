@@ -27,9 +27,7 @@ Handle even number of voters (button that pops up saying break tie, randomly pic
 
 
 BUGS:
-- Something is up with resetting votes - sometimes it says there's a tie when only two people have voted
 - When going back from play screen to home screen, it removes any teams that have byes
-- In a bracket with 6 teams, when rearranging teams, it removes any teams with byes
 
 TODO:
 - Basic functionality
@@ -37,9 +35,8 @@ TODO:
   - [ ] Style IdeasPage page
   - [ ] Category: drop down menu of sports teams, movies, shows, songs, foods, etc, have this be the default name instead of "team X" every time
   - [ ] Format on mobile!
-  - 6. Ideas Page
+  - Ideas Page
     - [ ] Button that generates a random category, maybe with some examples
-    - [ ] Screenshot of my paper bracket?
 - QoL
   - [ ] Let users change the order/seed of an individual team in SetupPage
   - [ ] Differentiate between the 3 different 'reset' buttons

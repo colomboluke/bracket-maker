@@ -89,7 +89,7 @@ function App() {
 
         // Update rest of bracket to reflect the outcome of this match
         nextBracket.handleMatchReset(matchID);
-
+        console.log("Bracket after resetting votes: ", nextBracket)
         setBracket(nextBracket);
     }
 

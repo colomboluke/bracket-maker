@@ -1,7 +1,7 @@
 /**
  * A single team.
  * ID is just a unique identifier
- * Seed corresponds to its position in the teams array
+ * Position corresponds to its index in the `teams` array
  */
 // Note to self: calling any function that relies on the team's position in the array
 // (array index) should be called with team.position. Anything that relies on bracket functions

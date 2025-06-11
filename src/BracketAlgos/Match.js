@@ -8,8 +8,8 @@ export default class Match {
      * @param nextMatchID Int, representing the Match that the winner will advance to
      * @param votes Map<Str,Int>, counting which Team each user has voted for. 1 -> team1,
      *      2 -> team2, 0 -> no vote. Each key is a voter name.
-     * @param nextStatus Int, whether the winner of this match becomes the home or away team of its next
-     *     match
+     * @param nextStatus Int, whether the winner of this match becomes the home or away team of its
+     *     next match
      */
     constructor(id, winner, team1, team2, nextMatchID, votes, nextStatus) {
         this.id = id;
@@ -46,9 +46,12 @@ export default class Match {
         this.votes[voterName] = vote;
     }
 
-    // Resets the votes object to default
+    // Resets the votes object, changing everybody's vote to 0
     resetVotes() {
-        this.votes = {};
+        const oldVotes = this.votes;
+        for (const voter in oldVotes) {
+            this.votes[voter] = 0;
+        }
     }
 
 }

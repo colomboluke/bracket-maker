@@ -1,5 +1,5 @@
 import "./PlayableBracket.css";
-import ClickableMatchup from "./ClickableMatch";
+import ClickableMatchup from "./ClickableMatchup";
 import Matchup from "../PreviewBracket/Matchup";
 import WinnerStub from "./WinnerStub";
 import {forwardRef} from "react";

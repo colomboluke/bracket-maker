@@ -42,7 +42,7 @@ export default function SetupPage({
     // Create a new team, with a seed one higher than the current highest and a default name
     function createTeam() {
         const validatedName = validateName()
-        const highestID = teams.length === 0 ? 0 : Math.max(...teams.map(team => team.id))
+        const highestID = teams.length === 0 ? -1 : Math.max(...teams.map(team => team.id))
         const newTeam = new Team(highestID + 1, validatedName, teams.length);
         setTeams([...teams, newTeam]);
     }
