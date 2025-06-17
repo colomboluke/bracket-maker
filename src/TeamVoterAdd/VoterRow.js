@@ -8,13 +8,13 @@ export default function VoterRow({index, name, updateName, onRemove}) {
 
     return (
         <div className={"add-row voter-add-row"} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
+            <div className={"voter-pos"}>{index + 1}</div>
             <input value={name} type={"text"} className={"settings-input"}
                    onChange={e => {
                        updateName(name, e.target.value);
                    }}
                    placeholder={"Add Name"}/>
             <div className={"icon"}>to-do</div>
-            <div className={"color"}>to-do</div>
             {isHovering && <div className={"remove"}><CgRemove className={"remove-btn"}
                                                                onClick={() => onRemove()}/></div>}
 

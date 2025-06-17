@@ -1,25 +1,15 @@
 
-Things to get people's thoughts on:
-- Displaying images for Teams in the bracket
-- Displaying images/icons for Voters 
-- 'Reset votes' button in voting screen
-  - Yes from maya
-- When hovering over a matchup, have the colors change depending on if its playable/placeholder/future match
-- Progress bar, showing how many matches still need to be completed
-  - yes from maya
+To add:
+- coin flip for random votes
+- make it two sided
+- images for voters (low priority)
 - 'Next' and 'Previous' buttons to navigate between matchups, rather than going back to the bracket each time
-  - yes from maya
-- Make the voting screen more intuitive
-  - change plus to new symbol (check?)
-- New method of adding Teams/Voters
-  - not necessary
-- New method of removing Teams/Voters
-  - make symbol red instead of white
-- Additional display for the winner (animation?)
-  - yes from maya
-- Prettier alerts
-  - yes from maya
-- Do you want the teams/voters to reset when you go from PlayPage to SetupPage?
+- prettier alerts
+- additional animation for winner
+- When hovering over a matchup, have the colors change depending on if its playable/placeholder/future match
+
+
+Things to get people's thoughts on:
 - Have them play around with resetting stuff, switching pages, put weird inputs, basically try to break it
 
 Handle even number of voters (button that pops up saying break tie, randomly pick one)
@@ -28,6 +18,7 @@ Handle even number of voters (button that pops up saying break tie, randomly pic
 
 BUGS:
 - When going back from play screen to home screen, it removes any teams that have byes
+- fix the sigfig bug with graph algos
 
 TODO:
 - Basic functionality

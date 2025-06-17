@@ -21,7 +21,14 @@
 }
 
 .voter-add-row {
-    grid-template-columns: 6fr minmax(0, 3fr) minmax(0, 3fr) minmax(0, 1fr);
+    grid-template-columns: 2fr 6fr minmax(0, 3fr) minmax(0, 1fr);
+}
+
+.voter-pos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*text-align: center;*/
 }
 
 .blue-button {
