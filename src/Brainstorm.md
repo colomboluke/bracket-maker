@@ -7,6 +7,7 @@ To add:
 - prettier alerts
 - additional animation for winner
 - When hovering over a matchup, have the colors change depending on if its playable/placeholder/future match
+- Button that generates a random category, maybe with some examples
 
 
 Things to get people's thoughts on:
@@ -23,26 +24,18 @@ BUGS:
 TODO:
 - Basic functionality
   - [ ] Have an animation/display for the winner
-  - [ ] Style IdeasPage page
-  - [ ] Category: drop down menu of sports teams, movies, shows, songs, foods, etc, have this be the default name instead of "team X" every time
+  - [ ] Style IdeasPage
   - [ ] Format on mobile!
-  - Ideas Page
-    - [ ] Button that generates a random category, maybe with some examples
 - QoL
-  - [ ] Let users change the order/seed of an individual team in SetupPage
   - [ ] Differentiate between the 3 different 'reset' buttons
-  - [ ] Make teams draggable in SetupPage
-    - Get grid style working
   - [ ] Let users click 'next' or 'prev' to move between VotingScreens
   - [ ] Select votes with right/left arrow keys
   - [ ] When trying to click 'next' on VotingScreen, highlight the rows that still need to vote
   - [ ] Display title and description
     - I think description might be nice for the final printout
-  - [ ] Let users choose images for each Team/Voter
-    - UI customization: toggle show icons in bracket or just in VotingScreen, toggle show icons in bracket, choose overall color scheme for the bracket (from set of options)
   - [ ] Make a zoom in/out button in the bottom right of PreviewBracket
   - [ ] Light mode/dark mode button 
-  - [ ] Automated testing for bracket functions
+  - [ ] Automated testing for bracket functions (to make sure nothing breaks when I update stuff)
 - Advanced features
   - [ ] More Statistics:
       - Adjusted upset rate: give more points for bigger upset like 1v8, less for 4v5
@@ -50,3 +43,7 @@ TODO:
     - Choose between traditional bracket and voting bracket
       - Traditional bracket chooses the winner of each match by comparing their scores, voting bracket lets users vote on who they want to advance
   - [ ] Let users create a bracket, then save that on the site and let other people play it
+    - [ ] Set up backend and connect it to this project
+    - [ ] Load a bracket onto SetupPage, then play it as normal
+    - [ ] Export a bracket, storing it in the backend with all necessary info
+    - [ ] In HomePage, add the Load Bracket button/workflow
