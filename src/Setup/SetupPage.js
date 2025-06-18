@@ -118,22 +118,23 @@ export default function SetupPage({
 
     // Create a new voter with a default name
     function createVoter() {
+        const lastVoter = voters.length > 0 ? voters.slice(-1)[0] : null;
         let newName = "Voter " + (voters.length + 1);
-        let lastVoter = voters.length > 0 ? voters.slice(-1)[0] : null;
         if (lastVoter) {
             // If the new name-to-be already exists, add 1 to it
             if (lastVoter.name === newName) {
                 newName = "Voter " + (parseInt(lastVoter.name.slice(-1)) + 1);
             }
         }
-        setVoters([...voters, {name: newName}]);
+        const newID = voters.length > 0 ? lastVoter.id + 1 : 0;
+        setVoters([...voters, {name: newName, id: newID}]);
     }
 
     // Change the name of a voter
-    function updateVoterName(oldName, newName) {
+    function updateVoterName(id, newName) {
         let nextVoters = [...voters];
         for (let voter of nextVoters) {
-            if (voter.name === oldName) {
+            if (voter.id === id) {
                 voter.name = newName;
             }
         }
@@ -206,7 +207,7 @@ export default function SetupPage({
                           setTitle={setTitle} desc={desc} setDesc={setDesc}/>
                 {/*<button onClick={() => {*/}
                 {/*    console.log("Teams:", teams);*/}
-                {/*    // console.log("Voters:", voters);*/}
+                {/*    console.log("Voters:", voters);*/}
                 {/*    console.log("Bracket:", bracket);*/}
                 {/*}}>Testing button*/}
                 {/*</button>*/}

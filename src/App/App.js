@@ -7,6 +7,7 @@ import SetupPage from "../Setup/SetupPage";
 import IdeasPage from "../Ideas/IdeasPage";
 import PlayPage from "../Play/PlayPage";
 import {getVoteCounts} from "../Utils.mjs";
+import {colorsBracket, videoGames} from "../BracketAlgos/TestJSON.mjs";
 
 /**
  * Top level component

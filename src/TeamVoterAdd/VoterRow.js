@@ -2,7 +2,7 @@ import {CgRemove} from "react-icons/cg";
 import "./TeamOrVoterAddGrid.css";
 import {useState} from "react";
 
-export default function VoterRow({index, name, updateName, onRemove}) {
+export default function VoterRow({index, id, name, updateName, onRemove}) {
 
     const [isHovering, setIsHovering] = useState(false);
 
@@ -11,7 +11,7 @@ export default function VoterRow({index, name, updateName, onRemove}) {
             <div className={"voter-pos"}>{index + 1}</div>
             <input value={name} type={"text"} className={"settings-input"}
                    onChange={e => {
-                       updateName(name, e.target.value);
+                       updateName(id, e.target.value);
                    }}
                    placeholder={"Add Name"}/>
             <div className={"icon"}>to-do</div>

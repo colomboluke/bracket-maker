@@ -12,7 +12,7 @@ export default function VoterAddGrid({voters, updateVoterName, createVoter, remo
                 <div className={"ta-header remove"}></div>
             </div>
             {voters.map((voter, index) => (
-                <VoterRow key={index} name={voter.name} index={index}
+                <VoterRow key={index} name={voter.name} index={index} id={voter.id}
                           updateName={updateVoterName}
                           onRemove={() => removeVoter(voter.name)}></VoterRow>
             ))}
