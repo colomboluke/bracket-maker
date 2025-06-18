@@ -7,7 +7,11 @@ export default class Bracket {
     constructor(roundID, matches, nextRound = null) {
         this.roundID = roundID;
         this.matches = matches;
-        this.nextRound = nextRound;
+        if (nextRound) {
+            this.nextRound = new Bracket(nextRound.roundID, nextRound.matches, nextRound.nextRound);
+        } else {
+            this.nextRound = null;
+        }
     }
 
     // Creates a shallow copy, mimicking the spread operator

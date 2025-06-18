@@ -67,12 +67,10 @@ export default function constructBracket(teams) {
     } else {  // MAIN CASE: 4+ teams
         //roundNum = 0 indexed, first round = 0
         let matchIDCounter = 0;
-        console.log(`${teams.length} TEAM BRACKET`)
         bracket = buildRoundRecursive(teams, 0, []);
 
         // Teams in round: array containing Team objects
         function buildRoundRecursive(teamsInCurRound, curRoundIdx, lastRoundByeTeams) {
-            console.log(`Building round ${curRoundIdx} with teams`, teamsInCurRound, "Last round's bye teams: ", lastRoundByeTeams)
             //Number of non-placeholder teams = number of bye teams, unless it's the first
             // round, where it = number of teams in current round
             let numNonPlaceholderTeams = lastRoundByeTeams.length;
@@ -81,14 +79,12 @@ export default function constructBracket(teams) {
             }
             let seedTeamsResult = seedTeams(totalRounds - curRoundIdx, curRoundIdx,
                                             numNonPlaceholderTeams, lastRoundByeTeams, teams);
-            console.log("Seed teams result: ", seedTeamsResult)
             let initialMatches = seedTeamsResult[0];
             let curByeTeams = seedTeamsResult[1];
             // NOTE: this line was originally assignMatchIDs(structuredClone(initialMatches)),
             // I changed it because structuredClone() was turning each Match into a normal object.
             initialMatches = assignMatchIDs(initialMatches);
             let curMatches = processMatches(initialMatches, curRoundIdx, lastRoundByeTeams);
-            console.log("Current matches", curMatches)
             let nextRoundTeams = getNextRoundTeams(initialMatches, curRoundIdx);
             // Recurse if this isn't the finals
             let nextRound;
