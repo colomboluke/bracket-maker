@@ -2,8 +2,9 @@ import React from 'react';
 import {FaGithub} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import "./Home.css";
+import {colorsBracket, nflBracket} from "../BracketAlgos/TestJSON.mjs";
 
-function HomePage() {
+function HomePage({onImport}) {
     return (
         <div className={"home-cont"}>
             <div className={"home-title-card"}>
@@ -16,6 +17,7 @@ function HomePage() {
                     winning contenders until one remains, and crown the group's overall champion.</h3>
             </div>
             <div className={"home-main"}>
+                <button onClick={() => onImport(nflBracket)}>Import Bracket</button>
                 <Link className={"link new-bracket-btn"}
                       to={"/create"}>New Bracket
                 </Link>

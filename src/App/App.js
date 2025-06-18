@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Routes, Route} from 'react-router-dom';
+import {Routes, Route, useNavigate} from 'react-router-dom';
 import constructBracket from "../BracketAlgos/ConstructBracket";
 import Header from "../Header/Header";
 import HomePage from "../Home/HomePage";
@@ -24,9 +24,21 @@ function App() {
     // constructBracket(): takes teams array and turns it into a bracket
     // Bracket is state because it changes over time from user input (vote tallies)
     const [bracket, setBracket] = useState(() => constructBracket(teams));
+    // Update bracket when teams get changed
     useEffect(() => {
         setBracket(constructBracket(teams));
     }, [teams]);
+
+    // Import bracket from HomePage
+    const navigate = useNavigate();
+    function onImport(bracket) {
+        console.log("Bracket to be imported: ", bracket)
+        setBracket(bracket);
+        // TODO: make this work with bye matches
+        setTeams(bracket.matchesToTeams());
+        setVoters([]);
+        navigate("/create");
+    }
 
     // ~~~ Functions to update bracket ~~~
 
@@ -119,7 +131,7 @@ function App() {
     return (
         <Routes>
             <Route element={<Header title={title} resetBracketVotes={resetAllBracketVotes}/>}>
-                <Route path="/" element={<HomePage/>}/>
+                <Route path="/" element={<HomePage onImport={onImport}/>}/>
                 <Route path="create" element={<SetupPage title={title} setTitle={setTitle}
                                                          desc={desc} setDesc={setDesc}
                                                          teams={teams} setTeams={setTeams}

@@ -39,3 +39,8 @@ export function filterOutByes(listOfMatches) {
 export function convertToStringKey(name1, name2) {
     return `${name1}${name2.slice(0,1).toUpperCase().concat(name2.slice(1))}`
 }
+
+// Checks if a given number is a power of 2 or not
+export function isPowerOfTwo(x) {
+    return (Math.log(x) / Math.log(2)) % 1 === 0;
+}

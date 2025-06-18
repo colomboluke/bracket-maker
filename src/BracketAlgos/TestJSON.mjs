@@ -1,6 +1,6 @@
 import Bracket from "./Bracket.mjs";
 
-export const colorsBracketObject = {
+const colorsBracketObject = {
     "roundID": 0,
     "matches": [
         {
@@ -179,4 +179,163 @@ export const colorsBracketObject = {
 }
 
 export const colorsBracket = new Bracket(colorsBracketObject.roundID, colorsBracketObject.matches, colorsBracketObject.nextRound);
-console.log(colorsBracket, "\n\n", colorsBracketObject)
+// console.log(colorsBracket, "\n\n\n", colorsBracketObject)
+
+const nflBracketObject = {
+    "roundID": 0,
+    "matches": [
+        {
+            "id": 0,
+            "winner": null,
+            "team1": null,
+            "team2": null,
+            "nextMatchID": 4,
+            "votes": {
+                "Voter 1": 0,
+                "Voter 2": 0,
+                "Voter 3": 0
+            },
+            "nextStatus": 0
+        },
+        {
+            "id": 1,
+            "winner": 1,
+            "team1": {
+                "id": 3,
+                "position": 3,
+                "name": "Rams",
+                "image": null
+            },
+            "team2": {
+                "id": 4,
+                "position": 4,
+                "name": "Vikings",
+                "image": null
+            },
+            "nextMatchID": 4,
+            "votes": {
+                "Voter 1": 1,
+                "Voter 2": 1,
+                "Voter 3": 1
+            },
+            "nextStatus": 1
+        },
+        {
+            "id": 2,
+            "winner": 2,
+            "team1": {
+                "id": 2,
+                "position": 2,
+                "name": "Buccaneers",
+                "image": null
+            },
+            "team2": {
+                "id": 5,
+                "position": 5,
+                "name": "Commanders",
+                "image": null
+            },
+            "nextMatchID": 5,
+            "votes": {
+                "Voter 1": 2,
+                "Voter 2": 2,
+                "Voter 3": 1
+            },
+            "nextStatus": 0
+        },
+        {
+            "id": 3,
+            "winner": null,
+            "team1": null,
+            "team2": null,
+            "nextMatchID": 5,
+            "votes": {
+                "Voter 1": 0,
+                "Voter 2": 0,
+                "Voter 3": 0
+            },
+            "nextStatus": 1
+        }
+    ],
+    "nextRound": {
+        "roundID": 1,
+        "matches": [
+            {
+                "id": 4,
+                "winner": 1,
+                "team1": {
+                    "id": 0,
+                    "position": 0,
+                    "name": "Lions",
+                    "image": null
+                },
+                "team2": {
+                    "id": 3,
+                    "position": 3,
+                    "name": "Rams",
+                    "image": null
+                },
+                "nextMatchID": 6,
+                "votes": {
+                    "Voter 1": 1,
+                    "Voter 2": 1,
+                    "Voter 3": 1
+                },
+                "nextStatus": 0
+            },
+            {
+                "id": 5,
+                "winner": 2,
+                "team1": {
+                    "id": 5,
+                    "position": 5,
+                    "name": "Commanders",
+                    "image": null
+                },
+                "team2": {
+                    "id": 1,
+                    "position": 1,
+                    "name": "Eagles",
+                    "image": null
+                },
+                "nextMatchID": 6,
+                "votes": {
+                    "Voter 1": 2,
+                    "Voter 2": 2,
+                    "Voter 3": 2
+                },
+                "nextStatus": 1
+            }
+        ],
+        "nextRound": {
+            "roundID": 2,
+            "matches": [
+                {
+                    "id": 6,
+                    "winner": 2,
+                    "team1": {
+                        "id": 0,
+                        "position": 0,
+                        "name": "Lions",
+                        "image": null
+                    },
+                    "team2": {
+                        "id": 1,
+                        "position": 1,
+                        "name": "Eagles",
+                        "image": null
+                    },
+                    "nextMatchID": 7,
+                    "votes": {
+                        "Voter 1": 2,
+                        "Voter 2": 2,
+                        "Voter 3": 2
+                    },
+                    "nextStatus": 0
+                }
+            ],
+            "nextRound": null
+        }
+    }
+}
+export const nflBracket = new Bracket(nflBracketObject.roundID, nflBracketObject.matches, nflBracketObject.nextRound);
