@@ -31,7 +31,7 @@ export default function UserRow({voterName, voteStatus, onClick}) {
             <div className={"voter-col"}>
                 {displayArray[0]}
             </div>
-            <div className={"voter-col"}>
+            <div className={"voter-middle"}>
                 {displayArray[1]}
             </div>
             <div className={"voter-col"}>

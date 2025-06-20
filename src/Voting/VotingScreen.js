@@ -59,24 +59,27 @@ export default function VotingScreen({match, voters, onVote, onClose, onReset}) 
         onVote(match.id, voterName, vote);
     }
 
-    let choiceOneName = match.team1.name;
-    let choiceTwoName = match.team2.name;
-    const header = <div className={"voter-row"}>
-        <div className={"voter-col"}>
-            <div className={"option-title"}>{choiceOneName}</div>
-            <div className={"option-icon"}>
-                <img src={match.team1.image} alt="Team 1" className={"voting-image"}/>
+    const getTeamDisplay = (imageSrc, teamName) => {
+        if (imageSrc) {
+            return <div className={"voter-col"}>
+                <div className={"option-title"}>{teamName}</div>
+                <div className={"option-icon"}>
+                    <img src={imageSrc} alt="Team 1" className={"voting-image"}/>
+                </div>
             </div>
-        </div>
-        <div className={"voter-col"}>
+        } else {
+            return <div className={"voter-col"}>
+                <span className={"option-title no-image"}>{teamName}</span>
+            </div>
+        }
+    }
+
+    const header = <div className={"voter-row"}>
+        {getTeamDisplay(match.team1.image, match.team1.name)}
+        <div className={"voter-middle"}>
             <span className={"vs"}>VS.</span>
         </div>
-        <div className={"voter-col"}>
-            <div className={"option-title"}>{choiceTwoName}</div>
-            <div className={"option-icon"}>
-                <img src={match.team2.image} alt="Team 2" className={"voting-image"}/>
-            </div>
-        </div>
+        {getTeamDisplay(match.team2.image, match.team2.name)}
     </div>
 
     return (
@@ -99,7 +102,8 @@ export default function VotingScreen({match, voters, onVote, onClose, onReset}) 
                 <button className={`next-matchup-button ${nextBtnStyle}`} disabled={!allSelected()}
                         onClick={onClose}>NEXT
                 </button>
-                <button className={`next-matchup-button ${resetBtnStyle} reset`} disabled={!anySelected()}
+                <button className={`next-matchup-button ${resetBtnStyle} reset`}
+                        disabled={!anySelected()}
                         onClick={onReset}>RESET VOTES
                 </button>
             </div>
