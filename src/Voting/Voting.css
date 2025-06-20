@@ -62,10 +62,17 @@
 
 .voter-row {
     /*border: 1px solid black;*/
+    width: 95%;
+    margin: auto;
     display: flex;
     flex-flow: row;
     align-items: center;
     justify-content: space-evenly;
+}
+
+.voter-row-selected {
+    background-color: grey;
+    /*border: 1px solid lightgray;*/
 }
 
 /*So the choice icons line up*/

@@ -1,10 +1,22 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "./Voting.css";
 
 // TODO: make the left/right buttons greyed out when everyone has voted
 // Vote status:
 // 0: neither selected. 1: left selected. 2: right selected
-export default function UserRow({voterName, voteStatus, onClick}) {
+export default function UserRow({voterName, voteStatus, onClick, selected}) {
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown)
+        function handleKeyDown(e) {
+
+        }
+
+        // Clean up listener when component unmounts
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
 
     let leftBtnStyle = voteStatus === 1 ? "selected" : "unselected";
     let rightBtnStyle = voteStatus === 2 ? "selected" : "unselected";
@@ -26,8 +38,10 @@ export default function UserRow({voterName, voteStatus, onClick}) {
         displayArray = [leftButton, rightButton, voterNameSpan]
     }
 
+    const selectedStyle = selected ? "voter-row-selected" : ""
+
     return (
-        <div className={"voter-row"}>
+        <div className={`voter-row ${selectedStyle}`}>
             <div className={"voter-col"}>
                 {displayArray[0]}
             </div>
