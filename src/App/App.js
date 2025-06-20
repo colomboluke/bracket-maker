@@ -29,12 +29,14 @@ function App() {
         setBracket(constructBracket(teams));
     }, [teams]);
 
+    // TODO: connect to Supabase, create functions:
+    //  Export: take a Bracket object and create a SQL Insert out of it
+    //  Import: call the Retrieve Bracket query with the given ID as parameter, parse the result into a Bracket object
     // Import bracket from HomePage
     const navigate = useNavigate();
     function onImport(bracket) {
         console.log("Bracket to be imported: ", bracket)
         setBracket(bracket);
-        // TODO: make this work with bye matches
         setTeams(bracket.matchesToTeams());
         setVoters([]);
         navigate("/create");
