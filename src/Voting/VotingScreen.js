@@ -1,13 +1,16 @@
 import UserRow from "./UserRow";
 import "./Voting.css";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 export default function VotingScreen({match, voters, onVote, onClose, onReset}) {
 
-    // Close on 'esc' key press
+    const [selectedRow, setSelectedRow] = useState(null);
+
+    // Handle key presses
     useEffect(() => {
         document.addEventListener('keydown', handleKeyDown);
 
+        // Close on 'esc' key press
         function handleKeyDown(e) {
             if (e.key === 'Escape') {
                 onClose();
@@ -16,13 +19,38 @@ export default function VotingScreen({match, voters, onVote, onClose, onReset}) 
             if (e.key === 'Enter' && Object.values(match.votes).every(item => item !== 0)) {
                 onClose();
             }
+            // Choose which voter's row is selected
+            if (e.key === 'ArrowUp') {
+                if (selectedRow === null) {
+                    setSelectedRow(0);
+                } else {
+                    setSelectedRow(Math.max(0, selectedRow - 1));
+                }
+            }
+            if (e.key === 'ArrowDown') {
+                if (selectedRow === null) {
+                    setSelectedRow(0)
+                } else {
+                    setSelectedRow(Math.min(voters.length - 1, selectedRow + 1));
+                }
+            }
+            // Cast a vote using left/right arrows
+            if (e.key === "ArrowRight") {
+                handleVoteLocal(voters[selectedRow].name, 2)
+            }
+            if (e.key === "ArrowLeft") {
+                handleVoteLocal(voters[selectedRow].name, 1)
+            }
         }
-
         // Clean up listener when component unmounts
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [onClose, match]);
+    }, [onClose, match, selectedRow, voters, handleVoteLocal]);
+
+    // useEffect(() => {
+    //     console.log("Selected row is now: ", selectedRow)
+    // }, [selectedRow]);
 
     // Whether all users have voted
     function allSelected() {
@@ -38,10 +66,6 @@ export default function VotingScreen({match, voters, onVote, onClose, onReset}) 
     let nextBtnStyle = allSelected() ? "active" : "";
     let resetBtnStyle = anySelected() ? "active" : "";
 
-    function reset() {
-        onReset(match.id);
-    }
-
     function getWinnerString() {
         if (match.winner === null) {
             return "";
@@ -55,28 +79,32 @@ export default function VotingScreen({match, voters, onVote, onClose, onReset}) 
     }
 
     // Tell parent to update vote, give additional info that we're referring to this match
+    // TODO: fix this dependency error
     function handleVoteLocal(voterName, vote) {
         onVote(match.id, voterName, vote);
     }
 
-    let choiceOneName = match.team1.name;
-    let choiceTwoName = match.team2.name;
-    const header = <div className={"voter-row"}>
-        <div className={"voter-col"}>
-            <div className={"option-title"}>{choiceOneName}</div>
-            <div className={"option-icon"}>
-                <img src={match.team1.image} alt="Team 1" className={"voting-image"}/>
+    const getTeamDisplay = (imageSrc, teamName) => {
+        if (imageSrc) {
+            return <div className={"voter-col"}>
+                <div className={"option-title"}>{teamName}</div>
+                <div className={"option-icon"}>
+                    <img src={imageSrc} alt="Team 1" className={"voting-image"}/>
+                </div>
             </div>
-        </div>
-        <div className={"voter-col"}>
+        } else {
+            return <div className={"voter-col"}>
+                <span className={"option-title no-image"}>{teamName}</span>
+            </div>
+        }
+    }
+
+    const header = <div className={"voter-row"}>
+        {getTeamDisplay(match.team1.image, match.team1.name)}
+        <div className={"voter-middle"}>
             <span className={"vs"}>VS.</span>
         </div>
-        <div className={"voter-col"}>
-            <div className={"option-title"}>{choiceTwoName}</div>
-            <div className={"option-icon"}>
-                <img src={match.team2.image} alt="Team 2" className={"voting-image"}/>
-            </div>
-        </div>
+        {getTeamDisplay(match.team2.image, match.team2.name)}
     </div>
 
     return (
@@ -91,7 +119,7 @@ export default function VotingScreen({match, voters, onVote, onClose, onReset}) 
                 {voters.map((voter, idx) => (
                     // Receive vote status from the match object
                     <UserRow key={idx} voterName={voter.name} voteStatus={match.votes[voter.name]}
-                             onClick={handleVoteLocal}/>
+                             onClick={handleVoteLocal} selected={selectedRow === idx}/>
                 ))}
             </div>
             <div className={"voting-footer"}>
@@ -99,7 +127,8 @@ export default function VotingScreen({match, voters, onVote, onClose, onReset}) 
                 <button className={`next-matchup-button ${nextBtnStyle}`} disabled={!allSelected()}
                         onClick={onClose}>NEXT
                 </button>
-                <button className={`next-matchup-button ${resetBtnStyle} reset`} disabled={!anySelected()}
+                <button className={`next-matchup-button ${resetBtnStyle} reset`}
+                        disabled={!anySelected()}
                         onClick={onReset}>RESET VOTES
                 </button>
             </div>

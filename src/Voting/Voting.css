@@ -62,25 +62,42 @@
 
 .voter-row {
     /*border: 1px solid black;*/
+    width: 95%;
+    margin: auto;
     display: flex;
     flex-flow: row;
     align-items: center;
     justify-content: space-evenly;
 }
 
+.voter-row-selected {
+    background-color: grey;
+    /*border: 1px solid lightgray;*/
+}
+
 /*So the choice icons line up*/
 .voter-row:first-child {
-    align-items: flex-end;
+    align-items: center;
+    margin-bottom: 40px;
 }
 
 .voter-col {
-    width: 33%;
+    width: 40%;
+    height: 100%;
     /*border: 1px solid gold;*/
     display: flex;
     flex-flow: column;
     justify-content: flex-end;
     align-items: center;
-    /*border: 1px solid gold;*/
+    /*overflow: scroll;*/
+}
+
+.voter-middle {
+    width: 20%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .option-title-cont {
@@ -113,7 +130,6 @@
 
 .vs {
     font-size: 24px;
-    margin-bottom: 30%;
 }
 
 .voting-spacer {

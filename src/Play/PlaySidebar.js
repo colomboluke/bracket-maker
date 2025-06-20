@@ -36,8 +36,9 @@ export default function PlaySidebar({
                     className={"print-btn-icon"}/></button>
                 <button className={"reset-btn"} onClick={onReset}>Reset</button>
             </div>
-            {!bracketComplete && <span className={"instruction-text"}>Click on a match to get started</span>}
-            {bracketComplete && <button onClick={() => onShowChart()} className={"insights-btn"}>{insightsBtnText}</button>}
+            {!bracketComplete && <span className={"instruction-text"}>Click on a match to get started. Vote by clicking under a column, or by using the arrow keys.</span>}
+            {bracketComplete && <button onClick={() => onShowChart()}
+                                        className={"insights-btn"}>{insightsBtnText}</button>}
             {/*For ease of testing*/}
             {/*<button onClick={() => onShowChart()} className={"insights-btn"}>{insightsBtnText}</button>*/}
         </div>
