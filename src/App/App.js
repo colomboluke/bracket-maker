@@ -7,7 +7,9 @@ import SetupPage from "../Setup/SetupPage";
 import IdeasPage from "../Ideas/IdeasPage";
 import PlayPage from "../Play/PlayPage";
 import {getVoteCounts} from "../Utils.mjs";
-import {colorsBracket, videoGames} from "../BracketAlgos/TestJSON.mjs";
+import { supabase } from "./Client";
+import {getVoterInfo, parseDatabaseRecord} from "../BracketAlgos/ParseDatabaseRecord";
+import {colorsBracket} from "../BracketAlgos/TestJSON.mjs";
 
 /**
  * Top level component
@@ -32,14 +34,50 @@ function App() {
     // TODO: connect to Supabase, create functions:
     //  Export: take a Bracket object and create a SQL Insert out of it
     //  Import: call the Retrieve Bracket query with the given ID as parameter, parse the result into a Bracket object
-    // Import bracket from HomePage
-    const navigate = useNavigate();
-    function onImport(bracket) {
-        console.log("Bracket to be imported: ", bracket)
+
+    async function fetchBracket(bracketID, asTemplate) {
+        // Select a bracket matching the ID
+        const { data, error } = await supabase
+            // .from("bracket").select()
+            .rpc('get_bracket', {p_id: bracketID})
+        if (error) {
+            alert(`Error fetching bracket with id ${bracketID}`)
+        }
+        const parseDBResult = parseDatabaseRecord(data);
+        const bracket = parseDBResult[1];
+        console.log("Parsed bracket: ", bracket)
+        // Set the bracket state to the info that was just fetched
         setBracket(bracket);
-        setTeams(bracket.matchesToTeams());
-        setVoters([]);
-        navigate("/create");
+        setTitle(parseDBResult[0].title);
+        setDesc(parseDBResult[0].desc);
+
+        // Handle whether this is a template or not
+        if (asTemplate) {
+            console.log("Creating a bracket template")
+            setTeams(parseDBResult[1].matchesToTeams());
+            setVoters([]);
+            navigate("/create");
+        } else {
+            console.log("Creating full bracket: ")
+            setVoters(getVoterInfo(parseDBResult[1]));
+            navigate("/play");
+        }
+
+    }
+
+    useEffect(() => {
+        console.log("bracket is now: ", bracket)
+    }, [bracket]);
+
+    useEffect(() => {
+        console.log("voters are now: ", voters)
+    }, [voters]);
+
+    // Import a bracket template
+    const navigate = useNavigate();
+    function handleImport(bracketID, asTemplate) {
+        console.log("Bracket ID to be imported: ", bracketID)
+        fetchBracket(bracketID, asTemplate)
     }
 
     // ~~~ Functions to update bracket ~~~
@@ -132,8 +170,8 @@ function App() {
 
     return (
         <Routes>
-            <Route element={<Header title={title} resetBracketVotes={resetAllBracketVotes}/>}>
-                <Route path="/" element={<HomePage onImport={onImport}/>}/>
+            <Route element={<Header title={title} resetBracketVotes={resetAllBracketVotes} bracketExists={bracket.matches.length > 0}/>}>
+                <Route path="/" element={<HomePage requestImport={handleImport}/>}/>
                 <Route path="create" element={<SetupPage title={title} setTitle={setTitle}
                                                          desc={desc} setDesc={setDesc}
                                                          teams={teams} setTeams={setTeams}

@@ -339,3 +339,7 @@ const nflBracketObject = {
     }
 }
 export const nflBracket = new Bracket(nflBracketObject.roundID, nflBracketObject.matches, nflBracketObject.nextRound);
+
+
+// console.log(colorsBracket)
+// console.log(colorsBracket.matchesToTeams())

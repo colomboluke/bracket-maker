@@ -1,10 +1,20 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {FaGithub} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import "./Home.css";
-import {colorsBracket, nflBracket} from "../BracketAlgos/TestJSON.mjs";
 
-function HomePage({onImport}) {
+function HomePage({requestImport}) {
+    const [showImportForm, setShowImportForm] = useState(false);
+    const [bracketID, setBracketID] = useState("");
+    const [asTemplate, setAsTemplate] = useState(false);
+
+    function onSubmit(e) {
+        e.preventDefault();
+        console.log("Form submitted, bracket ID: ", bracketID, "Use as template?: ", asTemplate);
+        setShowImportForm(false);
+        requestImport(bracketID, asTemplate);
+    }
+
     return (
         <div className={"home-cont"}>
             <div className={"home-title-card"}>
@@ -14,10 +24,26 @@ function HomePage({onImport}) {
                     Madness-style tournament brackets. Make a list of movies, songs, foods, or
                     anything else you can think of, and get a group together to debate the winner of
                     each matchup. Bracket Maker will tally votes for each matchup, advance the
-                    winning contenders until one remains, and crown the group's overall champion.</h3>
+                    winning contenders until one remains, and crown the group's overall
+                    champion.</h3>
             </div>
             <div className={"home-main"}>
-                <button onClick={() => onImport(nflBracket)}>Import Bracket</button>
+                <button onClick={() => setShowImportForm(!showImportForm)}>Import Bracket</button>
+                {showImportForm && (
+                    <form onSubmit={onSubmit}>
+                        <div className={"import-form-row"}>
+                            <span>Bracket ID: </span>
+                            <input type="text" name={"bracketID"} value={bracketID}
+                                   onChange={e => setBracketID(e.target.value)}/>
+                        </div>
+                        <div className={"import-form-row"}>
+                            <span>Use as template? </span>
+                            <input type="checkbox" name={"asTemplate"}
+                                   checked={asTemplate} onChange={e => setAsTemplate(e.target.checked)}/>
+                        </div>
+                        <button type={"submit"}>Import</button>
+                    </form>
+                )}
                 <Link className={"link new-bracket-btn"}
                       to={"/create"}>New Bracket
                 </Link>

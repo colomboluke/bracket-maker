@@ -6,6 +6,7 @@ import "./Voting.css";
 // 0: neither selected. 1: left selected. 2: right selected
 export default function UserRow({voterName, voteStatus, onClick}) {
 
+
     let leftBtnStyle = voteStatus === 1 ? "selected" : "unselected";
     let rightBtnStyle = voteStatus === 2 ? "selected" : "unselected";
     let voteBtnText = "+"
