@@ -207,12 +207,12 @@ export default function SetupPage({
                           numVoters={voters.length} createVoter={createVoter}
                           removeLastVoter={removeLastVoter} title={title}
                           setTitle={setTitle} desc={desc} setDesc={setDesc}/>
-                <button onClick={() => {
-                    console.log("Teams:", teams);
-                    console.log("Voters:", voters);
-                    console.log("Bracket:", bracket);
-                }}>Testing button
-                </button>
+                {/*<button onClick={() => {*/}
+                {/*    console.log("Teams:", teams);*/}
+                {/*    console.log("Voters:", voters);*/}
+                {/*    console.log("Bracket:", bracket);*/}
+                {/*}}>Testing button*/}
+                {/*</button>*/}
                 {/*<button onClick={() => {*/}
                 {/*    for (let i = 0; i < teams.length; i++) {*/}
                 {/*        bracket.getTeam(i);*/}
