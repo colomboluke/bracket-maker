@@ -18,6 +18,7 @@ export default function UserRow({voterName, voteStatus, onClick, selected}) {
         };
     }, []);
 
+
     let leftBtnStyle = voteStatus === 1 ? "selected" : "unselected";
     let rightBtnStyle = voteStatus === 2 ? "selected" : "unselected";
     let voteBtnText = "+"

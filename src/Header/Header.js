@@ -3,7 +3,7 @@ import React from "react";
 import {FaGithub, FaMousePointer, FaPrint} from "react-icons/fa";
 import "./Header.css";
 
-export default function Header({title, resetBracketVotes}) {
+export default function Header({title, resetBracketVotes, bracketExists}) {
     const location = useLocation();
     const titleDisplay = (title === "" ? <h3 className={"bracket-title"}>Untitled Bracket</h3> :
                           <h3 className={"bracket-title"}>{title}</h3>)
@@ -15,11 +15,16 @@ export default function Header({title, resetBracketVotes}) {
         if (location.pathname === "/play") {
             if (window.confirm(
                 "Navigating away from a bracket will lose all progress. Are you sure?")) {
+                // TODO: bug happening here when importing a full bracket, then navigating away from play page
                 resetBracketVotes();
                 navigate(toPath);
             }
         } else {
             navigate(toPath);
+        }
+        // only reload if there's state
+        if (toPath === "/" && bracketExists) {
+            // window.location.reload();
         }
     }
 

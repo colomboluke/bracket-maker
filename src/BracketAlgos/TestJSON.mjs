@@ -1,5 +1,7 @@
+import {parseMatchArrRecursive} from "./DBConnect.mjs";
 import Bracket from "./Bracket.mjs";
-export const testBracket1 = {
+
+const colorsBracketObject = {
     "roundID": 0,
     "matches": [
         {
@@ -7,121 +9,44 @@ export const testBracket1 = {
             "winner": 1,
             "team1": {
                 "id": 0,
-                "name": "Item 1",
+                "position": 0,
+                "name": "Red",
                 "image": null
             },
             "team2": {
+                "id": 7,
+                "position": 7,
+                "name": "Pink",
+                "image": null
+            },
+            "nextMatchID": 4,
+            "votes": {
+                "Luke": 1,
+                "Maya": 2,
+                "Coby": 1
+            },
+            "nextStatus": 0
+        },
+        {
+            "id": 1,
+            "winner": 1,
+            "team1": {
                 "id": 3,
-                "name": "Item 4",
-                "image": null
-            },
-            "nextMatchID": 2,
-            "votes": {
-                "Voter 1": 1,
-                "Voter 2": 1,
-                "Voter 3": 1
-            },
-            "nextStatus": 0
-        },
-        {
-            "id": 1,
-            "winner": 1,
-            "team1": {
-                "id": 1,
-                "name": "Item 2",
+                "position": 3,
+                "name": "Green",
                 "image": null
             },
             "team2": {
-                "id": 2,
-                "name": "Item 3",
+                "id": 4,
+                "position": 4,
+                "name": "Blue",
                 "image": null
             },
-            "nextMatchID": 2,
+            "nextMatchID": 4,
             "votes": {
-                "Voter 1": 2,
-                "Voter 2": 1,
-                "Voter 3": 1
-            },
-            "nextStatus": 1
-        }
-    ],
-    "nextRound": {
-        "roundID": 1,
-        "matches": [
-            {
-                "id": 2,
-                "winner": 1,
-                "team1": {
-                    "id": 0,
-                    "name": "Item 1",
-                    "image": null
-                },
-                "team2": {
-                    "id": 1,
-                    "name": "Item 2",
-                    "image": null
-                },
-                "nextMatchID": 3,
-                "votes": {
-                    "Voter 1": 1,
-                    "Voter 2": 1,
-                    "Voter 3": 2
-                },
-                "nextStatus": 0
-            }
-        ],
-        "nextRound": null
-    }
-}
-
-// export const testBracketActual = new Bracket(testBracket1.roundID, testBracket1.matches, testBracket1.nextRound)
-
-export const animatedMovies = {
-    "roundID": 0,
-    "matches": [
-        {
-            "id": 0,
-            "winner": 1,
-            "team1": {
-                "id": 0,
-                "name": "Spiderverse",
-                "image": null
-            },
-            "team2": {
-                "id": 31,
-                "name": "Megamind",
-                "image": null
-            },
-            "nextMatchID": 16,
-            "votes": {
-                "Voter 1": 1,
-                "Voter 2": 1,
-                "Voter 3": 1,
-                "Voter 4": 1,
-                "Voter 5": 1
-            },
-            "nextStatus": 0
-        },
-        {
-            "id": 1,
-            "winner": 1,
-            "team1": {
-                "id": 15,
-                "name": "Coco",
-                "image": null
-            },
-            "team2": {
-                "id": 16,
-                "name": "Little Mermaid",
-                "image": null
-            },
-            "nextMatchID": 16,
-            "votes": {
-                "Voter 1": 1,
-                "Voter 2": 1,
-                "Voter 3": 1,
-                "Voter 4": 1,
-                "Voter 5": 2
+                "Luke": 2,
+                "Maya": 1,
+                "Coby": 1
             },
             "nextStatus": 1
         },
@@ -129,22 +54,22 @@ export const animatedMovies = {
             "id": 2,
             "winner": 2,
             "team1": {
-                "id": 8,
-                "name": "Toy Story 1",
+                "id": 2,
+                "position": 2,
+                "name": "Yellow",
                 "image": null
             },
             "team2": {
-                "id": 23,
-                "name": "Ratatouille",
+                "id": 5,
+                "position": 5,
+                "name": "Indigo",
                 "image": null
             },
-            "nextMatchID": 17,
+            "nextMatchID": 5,
             "votes": {
-                "Voter 1": 2,
-                "Voter 2": 2,
-                "Voter 3": 2,
-                "Voter 4": 1,
-                "Voter 5": 2
+                "Luke": 2,
+                "Maya": 2,
+                "Coby": 2
             },
             "nextStatus": 0
         },
@@ -152,298 +77,22 @@ export const animatedMovies = {
             "id": 3,
             "winner": 1,
             "team1": {
-                "id": 7,
-                "name": "Inside Out",
-                "image": null
-            },
-            "team2": {
-                "id": 24,
-                "name": "Monsters Inc",
-                "image": null
-            },
-            "nextMatchID": 17,
-            "votes": {
-                "Voter 1": 1,
-                "Voter 2": 1,
-                "Voter 3": 1,
-                "Voter 4": 2,
-                "Voter 5": 1
-            },
-            "nextStatus": 1
-        },
-        {
-            "id": 4,
-            "winner": 2,
-            "team1": {
-                "id": 4,
-                "name": "Descpicable Me",
-                "image": null
-            },
-            "team2": {
-                "id": 27,
-                "name": "Up",
-                "image": null
-            },
-            "nextMatchID": 18,
-            "votes": {
-                "Voter 1": 2,
-                "Voter 2": 1,
-                "Voter 3": 2,
-                "Voter 4": 1,
-                "Voter 5": 2
-            },
-            "nextStatus": 0
-        },
-        {
-            "id": 5,
-            "winner": 1,
-            "team1": {
-                "id": 11,
-                "name": "How To Train Your Dragon 1",
-                "image": null
-            },
-            "team2": {
-                "id": 20,
-                "name": "Finding Nemo",
-                "image": null
-            },
-            "nextMatchID": 18,
-            "votes": {
-                "Voter 1": 1,
-                "Voter 2": 1,
-                "Voter 3": 1,
-                "Voter 4": 2,
-                "Voter 5": 2
-            },
-            "nextStatus": 1
-        },
-        {
-            "id": 6,
-            "winner": 2,
-            "team1": {
-                "id": 12,
-                "name": "Rango",
-                "image": null
-            },
-            "team2": {
-                "id": 19,
-                "name": "Lorax",
-                "image": null
-            },
-            "nextMatchID": 19,
-            "votes": {
-                "Voter 1": 2,
-                "Voter 2": 2,
-                "Voter 3": 1,
-                "Voter 4": 1,
-                "Voter 5": 2
-            },
-            "nextStatus": 0
-        },
-        {
-            "id": 7,
-            "winner": 1,
-            "team1": {
-                "id": 3,
-                "name": "Moana",
-                "image": null
-            },
-            "team2": {
-                "id": 28,
-                "name": "Storks",
-                "image": null
-            },
-            "nextMatchID": 19,
-            "votes": {
-                "Voter 1": 1,
-                "Voter 2": 2,
-                "Voter 3": 1,
-                "Voter 4": 1,
-                "Voter 5": 1
-            },
-            "nextStatus": 1
-        },
-        {
-            "id": 8,
-            "winner": 2,
-            "team1": {
-                "id": 2,
-                "name": "Lego Movie",
-                "image": null
-            },
-            "team2": {
-                "id": 29,
-                "name": "Wall-E",
-                "image": null
-            },
-            "nextMatchID": 20,
-            "votes": {
-                "Voter 1": 2,
-                "Voter 2": 2,
-                "Voter 3": 1,
-                "Voter 4": 2,
-                "Voter 5": 1
-            },
-            "nextStatus": 0
-        },
-        {
-            "id": 9,
-            "winner": 2,
-            "team1": {
-                "id": 13,
-                "name": "Big Hero 6",
-                "image": null
-            },
-            "team2": {
-                "id": 18,
-                "name": "Lion King",
-                "image": null
-            },
-            "nextMatchID": 20,
-            "votes": {
-                "Voter 1": 1,
-                "Voter 2": 2,
-                "Voter 3": 2,
-                "Voter 4": 2,
-                "Voter 5": 2
-            },
-            "nextStatus": 1
-        },
-        {
-            "id": 10,
-            "winner": 2,
-            "team1": {
-                "id": 10,
-                "name": "Tangled",
-                "image": null
-            },
-            "team2": {
-                "id": 21,
-                "name": "Howl's Moving Castle",
-                "image": null
-            },
-            "nextMatchID": 21,
-            "votes": {
-                "Voter 1": 2,
-                "Voter 2": 1,
-                "Voter 3": 2,
-                "Voter 4": 2,
-                "Voter 5": 1
-            },
-            "nextStatus": 0
-        },
-        {
-            "id": 11,
-            "winner": 2,
-            "team1": {
-                "id": 5,
-                "name": "Madagascar",
-                "image": null
-            },
-            "team2": {
-                "id": 26,
-                "name": "Spirited Away",
-                "image": null
-            },
-            "nextMatchID": 21,
-            "votes": {
-                "Voter 1": 2,
-                "Voter 2": 2,
-                "Voter 3": 1,
-                "Voter 4": 2,
-                "Voter 5": 2
-            },
-            "nextStatus": 1
-        },
-        {
-            "id": 12,
-            "winner": 1,
-            "team1": {
-                "id": 6,
-                "name": "Incredibles 1",
-                "image": null
-            },
-            "team2": {
-                "id": 25,
-                "name": "Shrek 2",
-                "image": null
-            },
-            "nextMatchID": 22,
-            "votes": {
-                "Voter 1": 1,
-                "Voter 2": 1,
-                "Voter 3": 1,
-                "Voter 4": 1,
-                "Voter 5": 1
-            },
-            "nextStatus": 0
-        },
-        {
-            "id": 13,
-            "winner": 2,
-            "team1": {
-                "id": 9,
-                "name": "Lego Batman",
-                "image": null
-            },
-            "team2": {
-                "id": 22,
-                "name": "Puss in Boots",
-                "image": null
-            },
-            "nextMatchID": 22,
-            "votes": {
-                "Voter 1": 2,
-                "Voter 2": 2,
-                "Voter 3": 2,
-                "Voter 4": 2,
-                "Voter 5": 2
-            },
-            "nextStatus": 1
-        },
-        {
-            "id": 14,
-            "winner": 1,
-            "team1": {
-                "id": 14,
-                "name": "Frozen",
-                "image": null
-            },
-            "team2": {
-                "id": 17,
-                "name": "Hotel Transylvania",
-                "image": null
-            },
-            "nextMatchID": 23,
-            "votes": {
-                "Voter 1": 1,
-                "Voter 2": 1,
-                "Voter 3": 1,
-                "Voter 4": 1,
-                "Voter 5": 1
-            },
-            "nextStatus": 0
-        },
-        {
-            "id": 15,
-            "winner": 1,
-            "team1": {
                 "id": 1,
-                "name": "Cars 1",
+                "position": 1,
+                "name": "Orange",
                 "image": null
             },
             "team2": {
-                "id": 30,
-                "name": "Kung Fu Panda 1",
+                "id": 6,
+                "position": 6,
+                "name": "Violet",
                 "image": null
             },
-            "nextMatchID": 23,
+            "nextMatchID": 5,
             "votes": {
-                "Voter 1": 1,
-                "Voter 2": 2,
-                "Voter 3": 1,
-                "Voter 4": 1,
-                "Voter 5": 2
+                "Luke": 2,
+                "Maya": 1,
+                "Coby": 1
             },
             "nextStatus": 1
         }
@@ -452,186 +101,48 @@ export const animatedMovies = {
         "roundID": 1,
         "matches": [
             {
-                "id": 16,
-                "winner": 1,
+                "id": 4,
+                "winner": 2,
                 "team1": {
                     "id": 0,
-                    "name": "Spiderverse",
-                    "image": null
-                },
-                "team2": {
-                    "id": 15,
-                    "name": "Coco",
-                    "image": null
-                },
-                "nextMatchID": 24,
-                "votes": {
-                    "Voter 1": 1,
-                    "Voter 2": 1,
-                    "Voter 3": 1,
-                    "Voter 4": 2,
-                    "Voter 5": 2
-                },
-                "nextStatus": 0
-            },
-            {
-                "id": 17,
-                "winner": 2,
-                "team1": {
-                    "id": 23,
-                    "name": "Ratatouille",
-                    "image": null
-                },
-                "team2": {
-                    "id": 7,
-                    "name": "Inside Out",
-                    "image": null
-                },
-                "nextMatchID": 24,
-                "votes": {
-                    "Voter 1": 2,
-                    "Voter 2": 1,
-                    "Voter 3": 2,
-                    "Voter 4": 2,
-                    "Voter 5": 1
-                },
-                "nextStatus": 1
-            },
-            {
-                "id": 18,
-                "winner": 1,
-                "team1": {
-                    "id": 27,
-                    "name": "Up",
-                    "image": null
-                },
-                "team2": {
-                    "id": 11,
-                    "name": "How To Train Your Dragon 1",
-                    "image": null
-                },
-                "nextMatchID": 25,
-                "votes": {
-                    "Voter 1": 1,
-                    "Voter 2": 2,
-                    "Voter 3": 2,
-                    "Voter 4": 1,
-                    "Voter 5": 1
-                },
-                "nextStatus": 0
-            },
-            {
-                "id": 19,
-                "winner": 2,
-                "team1": {
-                    "id": 19,
-                    "name": "Lorax",
+                    "position": 0,
+                    "name": "Red",
                     "image": null
                 },
                 "team2": {
                     "id": 3,
-                    "name": "Moana",
+                    "position": 3,
+                    "name": "Green",
                     "image": null
                 },
-                "nextMatchID": 25,
+                "nextMatchID": 6,
                 "votes": {
-                    "Voter 1": 2,
-                    "Voter 2": 1,
-                    "Voter 3": 2,
-                    "Voter 4": 2,
-                    "Voter 5": 2
-                },
-                "nextStatus": 1
-            },
-            {
-                "id": 20,
-                "winner": 2,
-                "team1": {
-                    "id": 29,
-                    "name": "Wall-E",
-                    "image": null
-                },
-                "team2": {
-                    "id": 18,
-                    "name": "Lion King",
-                    "image": null
-                },
-                "nextMatchID": 26,
-                "votes": {
-                    "Voter 1": 1,
-                    "Voter 2": 1,
-                    "Voter 3": 2,
-                    "Voter 4": 2,
-                    "Voter 5": 2
+                    "Luke": 2,
+                    "Maya": 2,
+                    "Coby": 1
                 },
                 "nextStatus": 0
             },
             {
-                "id": 21,
-                "winner": 1,
-                "team1": {
-                    "id": 21,
-                    "name": "Howl's Moving Castle",
-                    "image": null
-                },
-                "team2": {
-                    "id": 26,
-                    "name": "Spirited Away",
-                    "image": null
-                },
-                "nextMatchID": 26,
-                "votes": {
-                    "Voter 1": 1,
-                    "Voter 2": 1,
-                    "Voter 3": 1,
-                    "Voter 4": 2,
-                    "Voter 5": 2
-                },
-                "nextStatus": 1
-            },
-            {
-                "id": 22,
+                "id": 5,
                 "winner": 2,
                 "team1": {
-                    "id": 6,
-                    "name": "Incredibles 1",
-                    "image": null
-                },
-                "team2": {
-                    "id": 22,
-                    "name": "Puss in Boots",
-                    "image": null
-                },
-                "nextMatchID": 27,
-                "votes": {
-                    "Voter 1": 1,
-                    "Voter 2": 2,
-                    "Voter 3": 2,
-                    "Voter 4": 2,
-                    "Voter 5": 2
-                },
-                "nextStatus": 0
-            },
-            {
-                "id": 23,
-                "winner": 2,
-                "team1": {
-                    "id": 14,
-                    "name": "Frozen",
+                    "id": 5,
+                    "position": 5,
+                    "name": "Indigo",
                     "image": null
                 },
                 "team2": {
                     "id": 1,
-                    "name": "Cars 1",
+                    "position": 1,
+                    "name": "Orange",
                     "image": null
                 },
-                "nextMatchID": 27,
+                "nextMatchID": 6,
                 "votes": {
-                    "Voter 1": 1,
-                    "Voter 2": 1,
-                    "Voter 3": 2,
-                    "Voter 4": 2,
-                    "Voter 5": 2
+                    "Luke": 1,
+                    "Maya": 2,
+                    "Coby": 2
                 },
                 "nextStatus": 1
             }
@@ -640,224 +151,69 @@ export const animatedMovies = {
             "roundID": 2,
             "matches": [
                 {
-                    "id": 24,
+                    "id": 6,
                     "winner": 1,
                     "team1": {
-                        "id": 0,
-                        "name": "Spiderverse",
-                        "image": null
-                    },
-                    "team2": {
-                        "id": 7,
-                        "name": "Inside Out",
-                        "image": null
-                    },
-                    "nextMatchID": 28,
-                    "votes": {
-                        "Voter 1": 1,
-                        "Voter 2": 1,
-                        "Voter 3": 1,
-                        "Voter 4": 2,
-                        "Voter 5": 2
-                    },
-                    "nextStatus": 0
-                },
-                {
-                    "id": 25,
-                    "winner": 2,
-                    "team1": {
-                        "id": 27,
-                        "name": "Up",
-                        "image": null
-                    },
-                    "team2": {
                         "id": 3,
-                        "name": "Moana",
-                        "image": null
-                    },
-                    "nextMatchID": 28,
-                    "votes": {
-                        "Voter 1": 2,
-                        "Voter 2": 2,
-                        "Voter 3": 1,
-                        "Voter 4": 2,
-                        "Voter 5": 2
-                    },
-                    "nextStatus": 1
-                },
-                {
-                    "id": 26,
-                    "winner": 1,
-                    "team1": {
-                        "id": 18,
-                        "name": "Lion King",
-                        "image": null
-                    },
-                    "team2": {
-                        "id": 21,
-                        "name": "Howl's Moving Castle",
-                        "image": null
-                    },
-                    "nextMatchID": 29,
-                    "votes": {
-                        "Voter 1": 1,
-                        "Voter 2": 1,
-                        "Voter 3": 2,
-                        "Voter 4": 1,
-                        "Voter 5": 2
-                    },
-                    "nextStatus": 0
-                },
-                {
-                    "id": 27,
-                    "winner": 2,
-                    "team1": {
-                        "id": 22,
-                        "name": "Puss in Boots",
+                        "position": 3,
+                        "name": "Green",
                         "image": null
                     },
                     "team2": {
                         "id": 1,
-                        "name": "Cars 1",
+                        "position": 1,
+                        "name": "Orange",
                         "image": null
                     },
-                    "nextMatchID": 29,
+                    "nextMatchID": 7,
                     "votes": {
-                        "Voter 1": 1,
-                        "Voter 2": 2,
-                        "Voter 3": 2,
-                        "Voter 4": 2,
-                        "Voter 5": 1
+                        "Luke": 1,
+                        "Maya": 1,
+                        "Coby": 2
                     },
-                    "nextStatus": 1
+                    "nextStatus": 0
                 }
             ],
-            "nextRound": {
-                "roundID": 3,
-                "matches": [
-                    {
-                        "id": 28,
-                        "winner": 1,
-                        "team1": {
-                            "id": 0,
-                            "name": "Spiderverse",
-                            "image": null
-                        },
-                        "team2": {
-                            "id": 3,
-                            "name": "Moana",
-                            "image": null
-                        },
-                        "nextMatchID": 30,
-                        "votes": {
-                            "Voter 1": 2,
-                            "Voter 2": 1,
-                            "Voter 3": 1,
-                            "Voter 4": 1,
-                            "Voter 5": 2
-                        },
-                        "nextStatus": 0
-                    },
-                    {
-                        "id": 29,
-                        "winner": 1,
-                        "team1": {
-                            "id": 18,
-                            "name": "Lion King",
-                            "image": null
-                        },
-                        "team2": {
-                            "id": 1,
-                            "name": "Cars 1",
-                            "image": null
-                        },
-                        "nextMatchID": 30,
-                        "votes": {
-                            "Voter 1": 1,
-                            "Voter 2": 1,
-                            "Voter 3": 1,
-                            "Voter 4": 2,
-                            "Voter 5": 2
-                        },
-                        "nextStatus": 1
-                    }
-                ],
-                "nextRound": {
-                    "roundID": 4,
-                    "matches": [
-                        {
-                            "id": 30,
-                            "winner": 1,
-                            "team1": {
-                                "id": 0,
-                                "name": "Spiderverse",
-                                "image": null
-                            },
-                            "team2": {
-                                "id": 18,
-                                "name": "Lion King",
-                                "image": null
-                            },
-                            "nextMatchID": 31,
-                            "votes": {
-                                "Voter 1": 1,
-                                "Voter 2": 1,
-                                "Voter 3": 1,
-                                "Voter 4": 2,
-                                "Voter 5": 2
-                            },
-                            "nextStatus": 0
-                        }
-                    ],
-                    "nextRound": null
-                }
-            }
+            "nextRound": null
         }
     }
 }
-
-export const popArtists = {
+const nflBracketObject = {
     "roundID": 0,
     "matches": [
         {
             "id": 0,
-            "winner": 1,
-            "team1": {
-                "id": 0,
-                "name": "Dua Lipa",
-                "image": null
-            },
-            "team2": {
-                "id": 7,
-                "name": "Taylor Swift",
-                "image": null
-            },
+            "winner": null,
+            "team1": null,
+            "team2": null,
             "nextMatchID": 4,
             "votes": {
-                "Luke": 2,
-                "Jake": 1,
-                "Aidan": 1
+                "Voter 1": 0,
+                "Voter 2": 0,
+                "Voter 3": 0
             },
             "nextStatus": 0
         },
         {
             "id": 1,
-            "winner": 2,
+            "winner": 1,
             "team1": {
                 "id": 3,
-                "name": "Ariana Grande",
+                "position": 3,
+                "name": "Rams",
                 "image": null
             },
             "team2": {
                 "id": 4,
-                "name": "Katy Perry",
+                "position": 4,
+                "name": "Vikings",
                 "image": null
             },
             "nextMatchID": 4,
             "votes": {
-                "Luke": 2,
-                "Jake": 2,
-                "Aidan": 1
+                "Voter 1": 1,
+                "Voter 2": 1,
+                "Voter 3": 1
             },
             "nextStatus": 1
         },
@@ -866,40 +222,34 @@ export const popArtists = {
             "winner": 2,
             "team1": {
                 "id": 2,
-                "name": "Beyonce",
+                "position": 2,
+                "name": "Buccaneers",
                 "image": null
             },
             "team2": {
                 "id": 5,
-                "name": "Rihanna",
+                "position": 5,
+                "name": "Commanders",
                 "image": null
             },
             "nextMatchID": 5,
             "votes": {
-                "Luke": 1,
-                "Jake": 2,
-                "Aidan": 2
+                "Voter 1": 2,
+                "Voter 2": 2,
+                "Voter 3": 1
             },
             "nextStatus": 0
         },
         {
             "id": 3,
-            "winner": 1,
-            "team1": {
-                "id": 1,
-                "name": "Adele",
-                "image": null
-            },
-            "team2": {
-                "id": 6,
-                "name": "Olivia Rodrigo",
-                "image": null
-            },
+            "winner": null,
+            "team1": null,
+            "team2": null,
             "nextMatchID": 5,
             "votes": {
-                "Luke": 1,
-                "Jake": 1,
-                "Aidan": 1
+                "Voter 1": 0,
+                "Voter 2": 0,
+                "Voter 3": 0
             },
             "nextStatus": 1
         }
@@ -912,40 +262,44 @@ export const popArtists = {
                 "winner": 1,
                 "team1": {
                     "id": 0,
-                    "name": "Dua Lipa",
+                    "position": 0,
+                    "name": "Lions",
                     "image": null
                 },
                 "team2": {
-                    "id": 4,
-                    "name": "Katy Perry",
+                    "id": 3,
+                    "position": 3,
+                    "name": "Rams",
                     "image": null
                 },
                 "nextMatchID": 6,
                 "votes": {
-                    "Luke": 2,
-                    "Jake": 1,
-                    "Aidan": 1
+                    "Voter 1": 1,
+                    "Voter 2": 1,
+                    "Voter 3": 1
                 },
                 "nextStatus": 0
             },
             {
                 "id": 5,
-                "winner": 1,
+                "winner": 2,
                 "team1": {
                     "id": 5,
-                    "name": "Rihanna",
+                    "position": 5,
+                    "name": "Commanders",
                     "image": null
                 },
                 "team2": {
                     "id": 1,
-                    "name": "Adele",
+                    "position": 1,
+                    "name": "Eagles",
                     "image": null
                 },
                 "nextMatchID": 6,
                 "votes": {
-                    "Luke": 2,
-                    "Jake": 1,
-                    "Aidan": 1
+                    "Voter 1": 2,
+                    "Voter 2": 2,
+                    "Voter 3": 2
                 },
                 "nextStatus": 1
             }
@@ -955,22 +309,24 @@ export const popArtists = {
             "matches": [
                 {
                     "id": 6,
-                    "winner": 1,
+                    "winner": 2,
                     "team1": {
                         "id": 0,
-                        "name": "Dua Lipa",
+                        "position": 0,
+                        "name": "Lions",
                         "image": null
                     },
                     "team2": {
-                        "id": 5,
-                        "name": "Rihanna",
+                        "id": 1,
+                        "position": 1,
+                        "name": "Eagles",
                         "image": null
                     },
                     "nextMatchID": 7,
                     "votes": {
-                        "Luke": 2,
-                        "Jake": 1,
-                        "Aidan": 1
+                        "Voter 1": 2,
+                        "Voter 2": 2,
+                        "Voter 3": 2
                     },
                     "nextStatus": 0
                 }
@@ -979,403 +335,8 @@ export const popArtists = {
         }
     }
 }
+export const nflBracket = new Bracket(nflBracketObject.roundID, nflBracketObject.matches, nflBracketObject.nextRound);
 
-export const voters = [
-    {
-        "name": "Luke"
-    },
-    {
-        "name": "Jake"
-    },
-    {
-        "name": "Aidan"
-    }
-]
-
-export const sevenVotersBracket = {
-    "roundID": 0,
-    "matches": [
-        {
-            "id": 0,
-            "winner": 1,
-            "team1": {
-                "id": 0,
-                "name": "Spiderverse 1",
-                "image": null
-            },
-            "team2": {
-                "id": 7,
-                "name": "Storks",
-                "image": null
-            },
-            "nextMatchID": 4,
-            "votes": {
-                "Luke": 1,
-                "Jake": 1,
-                "Aidan": 1,
-                "Zach": 1,
-                "Gabe": 1,
-                "Ivan": 2,
-                "Connor": 1
-            },
-            "nextStatus": 0
-        },
-        {
-            "id": 1,
-            "winner": 1,
-            "team1": {
-                "id": 3,
-                "name": "Cars",
-                "image": null
-            },
-            "team2": {
-                "id": 4,
-                "name": "Shrek",
-                "image": null
-            },
-            "nextMatchID": 4,
-            "votes": {
-                "Luke": 2,
-                "Jake": 2,
-                "Aidan": 1,
-                "Zach": 1,
-                "Gabe": 2,
-                "Ivan": 1,
-                "Connor": 1
-            },
-            "nextStatus": 1
-        },
-        {
-            "id": 2,
-            "winner": 1,
-            "team1": {
-                "id": 2,
-                "name": "Moana",
-                "image": null
-            },
-            "team2": {
-                "id": 5,
-                "name": "Spirited Away",
-                "image": null
-            },
-            "nextMatchID": 5,
-            "votes": {
-                "Luke": 2,
-                "Jake": 2,
-                "Aidan": 1,
-                "Zach": 1,
-                "Gabe": 2,
-                "Ivan": 1,
-                "Connor": 1
-            },
-            "nextStatus": 0
-        },
-        {
-            "id": 3,
-            "winner": 1,
-            "team1": {
-                "id": 1,
-                "name": "Puss in Boots 2",
-                "image": null
-            },
-            "team2": {
-                "id": 6,
-                "name": "Frozen",
-                "image": null
-            },
-            "nextMatchID": 5,
-            "votes": {
-                "Luke": 1,
-                "Jake": 1,
-                "Aidan": 1,
-                "Zach": 2,
-                "Gabe": 1,
-                "Ivan": 2,
-                "Connor": 2
-            },
-            "nextStatus": 1
-        }
-    ],
-    "nextRound": {
-        "roundID": 1,
-        "matches": [
-            {
-                "id": 4,
-                "winner": 1,
-                "team1": {
-                    "id": 0,
-                    "name": "Spiderverse 1",
-                    "image": null
-                },
-                "team2": {
-                    "id": 3,
-                    "name": "Cars",
-                    "image": null
-                },
-                "nextMatchID": 6,
-                "votes": {
-                    "Luke": 1,
-                    "Jake": 1,
-                    "Aidan": 1,
-                    "Zach": 2,
-                    "Gabe": 1,
-                    "Ivan": 1,
-                    "Connor": 2
-                },
-                "nextStatus": 0
-            },
-            {
-                "id": 5,
-                "winner": 1,
-                "team1": {
-                    "id": 2,
-                    "name": "Moana",
-                    "image": null
-                },
-                "team2": {
-                    "id": 1,
-                    "name": "Puss in Boots 2",
-                    "image": null
-                },
-                "nextMatchID": 6,
-                "votes": {
-                    "Luke": 1,
-                    "Jake": 2,
-                    "Aidan": 2,
-                    "Zach": 1,
-                    "Gabe": 2,
-                    "Ivan": 1,
-                    "Connor": 1
-                },
-                "nextStatus": 1
-            }
-        ],
-        "nextRound": {
-            "roundID": 2,
-            "matches": [
-                {
-                    "id": 6,
-                    "winner": 1,
-                    "team1": {
-                        "id": 0,
-                        "name": "Spiderverse 1",
-                        "image": null
-                    },
-                    "team2": {
-                        "id": 2,
-                        "name": "Moana",
-                        "image": null
-                    },
-                    "nextMatchID": 7,
-                    "votes": {
-                        "Luke": 1,
-                        "Jake": 1,
-                        "Aidan": 1,
-                        "Zach": 2,
-                        "Gabe": 1,
-                        "Ivan": 1,
-                        "Connor": 1
-                    },
-                    "nextStatus": 0
-                }
-            ],
-            "nextRound": null
-        }
-    }
-}
-
-export const fiveVoters = [
-    {
-        "name": "Luke"
-    },
-    {
-        "name": "Jake"
-    },
-    {
-        "name": "Aidan"
-    },
-    {
-        "name": "Zach"
-    },
-    {
-        "name": "Gabe"
-    }
-]
-
-export const videoGames = {
-    "roundID": 0,
-    "matches": [
-        {
-            "id": 0,
-            "winner": 1,
-            "team1": {
-                "id": 0,
-                "name": "Minecraft",
-                "image": null
-            },
-            "team2": {
-                "id": 7,
-                "name": "Zelda",
-                "image": null
-            },
-            "nextMatchID": 4,
-            "votes": {
-                "Luke": 1,
-                "Jake": 1,
-                "Aidan": 1,
-                "Zach": 1,
-                "Gabe": 2
-            },
-            "nextStatus": 0
-        },
-        {
-            "id": 1,
-            "winner": 1,
-            "team1": {
-                "id": 3,
-                "name": "Super Smash Bros",
-                "image": null
-            },
-            "team2": {
-                "id": 4,
-                "name": "Fornite",
-                "image": null
-            },
-            "nextMatchID": 4,
-            "votes": {
-                "Luke": 2,
-                "Jake": 2,
-                "Aidan": 1,
-                "Zach": 1,
-                "Gabe": 1
-            },
-            "nextStatus": 1
-        },
-        {
-            "id": 2,
-            "winner": 1,
-            "team1": {
-                "id": 2,
-                "name": "Mario Kart",
-                "image": null
-            },
-            "team2": {
-                "id": 5,
-                "name": "Valorant",
-                "image": null
-            },
-            "nextMatchID": 5,
-            "votes": {
-                "Luke": 2,
-                "Jake": 2,
-                "Aidan": 1,
-                "Zach": 1,
-                "Gabe": 1
-            },
-            "nextStatus": 0
-        },
-        {
-            "id": 3,
-            "winner": 1,
-            "team1": {
-                "id": 1,
-                "name": "Overwatch",
-                "image": null
-            },
-            "team2": {
-                "id": 6,
-                "name": "Civ 6",
-                "image": null
-            },
-            "nextMatchID": 5,
-            "votes": {
-                "Luke": 2,
-                "Jake": 1,
-                "Aidan": 1,
-                "Zach": 1,
-                "Gabe": 2
-            },
-            "nextStatus": 1
-        }
-    ],
-    "nextRound": {
-        "roundID": 1,
-        "matches": [
-            {
-                "id": 4,
-                "winner": 1,
-                "team1": {
-                    "id": 0,
-                    "name": "Minecraft",
-                    "image": null
-                },
-                "team2": {
-                    "id": 3,
-                    "name": "Super Smash Bros",
-                    "image": null
-                },
-                "nextMatchID": 6,
-                "votes": {
-                    "Luke": 1,
-                    "Jake": 1,
-                    "Aidan": 2,
-                    "Zach": 2,
-                    "Gabe": 1
-                },
-                "nextStatus": 0
-            },
-            {
-                "id": 5,
-                "winner": 1,
-                "team1": {
-                    "id": 2,
-                    "name": "Mario Kart",
-                    "image": null
-                },
-                "team2": {
-                    "id": 1,
-                    "name": "Overwatch",
-                    "image": null
-                },
-                "nextMatchID": 6,
-                "votes": {
-                    "Luke": 1,
-                    "Jake": 2,
-                    "Aidan": 2,
-                    "Zach": 1,
-                    "Gabe": 1
-                },
-                "nextStatus": 1
-            }
-        ],
-        "nextRound": {
-            "roundID": 2,
-            "matches": [
-                {
-                    "id": 6,
-                    "winner": 1,
-                    "team1": {
-                        "id": 0,
-                        "name": "Minecraft",
-                        "image": null
-                    },
-                    "team2": {
-                        "id": 2,
-                        "name": "Mario Kart",
-                        "image": null
-                    },
-                    "nextMatchID": 7,
-                    "votes": {
-                        "Luke": 1,
-                        "Jake": 1,
-                        "Aidan": 1,
-                        "Zach": 1,
-                        "Gabe": 1
-                    },
-                    "nextStatus": 0
-                }
-            ],
-            "nextRound": null
-        }
-    }
-}
+export const colorsBracket = new Bracket(colorsBracketObject.roundID, colorsBracketObject.matches, colorsBracketObject.nextRound);
+parseMatchArrRecursive(colorsBracket)
+// console.log(colorsBracket.matchesToTeams())

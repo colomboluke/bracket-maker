@@ -1,6 +1,6 @@
 import "./PlayPage.css"
-import {FaPrint} from "react-icons/fa";
-import React from "react";
+import {FaChevronDown, FaChevronUp, FaPrint} from "react-icons/fa";
+import React, {useState} from "react";
 
 export default function PlaySidebar({
                                         setShowPrintMenu,
@@ -8,8 +8,15 @@ export default function PlaySidebar({
                                         totalMatches,
                                         onReset,
                                         onShowChart,
-                                        showInsights
+                                        showInsights, requestExport, bracketTitle
                                     }) {
+    const [showExportForm, setShowExportForm] = useState(false);
+    const [bracketID, setBracketID] = useState(bracketTitle.toString());
+    const [asPublic, setAsPublic] = useState(false);
+    function handleSubmit(e) {
+        e.preventDefault();
+        requestExport(bracketID, asPublic);
+    }
 
     const bracketComplete = matchesComplete >= totalMatches
 
@@ -20,7 +27,9 @@ export default function PlaySidebar({
 
     const insightsBtnText = showInsights ? "Hide Insights" : "Show Insights";
 
-    /*    TODO: mechanism to hide/show this screen*/
+    const dropdownBtn = showExportForm ? <FaChevronUp className={"import-chevron"}/> :
+                                  <FaChevronDown className={"import-chevron"}/>
+
     return (
         <div className={"play-sidebar"}>
             <div className={"progress-cont"}>
@@ -36,11 +45,28 @@ export default function PlaySidebar({
                     className={"print-btn-icon"}/></button>
                 <button className={"reset-btn"} onClick={onReset}>Reset</button>
             </div>
-            {!bracketComplete && <span className={"instruction-text"}>Click on a match to get started. Vote by clicking under a column, or by using the arrow keys.</span>}
-            {bracketComplete && <button onClick={() => onShowChart()}
-                                        className={"insights-btn"}>{insightsBtnText}</button>}
-            {/*For ease of testing*/}
-            {/*<button onClick={() => onShowChart()} className={"insights-btn"}>{insightsBtnText}</button>*/}
+            {!bracketComplete && <span className={"instruction-text"}>Click on a match to get started</span>}
+            {bracketComplete && <button onClick={() => onShowChart()} className={"insights-btn"}>{insightsBtnText}</button>}
+
+            <div className={"export-cont"}>
+                <button onClick={() => setShowExportForm(!showExportForm)} className={"show-export-btn"}>Export Bracket {dropdownBtn}</button>
+                {showExportForm && (
+                    <form onSubmit={handleSubmit} className={"export-form"}>
+                        <div className={"import-form-row"}>
+                            <span>Bracket ID: </span>
+                            <input type="text" name={"bracketID"} value={bracketID}
+                                   onChange={e => setBracketID(e.target.value)}
+                                   className={"import-form-text-input"}/>
+                        </div>
+                        <div className={"import-form-row"}>
+                            <span>Set public? </span>
+                            <input type="checkbox" name={"asTemplate"}
+                                   checked={asPublic} onChange={e => setAsPublic(e.target.checked)} className={"import-form-checkbox"}/>
+                        </div>
+                        <button type={"submit"} className={"import-submit"}>Export</button>
+                    </form>
+                )}
+            </div>
         </div>
     )
 }

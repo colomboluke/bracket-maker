@@ -10,7 +10,6 @@
     border-radius: 5px;
     border: none;
     font-size: 16px;
-
 }
 
 .dropdown-main {
@@ -155,4 +154,34 @@ th, td {
     top: -20px;
     right: -150px;
     z-index: 1;
+}
+
+.export-cont {
+    display: flex;
+    flex-flow: column;
+    gap: 10px;
+}
+
+.show-export-btn {
+    background-color: lightgray;
+    color: var(--background2);
+    font-weight: bold;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+    height: fit-content;
+    width: 95%;
+    padding: 5px 10px;
+    margin: auto;
+
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.export-form {
+    display: flex;
+    flex-flow: column;
+    gap: 10px;
 }

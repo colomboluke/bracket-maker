@@ -3,7 +3,7 @@ import {useNavigate, useLocation} from "react-router-dom";
 import "./Setup.css";
 import PreviewBracket from "../PreviewBracket/PreviewBracket";
 import Settings from "./Settings";
-import Team from "../BracketAlgos/Team";
+import Team from "../BracketAlgos/Team.mjs";
 import TeamAddGrid from "../TeamVoterAdd/TeamAddGrid";
 import VoterAddGrid from "../TeamVoterAdd/VoterAddGrid";
 import DragAndDrop from "./DragAndDrop";
@@ -156,7 +156,7 @@ export default function SetupPage({
     // Whether the bracket is ready to start
     // Needs to have 2+ teams, and an odd number of voters greater than 1
     function checkStartReqs() {
-        return teams.length >= 2 && (voters.length % 2 !== 0);
+        return teams.length >= 2 && (voters.length % 2 !== 0) && title.length > 0;
     }
 
     let allowToStart = checkStartReqs();
@@ -176,6 +176,8 @@ export default function SetupPage({
                 alert("A bracket needs at least two teams.");
             } else if (!(voters.length % 2 !== 0)) {
                 alert("A voting bracket needs an odd number of voters, in order to solve ties.");
+            } else if (title.length < 1) {
+                alert("Bracket needs a title.");
             }
         }
     }
@@ -205,12 +207,12 @@ export default function SetupPage({
                           numVoters={voters.length} createVoter={createVoter}
                           removeLastVoter={removeLastVoter} title={title}
                           setTitle={setTitle} desc={desc} setDesc={setDesc}/>
-                {/*<button onClick={() => {*/}
-                {/*    console.log("Teams:", teams);*/}
-                {/*    console.log("Voters:", voters);*/}
-                {/*    console.log("Bracket:", bracket);*/}
-                {/*}}>Testing button*/}
-                {/*</button>*/}
+                <button onClick={() => {
+                    console.log("Teams:", teams);
+                    console.log("Voters:", voters);
+                    console.log("Bracket:", bracket);
+                }}>Testing button
+                </button>
                 {/*<button onClick={() => {*/}
                 {/*    for (let i = 0; i < teams.length; i++) {*/}
                 {/*        bracket.getTeam(i);*/}

@@ -16,7 +16,7 @@ export default function PlayPage({
                                      onVote,
                                      getVoteCounts,
                                      resetVotes,
-                                     resetBracket
+                                     resetBracket, requestExport
                                  }) {
     // Track the currently selected match using its ID
     const [selectedMatchID, setSelectedMatchID] = useState(null);
@@ -92,9 +92,10 @@ export default function PlayPage({
             {/*</div>*/}
             <PlaySidebar setShowPrintMenu={setShowPrintMenu} matchesComplete={completeMatches}
                          totalMatches={totalMatches} onReset={handleResetWholeBracket}
-                         onShowChart={handleShowChartClick} showInsights={showInsights}/>
+                         onShowChart={handleShowChartClick} showInsights={showInsights}
+                         requestExport={requestExport} bracketTitle={title}/>
             {/*<input type="color" value={"pick color"}/>*/}
-            {/*<button onClick={() => console.log(bracket, voters)}>Log bracket</button>*/}
+            <button onClick={() => console.log(bracket, voters)}>Log bracket</button>
 
             {/*This gets the ref because this is what will be printed*/}
             <PlayableBracket bracket={bracket} onClick={handleMatchClick}

@@ -1,13 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import {Routes, Route} from 'react-router-dom';
+import {Routes, Route, useNavigate} from 'react-router-dom';
 import constructBracket from "../BracketAlgos/ConstructBracket";
 import Header from "../Header/Header";
 import HomePage from "../Home/HomePage";
 import SetupPage from "../Setup/SetupPage";
 import IdeasPage from "../Ideas/IdeasPage";
 import PlayPage from "../Play/PlayPage";
-import {getVoteCounts} from "../Utils.mjs";
-import {colorsBracket, videoGames} from "../BracketAlgos/TestJSON.mjs";
+import {getNumRounds, getVoteCounts} from "../Utils.mjs";
+import {supabase} from "./Client";
+import {
+    exportBracket,
+    getVoterInfo,
+    importBracket,
+    parseMatchArrRecursive
+} from "../BracketAlgos/DBConnect.mjs";
+import {colorsBracket} from "../BracketAlgos/TestJSON.mjs";
 
 /**
  * Top level component
@@ -24,6 +31,7 @@ function App() {
     // constructBracket(): takes teams array and turns it into a bracket
     // Bracket is state because it changes over time from user input (vote tallies)
     const [bracket, setBracket] = useState(() => constructBracket(teams));
+    // Update bracket when teams get changed
     useEffect(() => {
         setBracket(constructBracket(teams));
     }, [teams]);
@@ -116,10 +124,93 @@ function App() {
     }
 
 
+    // ~~~ Backend Operations ~~~
+
+    // Import a bracket template
+    const navigate = useNavigate();
+    function handleImport(bracketID, asTemplate) {
+        const id = bracketID.split("#")[1]
+        fetchBracket(id, asTemplate)
+    }
+
+    async function fetchBracket(bracketID, asTemplate) {
+        // Select a bracket matching the ID
+        const {data, error} = await supabase
+            // .from("bracket").select()
+            .rpc('get_bracket', {p_id: bracketID})
+        if (error) {
+            alert(`Error fetching bracket with id ${bracketID}`)
+        }
+        const importResult = importBracket(data);
+        const bracket = importResult[1];
+        parseMatchArrRecursive(bracket); //turn JSON into actual objects
+
+        // Set the bracket (& metadata) state to the info that was just fetched
+        setBracket(bracket);
+        setTitle(importResult[0].title);
+        setDesc(importResult[0].desc);
+
+        // Handle whether this is a template or not
+        if (asTemplate) {
+            setTeams(bracket.matchesToTeams());
+            setVoters([]);
+            navigate("/create");
+        } else {
+            // NOTE: shouldn't matter what teams state is here. Could look into this
+            setVoters(getVoterInfo(bracket));
+            navigate("/play");
+        }
+    }
+
+    async function handleExport(bracketID, asPublic) {
+        //Insert rounds recursively, get the ID of the first one
+        const firstRound = await insertRoundRecursive(bracket);
+
+        //Insert the bracket record itself
+        const {data, error} = await supabase
+            .from('bracket').insert({
+                title: bracketID,
+                b_desc: desc,
+                public: asPublic,
+                first_round_id: firstRound.id
+                                  }).select("id")
+        if (error) {
+            console.log(error)
+            alert("Error exporting bracket.");
+        } else {
+            alert(`Bracket successfully exported. ID: ${bracketID.concat("#").concat(data[0].id)}`);
+        }
+    }
+
+    async function insertRoundRecursive(round) {
+        let nextRoundID = null;
+        if (round.nextRound) { //insert next round before this one (insert back to front)
+            const insertedNextRound = await insertRoundRecursive(round.nextRound);
+            if (!insertedNextRound) {
+                alert("Failed to insert round.");
+            }
+            nextRoundID = insertedNextRound.id;
+        }
+        const {data, error} = await supabase
+            .from('round').insert({
+                                      round_num: round.roundID,
+                                      matches: round.matches,
+                                      next_round_id: nextRoundID
+                                  })
+            .select()
+        if (error) {
+            console.log(error)
+            alert("Error with exporting bracket.");
+            return null;
+        }
+        return data[0]; //return the inserted row
+    }
+
     return (
         <Routes>
-            <Route element={<Header title={title} resetBracketVotes={resetAllBracketVotes}/>}>
-                <Route path="/" element={<HomePage/>}/>
+            <Route element={<Header title={title} resetBracketVotes={resetAllBracketVotes}
+                                    bracketExists={bracket.matches.length > 0}/>}>
+                <Route path="/" element={<HomePage requestImport={handleImport}/>}/>
                 <Route path="create" element={<SetupPage title={title} setTitle={setTitle}
                                                          desc={desc} setDesc={setDesc}
                                                          teams={teams} setTeams={setTeams}
@@ -128,13 +219,15 @@ function App() {
                                                          bracket={bracket}
                                                          onStart={handleInitializeVotes}
                                                          reset={resetState}
-                setTeamImage={setTeamImage}/>}/>
+                                                         setTeamImage={setTeamImage}/>}/>
                 <Route path="help" element={<IdeasPage/>}/>
                 <Route path="play" element={<PlayPage title={title} bracket={bracket}
                                                       voters={voters}
                                                       onVote={handleVote}
                                                       getVoteCounts={getVoteCounts}
-                                                      resetVotes={resetVotes} resetBracket={resetAllBracketVotes}/>}/>
+                                                      resetVotes={resetVotes}
+                                                      resetBracket={resetAllBracketVotes}
+                                                      requestExport={handleExport}/>}/>
             </Route>
         </Routes>
     );

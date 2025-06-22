@@ -1,3 +1,5 @@
+import {isPowerOfTwo} from "../Utils.mjs";
+
 export default class Bracket {
     /**
      * @param roundID Int
@@ -8,6 +10,40 @@ export default class Bracket {
         this.roundID = roundID;
         this.matches = matches;
         this.nextRound = nextRound;
+    }
+
+    // Turns the *first round's matches into a flat array of Teams
+    //  *plus second round if there are byes in the first
+    matchesToTeams() {
+        const teams = []
+        let areByes = false;
+        this.matches.forEach(match => {
+            if (match.team1) {
+                teams.push(match.team1)
+            } else {
+                areByes = true
+            }
+            if (match.team2) {
+                teams.push(match.team2);
+            } else {
+                areByes = true;
+            }
+        })
+        //Add in teams who got byes for the first round
+        const teamIDList = teams.map(team => team.id);
+        if (areByes) {
+            this.nextRound.matches.forEach(match => {
+                if (match.team1 && !teamIDList.includes(match.team1.id)) {
+                    teams.push(match.team1)
+                }
+                if (match.team2 && !teamIDList.includes(match.team2.id)) {
+                    teams.push(match.team2)
+                }
+            })
+        }
+        teams.sort((a, b) => a.position - b.position);
+        // console.log("Matches to teams result: ", teams)
+        return teams;
     }
 
     // Creates a shallow copy, mimicking the spread operator
@@ -125,6 +161,7 @@ export default class Bracket {
     handleMatchReset(targetID) {
         // Reset the target match's winner
         const oldMatch = this.getMatch(targetID);
+        // console.log("Get match result: ", oldMatch)
         // TODO: why does this work even if I don't reset votes here?
         this.setMatch(oldMatch.cleanCopy({winner: null}));
 

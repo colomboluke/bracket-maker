@@ -7,11 +7,11 @@
 // (array index) should be called with team.position. Anything that relies on bracket functions
 // like getTeam should be called with team.id
 export default class Team {
-    constructor(id, name, position) {
+    constructor(id, name, position, image) {
         this.id = id;
         this.position = position;
         this.name = name;
-        this.image = null;
+        this.image = image;
     }
     setImage(image) {
         this.image = image;

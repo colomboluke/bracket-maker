@@ -12,6 +12,15 @@ export function matchupSafeGet(object, property) {
     return "";
 }
 
+// Return how many total rounds are in this bracket
+export function getNumRounds(bracket) {
+    if (bracket.nextRound) {
+        return getNumRounds(bracket.nextRound); //not at end yet
+    } else { //reached the end
+        return bracket.roundID;
+    }
+}
+
 // Given a votes object (record of who voted for what), tally the votes for each team
 export function getVoteCounts(votesObj) {
     let counts = {team1: 0, team2: 0}
@@ -38,4 +47,9 @@ export function filterOutByes(listOfMatches) {
 // Turns two strings into one, to use as a key
 export function convertToStringKey(name1, name2) {
     return `${name1}${name2.slice(0,1).toUpperCase().concat(name2.slice(1))}`
+}
+
+// Checks if a given number is a power of 2 or not
+export function isPowerOfTwo(x) {
+    return (Math.log(x) / Math.log(2)) % 1 === 0;
 }
