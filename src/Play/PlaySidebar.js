@@ -1,5 +1,5 @@
 import "./PlayPage.css"
-import {FaPrint} from "react-icons/fa";
+import {FaChevronDown, FaChevronUp, FaPrint} from "react-icons/fa";
 import React, {useState} from "react";
 
 export default function PlaySidebar({
@@ -27,6 +27,9 @@ export default function PlaySidebar({
 
     const insightsBtnText = showInsights ? "Hide Insights" : "Show Insights";
 
+    const dropdownBtn = showExportForm ? <FaChevronUp className={"import-chevron"}/> :
+                                  <FaChevronDown className={"import-chevron"}/>
+
     return (
         <div className={"play-sidebar"}>
             <div className={"progress-cont"}>
@@ -45,22 +48,25 @@ export default function PlaySidebar({
             {!bracketComplete && <span className={"instruction-text"}>Click on a match to get started</span>}
             {bracketComplete && <button onClick={() => onShowChart()} className={"insights-btn"}>{insightsBtnText}</button>}
 
-            <button onClick={() => setShowExportForm(!showExportForm)}>Export Bracket</button>
-            {showExportForm && (
-                <form onSubmit={handleSubmit}>
-                    <div className={"import-form-row"}>
-                        <span>Bracket ID: </span>
-                        <input type="text" name={"bracketID"} value={bracketID}
-                               onChange={e => setBracketID(e.target.value)}/>
-                    </div>
-                    <div className={"import-form-row"}>
-                        <span>Set public? </span>
-                        <input type="checkbox" name={"asTemplate"}
-                               checked={asPublic} onChange={e => setAsPublic(e.target.checked)}/>
-                    </div>
-                    <button type={"submit"}>Export</button>
-                </form>
-            )}
+            <div className={"export-cont"}>
+                <button onClick={() => setShowExportForm(!showExportForm)} className={"show-export-btn"}>Export Bracket {dropdownBtn}</button>
+                {showExportForm && (
+                    <form onSubmit={handleSubmit} className={"export-form"}>
+                        <div className={"import-form-row"}>
+                            <span>Bracket ID: </span>
+                            <input type="text" name={"bracketID"} value={bracketID}
+                                   onChange={e => setBracketID(e.target.value)}
+                                   className={"import-form-text-input"}/>
+                        </div>
+                        <div className={"import-form-row"}>
+                            <span>Set public? </span>
+                            <input type="checkbox" name={"asTemplate"}
+                                   checked={asPublic} onChange={e => setAsPublic(e.target.checked)} className={"import-form-checkbox"}/>
+                        </div>
+                        <button type={"submit"} className={"import-submit"}>Export</button>
+                    </form>
+                )}
+            </div>
         </div>
     )
 }

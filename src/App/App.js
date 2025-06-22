@@ -36,97 +36,6 @@ function App() {
         setBracket(constructBracket(teams));
     }, [teams]);
 
-    async function fetchBracket(bracketID, asTemplate) {
-        // Select a bracket matching the ID
-        const {data, error} = await supabase
-            // .from("bracket").select()
-            .rpc('get_bracket', {p_id: bracketID})
-        if (error) {
-            alert(`Error fetching bracket with id ${bracketID}`)
-        }
-        console.log("Imported bracket (as SQL): ", data)
-        const importResult = importBracket(data);
-        const bracket = importResult[1];
-        parseMatchArrRecursive(bracket); //turn JSON into actual objects
-        console.log("Imported bracket (as JSON): ", bracket);
-
-        // Set the bracket (& metadata) state to the info that was just fetched
-        setBracket(bracket);
-        setTitle(importResult[0].title);
-        setDesc(importResult[0].desc);
-
-        // Handle whether this is a template or not
-        if (asTemplate) {
-            console.log("Creating a bracket template")
-            setTeams(bracket.matchesToTeams());
-            setVoters([]);
-            navigate("/create");
-        } else {
-            console.log("Creating full bracket: ")
-            // NOTE: shouldn't matter what teams state is here. Could look into this
-            setVoters(getVoterInfo(bracket));
-            navigate("/play");
-        }
-    }
-
-    // Import a bracket template
-    const navigate = useNavigate();
-    function handleImport(bracketID, asTemplate) {
-        console.log("Bracket ID to be imported: ", bracketID)
-        const id = bracketID.split("#")[1]
-        fetchBracket(id, asTemplate)
-    }
-
-    async function handleExport(bracketID, asPublic) {
-        console.log("Bracket ID to be exported: ", bracketID, asPublic);
-        console.log("Bracket: ", bracket);
-
-        //Insert rounds recursively, get the ID of the first one
-        const firstRound = await insertRoundRecursive(bracket);
-        console.log("First round: ", firstRound)
-
-        //Insert the bracket record itself
-        const {data, error} = await supabase
-            .from('bracket').insert({
-                title: bracketID,
-                b_desc: desc,
-                public: asPublic,
-                first_round_id: firstRound.id
-                                  }).select("id")
-        if (error) {
-            console.log(error)
-            alert("Error exporting bracket.");
-        } else {
-            alert(`Bracket successfully exported. ID: ${bracketID.concat("#").concat(data[0].id)}`);
-        }
-    }
-
-    async function insertRoundRecursive(round) {
-        console.log(`Reached round ${round.roundID}, matches: `, round.matches)
-        let nextRoundID = null;
-        if (round.nextRound) { //insert next round before this one (insert back to front)
-            const insertedNextRound = await insertRoundRecursive(round.nextRound);
-            if (!insertedNextRound) {
-                alert("Failed to insert round.");
-            }
-            nextRoundID = insertedNextRound.id;
-        }
-        const {data, error} = await supabase
-            .from('round').insert({
-                                      round_num: round.roundID,
-                                      matches: round.matches,
-                                      next_round_id: nextRoundID
-                                  })
-            .select()
-        if (error) {
-            console.log(error)
-            alert("Error with exporting bracket.");
-            return null;
-        }
-        console.log("Just inserted: ", data[0]);
-        return data[0]; //return the inserted row
-    }
-
     // ~~~ Functions to update bracket ~~~
 
     function handleInitializeVotes() {
@@ -212,6 +121,89 @@ function App() {
         console.log("Setting image of team:", team)
         team.setImage(image);
         setBracket(nextBracket);
+    }
+
+
+    // ~~~ Backend Operations ~~~
+
+    // Import a bracket template
+    const navigate = useNavigate();
+    function handleImport(bracketID, asTemplate) {
+        const id = bracketID.split("#")[1]
+        fetchBracket(id, asTemplate)
+    }
+
+    async function fetchBracket(bracketID, asTemplate) {
+        // Select a bracket matching the ID
+        const {data, error} = await supabase
+            // .from("bracket").select()
+            .rpc('get_bracket', {p_id: bracketID})
+        if (error) {
+            alert(`Error fetching bracket with id ${bracketID}`)
+        }
+        const importResult = importBracket(data);
+        const bracket = importResult[1];
+        parseMatchArrRecursive(bracket); //turn JSON into actual objects
+
+        // Set the bracket (& metadata) state to the info that was just fetched
+        setBracket(bracket);
+        setTitle(importResult[0].title);
+        setDesc(importResult[0].desc);
+
+        // Handle whether this is a template or not
+        if (asTemplate) {
+            setTeams(bracket.matchesToTeams());
+            setVoters([]);
+            navigate("/create");
+        } else {
+            // NOTE: shouldn't matter what teams state is here. Could look into this
+            setVoters(getVoterInfo(bracket));
+            navigate("/play");
+        }
+    }
+
+    async function handleExport(bracketID, asPublic) {
+        //Insert rounds recursively, get the ID of the first one
+        const firstRound = await insertRoundRecursive(bracket);
+
+        //Insert the bracket record itself
+        const {data, error} = await supabase
+            .from('bracket').insert({
+                title: bracketID,
+                b_desc: desc,
+                public: asPublic,
+                first_round_id: firstRound.id
+                                  }).select("id")
+        if (error) {
+            console.log(error)
+            alert("Error exporting bracket.");
+        } else {
+            alert(`Bracket successfully exported. ID: ${bracketID.concat("#").concat(data[0].id)}`);
+        }
+    }
+
+    async function insertRoundRecursive(round) {
+        let nextRoundID = null;
+        if (round.nextRound) { //insert next round before this one (insert back to front)
+            const insertedNextRound = await insertRoundRecursive(round.nextRound);
+            if (!insertedNextRound) {
+                alert("Failed to insert round.");
+            }
+            nextRoundID = insertedNextRound.id;
+        }
+        const {data, error} = await supabase
+            .from('round').insert({
+                                      round_num: round.roundID,
+                                      matches: round.matches,
+                                      next_round_id: nextRoundID
+                                  })
+            .select()
+        if (error) {
+            console.log(error)
+            alert("Error with exporting bracket.");
+            return null;
+        }
+        return data[0]; //return the inserted row
     }
 
     return (
