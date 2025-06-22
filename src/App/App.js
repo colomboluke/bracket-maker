@@ -73,7 +73,8 @@ function App() {
     const navigate = useNavigate();
     function handleImport(bracketID, asTemplate) {
         console.log("Bracket ID to be imported: ", bracketID)
-        fetchBracket(bracketID, asTemplate)
+        const id = bracketID.split("#")[1]
+        fetchBracket(id, asTemplate)
     }
 
     async function handleExport(bracketID, asPublic) {
@@ -85,16 +86,18 @@ function App() {
         console.log("First round: ", firstRound)
 
         //Insert the bracket record itself
-        const {error} = await supabase
+        const {data, error} = await supabase
             .from('bracket').insert({
-                title: title,
+                title: bracketID,
                 b_desc: desc,
                 public: asPublic,
                 first_round_id: firstRound.id
-                                  })
+                                  }).select("id")
         if (error) {
             console.log(error)
             alert("Error exporting bracket.");
+        } else {
+            alert(`Bracket successfully exported. ID: ${bracketID.concat("#").concat(data[0].id)}`);
         }
     }
 

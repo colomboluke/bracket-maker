@@ -20,6 +20,7 @@ Handle even number of voters (button that pops up saying break tie, randomly pic
 BUGS:
 - When going back from play screen to home screen, it removes any teams that have byes
 - fix the sigfig bug with graph algos
+- When importing a bracket but you put in the wrong ID, sometimes it just breaks
 
 TODO:
 - Basic functionality

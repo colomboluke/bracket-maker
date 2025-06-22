@@ -92,7 +92,8 @@ export default function PlayPage({
             {/*</div>*/}
             <PlaySidebar setShowPrintMenu={setShowPrintMenu} matchesComplete={completeMatches}
                          totalMatches={totalMatches} onReset={handleResetWholeBracket}
-                         onShowChart={handleShowChartClick} showInsights={showInsights} requestExport={requestExport}/>
+                         onShowChart={handleShowChartClick} showInsights={showInsights}
+                         requestExport={requestExport} bracketTitle={title}/>
             {/*<input type="color" value={"pick color"}/>*/}
             <button onClick={() => console.log(bracket, voters)}>Log bracket</button>
 

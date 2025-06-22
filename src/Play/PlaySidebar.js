@@ -8,11 +8,10 @@ export default function PlaySidebar({
                                         totalMatches,
                                         onReset,
                                         onShowChart,
-                                        showInsights, requestExport
+                                        showInsights, requestExport, bracketTitle
                                     }) {
-
     const [showExportForm, setShowExportForm] = useState(false);
-    const [bracketID, setBracketID] = useState("");
+    const [bracketID, setBracketID] = useState(bracketTitle.toString());
     const [asPublic, setAsPublic] = useState(false);
     function handleSubmit(e) {
         e.preventDefault();
