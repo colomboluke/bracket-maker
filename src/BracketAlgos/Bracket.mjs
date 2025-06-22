@@ -46,7 +46,7 @@ export default class Bracket {
             })
         }
         teams.sort((a, b) => a.position - b.position);
-        console.log("Matches to teams result: ", teams)
+        // console.log("Matches to teams result: ", teams)
         return teams;
     }
 
@@ -165,6 +165,7 @@ export default class Bracket {
     handleMatchReset(targetID) {
         // Reset the target match's winner
         const oldMatch = this.getMatch(targetID);
+        // console.log("Get match result: ", oldMatch)
         // TODO: why does this work even if I don't reset votes here?
         this.setMatch(oldMatch.cleanCopy({winner: null}));
 

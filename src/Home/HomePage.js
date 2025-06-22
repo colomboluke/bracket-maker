@@ -28,6 +28,7 @@ function HomePage({requestImport}) {
                     champion.</h3>
             </div>
             <div className={"home-main"}>
+
                 <button onClick={() => setShowImportForm(!showImportForm)}>Import Bracket</button>
                 {showImportForm && (
                     <form onSubmit={onSubmit}>
@@ -44,6 +45,7 @@ function HomePage({requestImport}) {
                         <button type={"submit"}>Import</button>
                     </form>
                 )}
+
                 <Link className={"link new-bracket-btn"}
                       to={"/create"}>New Bracket
                 </Link>

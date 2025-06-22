@@ -12,6 +12,15 @@ export function matchupSafeGet(object, property) {
     return "";
 }
 
+// Return how many total rounds are in this bracket
+export function getNumRounds(bracket) {
+    if (bracket.nextRound) {
+        return getNumRounds(bracket.nextRound); //not at end yet
+    } else { //reached the end
+        return bracket.roundID;
+    }
+}
+
 // Given a votes object (record of who voted for what), tally the votes for each team
 export function getVoteCounts(votesObj) {
     let counts = {team1: 0, team2: 0}

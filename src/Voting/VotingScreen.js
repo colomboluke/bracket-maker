@@ -3,7 +3,6 @@ import "./Voting.css";
 import {useEffect} from "react";
 
 export default function VotingScreen({match, voters, onVote, onClose, onReset}) {
-    console.log("Match: ", match, voters);
     // Close on 'esc' key press
     useEffect(() => {
         document.addEventListener('keydown', handleKeyDown);
@@ -37,10 +36,6 @@ export default function VotingScreen({match, voters, onVote, onClose, onReset}) 
 
     let nextBtnStyle = allSelected() ? "active" : "";
     let resetBtnStyle = anySelected() ? "active" : "";
-
-    function reset() {
-        onReset(match.id);
-    }
 
     function getWinnerString() {
         if (match.winner === null) {
@@ -88,7 +83,6 @@ export default function VotingScreen({match, voters, onVote, onClose, onReset}) 
             <div className={"voting-grid"}>
                 {header}
                 <div className={"voting-spacer"}></div>
-                {/*ERROR: now the voters is just a list of strings, as opposed to each voter being an object*/}
                 {voters.map((voter, idx) => (
                     // Receive vote status from the match object
                     <UserRow key={idx} voterName={voter.name} voteStatus={match.votes[voter.name]}

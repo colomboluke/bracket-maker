@@ -24,7 +24,7 @@ export default function Header({title, resetBracketVotes, bracketExists}) {
         }
         // only reload if there's state
         if (toPath === "/" && bracketExists) {
-            window.location.reload();
+            // window.location.reload();
         }
     }
 

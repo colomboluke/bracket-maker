@@ -6,9 +6,14 @@ import HomePage from "../Home/HomePage";
 import SetupPage from "../Setup/SetupPage";
 import IdeasPage from "../Ideas/IdeasPage";
 import PlayPage from "../Play/PlayPage";
-import {getVoteCounts} from "../Utils.mjs";
-import { supabase } from "./Client";
-import {getVoterInfo, parseDatabaseRecord} from "../BracketAlgos/ParseDatabaseRecord";
+import {getNumRounds, getVoteCounts} from "../Utils.mjs";
+import {supabase} from "./Client";
+import {
+    exportBracket,
+    getVoterInfo,
+    importBracket,
+    parseMatchArrRecursive
+} from "../BracketAlgos/DBConnect.mjs";
 import {colorsBracket} from "../BracketAlgos/TestJSON.mjs";
 
 /**
@@ -31,53 +36,92 @@ function App() {
         setBracket(constructBracket(teams));
     }, [teams]);
 
-    // TODO: connect to Supabase, create functions:
-    //  Export: take a Bracket object and create a SQL Insert out of it
-    //  Import: call the Retrieve Bracket query with the given ID as parameter, parse the result into a Bracket object
-
     async function fetchBracket(bracketID, asTemplate) {
         // Select a bracket matching the ID
-        const { data, error } = await supabase
+        const {data, error} = await supabase
             // .from("bracket").select()
             .rpc('get_bracket', {p_id: bracketID})
         if (error) {
             alert(`Error fetching bracket with id ${bracketID}`)
         }
-        const parseDBResult = parseDatabaseRecord(data);
-        const bracket = parseDBResult[1];
-        console.log("Parsed bracket: ", bracket)
-        // Set the bracket state to the info that was just fetched
+        console.log("Imported bracket (as SQL): ", data)
+        const importResult = importBracket(data);
+        const bracket = importResult[1];
+        parseMatchArrRecursive(bracket); //turn JSON into actual objects
+        console.log("Imported bracket (as JSON): ", bracket);
+
+        // Set the bracket (& metadata) state to the info that was just fetched
         setBracket(bracket);
-        setTitle(parseDBResult[0].title);
-        setDesc(parseDBResult[0].desc);
+        setTitle(importResult[0].title);
+        setDesc(importResult[0].desc);
 
         // Handle whether this is a template or not
         if (asTemplate) {
             console.log("Creating a bracket template")
-            setTeams(parseDBResult[1].matchesToTeams());
+            setTeams(bracket.matchesToTeams());
             setVoters([]);
             navigate("/create");
         } else {
             console.log("Creating full bracket: ")
-            setVoters(getVoterInfo(parseDBResult[1]));
+            // NOTE: shouldn't matter what teams state is here. Could look into this
+            setVoters(getVoterInfo(bracket));
             navigate("/play");
         }
-
     }
-
-    useEffect(() => {
-        console.log("bracket is now: ", bracket)
-    }, [bracket]);
-
-    useEffect(() => {
-        console.log("voters are now: ", voters)
-    }, [voters]);
 
     // Import a bracket template
     const navigate = useNavigate();
     function handleImport(bracketID, asTemplate) {
         console.log("Bracket ID to be imported: ", bracketID)
         fetchBracket(bracketID, asTemplate)
+    }
+
+    async function handleExport(bracketID, asPublic) {
+        console.log("Bracket ID to be exported: ", bracketID, asPublic);
+        console.log("Bracket: ", bracket);
+
+        //Insert rounds recursively, get the ID of the first one
+        const firstRound = await insertRoundRecursive(bracket);
+        console.log("First round: ", firstRound)
+
+        //Insert the bracket record itself
+        const {error} = await supabase
+            .from('bracket').insert({
+                title: title,
+                b_desc: desc,
+                public: asPublic,
+                first_round_id: firstRound.id
+                                  })
+        if (error) {
+            console.log(error)
+            alert("Error exporting bracket.");
+        }
+    }
+
+    async function insertRoundRecursive(round) {
+        console.log(`Reached round ${round.roundID}, matches: `, round.matches)
+        let nextRoundID = null;
+        if (round.nextRound) { //insert next round before this one (insert back to front)
+            const insertedNextRound = await insertRoundRecursive(round.nextRound);
+            if (!insertedNextRound) {
+                alert("Failed to insert round.");
+            }
+            nextRoundID = insertedNextRound.id;
+        }
+        const {data, error} = await supabase
+            .from('round').insert({
+                                      round_num: round.roundID,
+                                      matches: round.matches,
+                                      next_round_id: nextRoundID
+                                  })
+            .select()
+        if (error) {
+            console.log(error)
+            alert("Error with exporting bracket.");
+            return null;
+        }
+        console.log("Just inserted: ", data[0]);
+        return data[0]; //return the inserted row
     }
 
     // ~~~ Functions to update bracket ~~~
@@ -167,10 +211,10 @@ function App() {
         setBracket(nextBracket);
     }
 
-
     return (
         <Routes>
-            <Route element={<Header title={title} resetBracketVotes={resetAllBracketVotes} bracketExists={bracket.matches.length > 0}/>}>
+            <Route element={<Header title={title} resetBracketVotes={resetAllBracketVotes}
+                                    bracketExists={bracket.matches.length > 0}/>}>
                 <Route path="/" element={<HomePage requestImport={handleImport}/>}/>
                 <Route path="create" element={<SetupPage title={title} setTitle={setTitle}
                                                          desc={desc} setDesc={setDesc}
@@ -180,13 +224,15 @@ function App() {
                                                          bracket={bracket}
                                                          onStart={handleInitializeVotes}
                                                          reset={resetState}
-                setTeamImage={setTeamImage}/>}/>
+                                                         setTeamImage={setTeamImage}/>}/>
                 <Route path="help" element={<IdeasPage/>}/>
                 <Route path="play" element={<PlayPage title={title} bracket={bracket}
                                                       voters={voters}
                                                       onVote={handleVote}
                                                       getVoteCounts={getVoteCounts}
-                                                      resetVotes={resetVotes} resetBracket={resetAllBracketVotes}/>}/>
+                                                      resetVotes={resetVotes}
+                                                      resetBracket={resetAllBracketVotes}
+                                                      requestExport={handleExport}/>}/>
             </Route>
         </Routes>
     );

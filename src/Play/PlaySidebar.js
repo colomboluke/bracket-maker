@@ -1,6 +1,6 @@
 import "./PlayPage.css"
 import {FaPrint} from "react-icons/fa";
-import React from "react";
+import React, {useState} from "react";
 
 export default function PlaySidebar({
                                         setShowPrintMenu,
@@ -8,8 +8,16 @@ export default function PlaySidebar({
                                         totalMatches,
                                         onReset,
                                         onShowChart,
-                                        showInsights
+                                        showInsights, requestExport
                                     }) {
+
+    const [showExportForm, setShowExportForm] = useState(false);
+    const [bracketID, setBracketID] = useState("");
+    const [asPublic, setAsPublic] = useState(false);
+    function handleSubmit(e) {
+        e.preventDefault();
+        requestExport(bracketID, asPublic);
+    }
 
     const bracketComplete = matchesComplete >= totalMatches
 
@@ -20,7 +28,6 @@ export default function PlaySidebar({
 
     const insightsBtnText = showInsights ? "Hide Insights" : "Show Insights";
 
-    /*    TODO: mechanism to hide/show this screen*/
     return (
         <div className={"play-sidebar"}>
             <div className={"progress-cont"}>
@@ -38,8 +45,23 @@ export default function PlaySidebar({
             </div>
             {!bracketComplete && <span className={"instruction-text"}>Click on a match to get started</span>}
             {bracketComplete && <button onClick={() => onShowChart()} className={"insights-btn"}>{insightsBtnText}</button>}
-            {/*For ease of testing*/}
-            {/*<button onClick={() => onShowChart()} className={"insights-btn"}>{insightsBtnText}</button>*/}
+
+            <button onClick={() => setShowExportForm(!showExportForm)}>Export Bracket</button>
+            {showExportForm && (
+                <form onSubmit={handleSubmit}>
+                    <div className={"import-form-row"}>
+                        <span>Bracket ID: </span>
+                        <input type="text" name={"bracketID"} value={bracketID}
+                               onChange={e => setBracketID(e.target.value)}/>
+                    </div>
+                    <div className={"import-form-row"}>
+                        <span>Set public? </span>
+                        <input type="checkbox" name={"asTemplate"}
+                               checked={asPublic} onChange={e => setAsPublic(e.target.checked)}/>
+                    </div>
+                    <button type={"submit"}>Export</button>
+                </form>
+            )}
         </div>
     )
 }

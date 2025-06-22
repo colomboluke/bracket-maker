@@ -1,3 +1,4 @@
+import {parseMatchArrRecursive} from "./DBConnect.mjs";
 import Bracket from "./Bracket.mjs";
 
 const colorsBracketObject = {
@@ -177,10 +178,6 @@ const colorsBracketObject = {
         }
     }
 }
-
-export const colorsBracket = new Bracket(colorsBracketObject.roundID, colorsBracketObject.matches, colorsBracketObject.nextRound);
-// console.log(colorsBracket, "\n\n\n", colorsBracketObject)
-
 const nflBracketObject = {
     "roundID": 0,
     "matches": [
@@ -340,6 +337,6 @@ const nflBracketObject = {
 }
 export const nflBracket = new Bracket(nflBracketObject.roundID, nflBracketObject.matches, nflBracketObject.nextRound);
 
-
-// console.log(colorsBracket)
+export const colorsBracket = new Bracket(colorsBracketObject.roundID, colorsBracketObject.matches, colorsBracketObject.nextRound);
+parseMatchArrRecursive(colorsBracket)
 // console.log(colorsBracket.matchesToTeams())

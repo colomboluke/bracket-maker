@@ -1,4 +1,4 @@
-import Match from "./Match";
+import Match from "./Match.mjs";
 import Bracket from "./Bracket.mjs";
 
 const placeholderMatch = new Match(0, null, null, null, null, {}, null);
