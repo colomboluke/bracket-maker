@@ -218,8 +218,30 @@
     display: none;
 }
 
+.arrow-cont {
+    border: 2px solid white;
+    padding: 5px;
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    top: 50%;
+}
 
+.arrow-left {
+    position: absolute;
+    left: -60px;
+}
+
+.arrow-right {
+    position: absolute;
+    right: -60px;
+}
 
 
 

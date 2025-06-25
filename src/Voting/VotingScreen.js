@@ -1,17 +1,10 @@
 import UserRow from "./UserRow";
 import "./Voting.css";
 import {useEffect, useState} from "react";
+import {FaArrowLeft, FaArrowRight} from "react-icons/fa";
 
-export default function VotingScreen({
-                                         match,
-                                         voters,
-                                         onVote,
-                                         onClose,
-                                         onReset,
-                                         onNextPress
-                                     }) {
+export default function VotingScreen({match, voters, onVote, onClose, onReset, selectPrevMatch, selectNextMatch, onNextPress}) {
 
-    console.log(match)
     const [selectedRow, setSelectedRow] = useState(null);
 
     // Handle key presses
@@ -53,7 +46,6 @@ export default function VotingScreen({
                 handleVoteLocal(voters[selectedRow].name, 1)
             }
         }
-
         // Clean up listener when component unmounts
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
@@ -136,7 +128,6 @@ export default function VotingScreen({
                 <div className={"voting-spacer"}></div>
                 {voters.map((voter, idx) => (
                     // Receive vote status from the match object
-                    // TODO: grey out plus buttons if this match is locked
                     <UserRow key={idx} voterName={voter.name} voteStatus={match.votes[voter.name]}
                              onClick={handleVoteLocal} selected={selectedRow === idx}
                              locked={match.locked}/>
@@ -162,6 +153,8 @@ export default function VotingScreen({
                 </button>
             </div>
 
+            <div className={"arrow-cont arrow-left"} onClick={() => selectPrevMatch()}><FaArrowLeft/></div>
+            <div className={"arrow-cont arrow-right"} onClick={() => selectNextMatch()}><FaArrowRight/></div>
         </div>
 
     )

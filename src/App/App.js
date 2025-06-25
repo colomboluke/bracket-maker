@@ -234,7 +234,8 @@ function App() {
                                                       getVoteCounts={getVoteCounts}
                                                       resetVotes={resetVotes}
                                                       resetBracket={resetAllBracketVotes}
-                                                      requestExport={handleExport} onNextPress={lockMatch}/>}/>
+                                                      requestExport={handleExport}
+                                                      onNextPress={lockMatch}/>}/>
             </Route>
         </Routes>
     );
