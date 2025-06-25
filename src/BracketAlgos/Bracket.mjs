@@ -176,10 +176,11 @@ export default class Bracket {
             return;
         }
         if (oldMatch.nextStatus === 0) {
-            curMatch = curMatch.cleanCopy({team1: null, votes: null, winner: null})
+            curMatch = curMatch.cleanCopy({team1: null, winner: null});
         } else if (oldMatch.nextStatus === 1) {
-            curMatch = curMatch.cleanCopy({team2: null, votes: null, winner: null})
+            curMatch = curMatch.cleanCopy({team2: null, winner: null});
         }
+        curMatch.resetVotes();
         this.setMatch(curMatch);
         //Recurse
         let nextMatch = this.getMatch(curMatch.nextMatchID);

@@ -11,7 +11,7 @@ export default function VotingScreen({
                                          onNextPress
                                      }) {
 
-    console.log(`Match ${match.id} locked?`, match.locked)
+    console.log(match)
     const [selectedRow, setSelectedRow] = useState(null);
 
     // Handle key presses
@@ -26,9 +26,11 @@ export default function VotingScreen({
             // Pressing enter closes it only if all votes are in
             if (e.key === 'Enter' && Object.values(match.votes).every(item => item !== 0)) {
                 onClose();
+                onNextPress(match.id);
             }
             // Choose which voter's row is selected
             if (e.key === 'ArrowUp') {
+                e.preventDefault(); //prevent the whole page from scrolling
                 if (selectedRow === null) {
                     setSelectedRow(0);
                 } else {
@@ -36,6 +38,7 @@ export default function VotingScreen({
                 }
             }
             if (e.key === 'ArrowDown') {
+                e.preventDefault();
                 if (selectedRow === null) {
                     setSelectedRow(0)
                 } else {
