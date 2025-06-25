@@ -85,16 +85,16 @@ export default function PlayPage({
     }, [showInsights]);
 
     function selectNextMatch() {
-        const nextID = Math.min(selectedMatchID + 1, numTeams - 2);
-        const nextMatch = bracket.getMatch(nextID)
-        if (nextMatch.team1 !== null && nextMatch.team2 !== null) {
-            setSelectedMatchID(nextID);
+        if (selectedMatchID === null) {
+            setSelectedMatchID(0);
+        } else {
+            const nextID = Math.min(selectedMatchID + 1, numTeams - 2); //max team id = n -2
+            const nextMatch = bracket.getMatch(nextID)
+            if (nextMatch.team1 !== null && nextMatch.team2 !== null) {
+                setSelectedMatchID(nextID);
+            }
         }
     }
-
-    useEffect(() => {
-        console.log("Selected match: ", selectedMatchID);
-    }, [selectedMatchID]);
 
     function selectPrevMatch() {
         const prevID = Math.max(selectedMatchID - 1, 0);
@@ -127,9 +127,8 @@ export default function PlayPage({
                                                      onClose={() => setSelectedMatchID(null)}
                                                      onReset={() => resetVotes(selectedMatchID)}
                                                      matchLocked={selectedMatch.locked}
-                                                     onNextPress={onNextPress}/>}
-                                                     onReset={() => resetVotes(selectedMatchID)}
-            selectPrevMatch={selectPrevMatch} selectNextMatch={selectNextMatch}/>
+                                                     onNextPress={onNextPress}
+            selectPrevMatch={selectPrevMatch} selectNextMatch={selectNextMatch}/>}
 
             {/*Download/Print popup*/}
             {showPrintMenu && <PrintPopup onClose={handlePrintPopupClose} fileName={pdfFileName}

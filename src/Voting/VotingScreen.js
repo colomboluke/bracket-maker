@@ -6,6 +6,7 @@ import {FaArrowLeft, FaArrowRight} from "react-icons/fa";
 export default function VotingScreen({match, voters, onVote, onClose, onReset, selectPrevMatch, selectNextMatch, onNextPress}) {
 
     const [selectedRow, setSelectedRow] = useState(null);
+    console.log(`Match ${match.id} locked? `, match.locked)
 
     // Handle key presses
     useEffect(() => {
@@ -39,10 +40,10 @@ export default function VotingScreen({match, voters, onVote, onClose, onReset, s
                 }
             }
             // Cast a vote using left/right arrows
-            if (e.key === "ArrowRight") {
+            if (e.key === "ArrowRight" && selectedRow !== null) {
                 handleVoteLocal(voters[selectedRow].name, 2)
             }
-            if (e.key === "ArrowLeft") {
+            if (e.key === "ArrowLeft" && selectedRow !== null) {
                 handleVoteLocal(voters[selectedRow].name, 1)
             }
         }
@@ -50,7 +51,7 @@ export default function VotingScreen({match, voters, onVote, onClose, onReset, s
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [onClose, match, selectedRow, voters, handleVoteLocal]);
+    }, [onClose, match, selectedRow, voters, handleVoteLocal, onNextPress]);
 
     // useEffect(() => {
     //     console.log("Selected row is now: ", selectedRow)
