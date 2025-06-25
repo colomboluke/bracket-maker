@@ -16,7 +16,7 @@ export default function PlayPage({
                                      onVote,
                                      getVoteCounts,
                                      resetVotes,
-                                     resetBracket
+                                     resetBracket, numTeams
                                  }) {
     // Track the currently selected match using its ID
     const [selectedMatchID, setSelectedMatchID] = useState(null);
@@ -84,6 +84,26 @@ export default function PlayPage({
         }
     }, [showInsights]);
 
+    function selectNextMatch() {
+        const nextID = Math.min(selectedMatchID + 1, numTeams - 2);
+        const nextMatch = bracket.getMatch(nextID)
+        if (nextMatch.team1 !== null && nextMatch.team2 !== null) {
+            setSelectedMatchID(nextID);
+        }
+    }
+
+    useEffect(() => {
+        console.log("Selected match: ", selectedMatchID);
+    }, [selectedMatchID]);
+
+    function selectPrevMatch() {
+        const prevID = Math.max(selectedMatchID - 1, 0);
+        const nextMatch = bracket.getMatch(prevID)
+        if (nextMatch.team1 !== null && nextMatch.team2 !== null) {
+            setSelectedMatchID(prevID);
+        }
+    }
+
     return (
         <div className={"play-bracket-cont"}>
             {/*Show overlay if VotingScreen or PrintMenu is displayed*/}
@@ -104,7 +124,8 @@ export default function PlayPage({
             {selectedMatch !== null && <VotingScreen voters={voters} match={selectedMatch}
                                                      onVote={onVote}
                                                      onClose={() => setSelectedMatchID(null)}
-                                                     onReset={() => resetVotes(selectedMatchID)}/>}
+                                                     onReset={() => resetVotes(selectedMatchID)}
+            selectPrevMatch={selectPrevMatch} selectNextMatch={selectNextMatch}/>}
 
             {/*Download/Print popup*/}
             {showPrintMenu && <PrintPopup onClose={handlePrintPopupClose} fileName={pdfFileName}

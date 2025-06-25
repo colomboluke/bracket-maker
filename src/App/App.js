@@ -115,7 +115,6 @@ function App() {
         setBracket(nextBracket);
     }
 
-
     return (
         <Routes>
             <Route element={<Header title={title} resetBracketVotes={resetAllBracketVotes}/>}>
@@ -128,13 +127,15 @@ function App() {
                                                          bracket={bracket}
                                                          onStart={handleInitializeVotes}
                                                          reset={resetState}
-                setTeamImage={setTeamImage}/>}/>
+                                                         setTeamImage={setTeamImage}/>}/>
                 <Route path="help" element={<IdeasPage/>}/>
                 <Route path="play" element={<PlayPage title={title} bracket={bracket}
                                                       voters={voters}
                                                       onVote={handleVote}
                                                       getVoteCounts={getVoteCounts}
-                                                      resetVotes={resetVotes} resetBracket={resetAllBracketVotes}/>}/>
+                                                      resetVotes={resetVotes}
+                                                      resetBracket={resetAllBracketVotes}
+                                                      numTeams={teams.length}/>}/>
             </Route>
         </Routes>
     );

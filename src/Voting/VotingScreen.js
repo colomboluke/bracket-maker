@@ -1,8 +1,9 @@
 import UserRow from "./UserRow";
 import "./Voting.css";
 import {useEffect, useState} from "react";
+import {FaArrowLeft, FaArrowRight} from "react-icons/fa";
 
-export default function VotingScreen({match, voters, onVote, onClose, onReset}) {
+export default function VotingScreen({match, voters, onVote, onClose, onReset, selectPrevMatch, selectNextMatch}) {
 
     const [selectedRow, setSelectedRow] = useState(null);
 
@@ -133,6 +134,8 @@ export default function VotingScreen({match, voters, onVote, onClose, onReset}) 
                 </button>
             </div>
 
+            <div className={"arrow-cont arrow-left"} onClick={() => selectPrevMatch()}><FaArrowLeft/></div>
+            <div className={"arrow-cont arrow-right"} onClick={() => selectNextMatch()}><FaArrowRight/></div>
         </div>
 
     )
