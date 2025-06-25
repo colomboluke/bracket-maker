@@ -142,6 +142,16 @@
     border: none;
     color: black;
     text-align: center;
+    cursor: pointer;
+}
+
+.locked {
+    opacity: 40%;
+    cursor: default;
+}
+
+.voting-locked-spacer {
+    height: 50px;
 }
 
 .voter-name {

@@ -2,8 +2,16 @@ import UserRow from "./UserRow";
 import "./Voting.css";
 import {useEffect, useState} from "react";
 
-export default function VotingScreen({match, voters, onVote, onClose, onReset}) {
+export default function VotingScreen({
+                                         match,
+                                         voters,
+                                         onVote,
+                                         onClose,
+                                         onReset,
+                                         onNextPress
+                                     }) {
 
+    console.log(`Match ${match.id} locked?`, match.locked)
     const [selectedRow, setSelectedRow] = useState(null);
 
     // Handle key presses
@@ -42,6 +50,7 @@ export default function VotingScreen({match, voters, onVote, onClose, onReset}) 
                 handleVoteLocal(voters[selectedRow].name, 1)
             }
         }
+
         // Clean up listener when component unmounts
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
@@ -75,6 +84,12 @@ export default function VotingScreen({match, voters, onVote, onClose, onReset}) 
             } else {
                 return match.team2.name;
             }
+        }
+    }
+
+    function handleReset() {
+        if (window.confirm("Are you sure you wish to reset votes? This may reset future rounds.")) {
+            onReset()
         }
     }
 
@@ -118,18 +133,29 @@ export default function VotingScreen({match, voters, onVote, onClose, onReset}) 
                 <div className={"voting-spacer"}></div>
                 {voters.map((voter, idx) => (
                     // Receive vote status from the match object
+                    // TODO: grey out plus buttons if this match is locked
                     <UserRow key={idx} voterName={voter.name} voteStatus={match.votes[voter.name]}
-                             onClick={handleVoteLocal} selected={selectedRow === idx}/>
+                             onClick={handleVoteLocal} selected={selectedRow === idx}
+                             locked={match.locked}/>
                 ))}
             </div>
             <div className={"voting-footer"}>
                 <span className={"winner-text"}>WINNER: {getWinnerString()}</span>
-                <button className={`next-matchup-button ${nextBtnStyle}`} disabled={!allSelected()}
-                        onClick={onClose}>NEXT
-                </button>
+                {!match.locked && (
+                    <button className={`next-matchup-button ${nextBtnStyle}`}
+                            disabled={!allSelected()}
+                            onClick={() => {
+                                onClose();
+                                onNextPress(match.id)
+                            }}>NEXT
+                    </button>
+                )}
+                {match.locked && (
+                    <div className={"voting-locked-spacer"}></div>
+                )}
                 <button className={`next-matchup-button ${resetBtnStyle} reset`}
                         disabled={!anySelected()}
-                        onClick={onReset}>RESET VOTES
+                        onClick={handleReset}>RESET VOTES
                 </button>
             </div>
 

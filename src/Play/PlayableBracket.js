@@ -21,8 +21,6 @@ function PlayableBracket(props, ref) {
                 <WinnerStub teamName={ultimateWinner ? ultimateWinner.name : ""}/>
             )
         } else {
-            // TODO: I don't think curRound is necessary anymore
-            let curRound = roundData.roundID;
             return (
                 <>
                     <div className={"round"}>
@@ -32,16 +30,16 @@ function PlayableBracket(props, ref) {
                                 //if this is final match, update the ultimate winner
                                 getUltimateWinner(roundData, match);
                                 return <ClickableMatchup key={index} team1={match.team1}
-                                                         team2={match.team2} className={curRound}
+                                                         team2={match.team2}
                                                          matchID={match.id} onClick={onClick}
                                                          winner={match.winner} votesTally={getVoteCounts(match.votes)}/>;
                             } else {
                                 return <Matchup key={index} team1={match.team1}
-                                                team2={match.team2} className={curRound}/>;
+                                                team2={match.team2}/>;
                             }
                         })}
                     </div>
-                    {renderRound(roundData.nextRound, curRound + 1)}
+                    {renderRound(roundData.nextRound)}
                 </>
             )
         }

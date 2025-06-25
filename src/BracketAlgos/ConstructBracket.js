@@ -1,7 +1,7 @@
 import Match from "./Match.mjs";
 import Bracket from "./Bracket.mjs";
 
-const placeholderMatch = new Match(0, null, null, null, null, {}, null);
+const placeholderMatch = new Match(0, null, null, null, null, {}, null, false);
 
 function getPresetBracket(teams) {
     if (teams.length === 0) {
@@ -173,7 +173,7 @@ function createMatch(homeSeed, awaySeed, totalTeams, byes) {
         byes.push(awaySeed);
         homeSeed = null;
     }
-    return new Match(null, null, homeSeed, awaySeed, null, {}, null);
+    return new Match(null, null, homeSeed, awaySeed, null, {}, null, false);
 }
 
 // Given an array of matches, ensure that the lower seed (higher ranked) goes first

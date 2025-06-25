@@ -16,7 +16,7 @@ export default function PlayPage({
                                      onVote,
                                      getVoteCounts,
                                      resetVotes,
-                                     resetBracket, requestExport
+                                     resetBracket, requestExport, onNextPress
                                  }) {
     // Track the currently selected match using its ID
     const [selectedMatchID, setSelectedMatchID] = useState(null);
@@ -95,7 +95,7 @@ export default function PlayPage({
                          onShowChart={handleShowChartClick} showInsights={showInsights}
                          requestExport={requestExport} bracketTitle={title}/>
             {/*<input type="color" value={"pick color"}/>*/}
-            {/*<button onClick={() => console.log(bracket, voters)}>Log bracket</button>*/}
+            <button onClick={() => console.log(bracket, voters)}>Log bracket</button>
 
             {/*This gets the ref because this is what will be printed*/}
             <PlayableBracket bracket={bracket} onClick={handleMatchClick}
@@ -105,7 +105,8 @@ export default function PlayPage({
             {selectedMatch !== null && <VotingScreen voters={voters} match={selectedMatch}
                                                      onVote={onVote}
                                                      onClose={() => setSelectedMatchID(null)}
-                                                     onReset={() => resetVotes(selectedMatchID)}/>}
+                                                     onReset={() => resetVotes(selectedMatchID)}
+                                                     matchLocked={selectedMatch.locked} onNextPress={onNextPress}/>}
 
             {/*Download/Print popup*/}
             {showPrintMenu && <PrintPopup onClose={handlePrintPopupClose} fileName={pdfFileName}

@@ -69,6 +69,14 @@ function App() {
         setBracket(nextBracket);
     }
 
+    function lockMatch(matchID) {
+        const nextBracket = bracket.cleanCopy()
+        const match = nextBracket.getMatch(matchID);
+        match.lockVotes();
+        nextBracket.setMatch(match);
+        setBracket(nextBracket);
+    }
+
     // Given a votes object, return 1 if the winner is team1, 2 if the winner is team2, or
     //  null if there is no winner
     function getWinner(votesObj) {
@@ -97,7 +105,6 @@ function App() {
 
         // Update rest of bracket to reflect the outcome of this match
         nextBracket.handleMatchReset(matchID);
-        console.log("Bracket after resetting votes: ", nextBracket)
         setBracket(nextBracket);
     }
 
@@ -227,7 +234,7 @@ function App() {
                                                       getVoteCounts={getVoteCounts}
                                                       resetVotes={resetVotes}
                                                       resetBracket={resetAllBracketVotes}
-                                                      requestExport={handleExport}/>}/>
+                                                      requestExport={handleExport} onNextPress={lockMatch}/>}/>
             </Route>
         </Routes>
     );

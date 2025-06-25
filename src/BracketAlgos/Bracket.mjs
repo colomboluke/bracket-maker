@@ -176,9 +176,9 @@ export default class Bracket {
             return;
         }
         if (oldMatch.nextStatus === 0) {
-            curMatch = curMatch.cleanCopy({team1: null})
+            curMatch = curMatch.cleanCopy({team1: null, votes: null, winner: null})
         } else if (oldMatch.nextStatus === 1) {
-            curMatch = curMatch.cleanCopy({team2: null})
+            curMatch = curMatch.cleanCopy({team2: null, votes: null, winner: null})
         }
         this.setMatch(curMatch);
         //Recurse
@@ -234,6 +234,7 @@ export default class Bracket {
             for (const property in match.votes) {
                 match.votes[property] = 0;
             }
+            match.locked = false;
             this.handleMatchReset(match.id);
         })
         if (this.nextRound) {
