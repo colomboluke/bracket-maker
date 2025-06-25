@@ -53,7 +53,7 @@ export default function PlaySidebar({
                 {showExportForm && (
                     <form onSubmit={handleSubmit} className={"export-form"}>
                         <div className={"import-form-row"}>
-                            <span>Bracket ID: </span>
+                            <span>Name: </span>
                             <input type="text" name={"bracketID"} value={bracketID}
                                    onChange={e => setBracketID(e.target.value)}
                                    className={"import-form-text-input"}/>

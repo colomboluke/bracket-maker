@@ -95,7 +95,7 @@ export default function PlayPage({
                          onShowChart={handleShowChartClick} showInsights={showInsights}
                          requestExport={requestExport} bracketTitle={title}/>
             {/*<input type="color" value={"pick color"}/>*/}
-            <button onClick={() => console.log(bracket, voters)}>Log bracket</button>
+            {/*<button onClick={() => console.log(bracket, voters)}>Log bracket</button>*/}
 
             {/*This gets the ref because this is what will be printed*/}
             <PlayableBracket bracket={bracket} onClick={handleMatchClick}
