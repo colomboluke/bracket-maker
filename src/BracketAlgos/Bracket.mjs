@@ -46,6 +46,8 @@ export default class Bracket {
         return teams;
     }
 
+    // TODO: method that counts the number of teams
+
     // Creates a shallow copy, mimicking the spread operator
     cleanCopy({roundID = this.roundID, matches = this.matches, nextRound = this.nextRound} = {}) {
         return new Bracket(roundID, matches, nextRound);

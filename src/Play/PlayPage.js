@@ -85,6 +85,7 @@ export default function PlayPage({
     }, [showInsights]);
 
     function selectNextMatch() {
+        console.log(`(next match)\tCur match id: ${selectedMatchID}, max id: ${numTeams - 2}`)
         if (selectedMatchID === null) {
             setSelectedMatchID(0);
         } else {
@@ -97,6 +98,7 @@ export default function PlayPage({
     }
 
     function selectPrevMatch() {
+        console.log(`(prev match)\tCur match id: ${selectedMatchID}, min id: ${0}`)
         const prevID = Math.max(selectedMatchID - 1, 0);
         const nextMatch = bracket.getMatch(prevID)
         if (nextMatch.team1 !== null && nextMatch.team2 !== null) {

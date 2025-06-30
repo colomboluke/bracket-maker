@@ -53,3 +53,8 @@ export function convertToStringKey(name1, name2) {
 export function isPowerOfTwo(x) {
     return (Math.log(x) / Math.log(2)) % 1 === 0;
 }
+
+export function asPercent(number, decimals=0) {
+    console.log("Nunber received: ", number, decimals, "Result: ", number.toFixed(decimals))
+    return number.toFixed(decimals).toString().concat("%");
+}

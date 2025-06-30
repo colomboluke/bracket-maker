@@ -213,6 +213,8 @@ function App() {
         return data[0]; //return the inserted row
     }
 
+    const numTeams = bracket.matchesToTeams().length;
+
     return (
         <Routes>
             <Route element={<Header title={title} resetBracketVotes={resetAllBracketVotes}
@@ -235,7 +237,7 @@ function App() {
                                                       resetVotes={resetVotes}
                                                       resetBracket={resetAllBracketVotes}
                                                       requestExport={handleExport}
-                                                      onNextPress={lockMatch} numTeams={teams.length}/>}/>
+                                                      onNextPress={lockMatch} numTeams={numTeams}/>}/>
             </Route>
         </Routes>
     );

@@ -1,25 +1,18 @@
-import {Bar, BarChart, Rectangle, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
+import {Bar, BarChart, Rectangle, Tooltip, XAxis, YAxis} from "recharts";
 import React from "react";
 import {marginOfVictory, voterOutlier, voterSimilarity} from "../BracketAlgos/PostGameStats.mjs";
 import "../BracketAlgos/Bracket.mjs"
-import {
-    animatedMovies, fiveVoters,
-    popArtists,
-    sevenVotersBracket,
-    testBracket1, videoGames
-} from "../BracketAlgos/TestJSON.mjs";
 import {convertToStringKey} from "../Utils.mjs";
 
 export default function ChartContainer({activeChart, bracket, voters, totalMatches}) {
 
     const WinStrengthTooltip = ({active, payload, label}) => {
         if (active && payload && payload.length) {
+            console.log('Payload: ', payload[0])
             return (
                 <div className="custom-tooltip">
                     <p className={"stat-label"}>{label}</p>
-                    <p className={"stat-content"}>{`Win strength: ${(payload[0].value
-                                                                     * 100).toString()
-                        .concat("%")}`}</p>
+                    <p className={"stat-content"}>{`Win strength: ${payload[0].value.concat("%")}`}</p>
                     <p className={"stat-blurb"}>Percentage of votes this contender received across
                         all rounds</p>
                 </div>
@@ -101,6 +94,7 @@ export default function ChartContainer({activeChart, bracket, voters, totalMatch
     // TODO; adjust the bar sizes more based on data length
     function getWinStrengthChart() {
         const dataProcessed = marginOfVictory(bracket);
+        console.log("Win strength data: ", dataProcessed);
         const dataLength = dataProcessed.length;
         const barSize = dataLength <= 16 ? 50 : 35;
         const barGap = dataLength <= 16 ? 30 : 15;

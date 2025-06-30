@@ -107,7 +107,7 @@ export function marginOfVictory(bracket) {
     // Format as string
     for (const contender in counts) {
         counts[contender]["Win strength"] =
-            (counts[contender]["percentage"] * 100).toString().concat("%");
+            (counts[contender]["percentage"] * 100).toFixed(0).toString().concat("%");
     }
     // console.log("MoV result", counts)
     return counts;

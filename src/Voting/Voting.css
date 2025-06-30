@@ -7,7 +7,6 @@
     display: flex;
     flex-flow: column nowrap;
     /*Overlay on top of bracket*/
-    /*TODO: make the top: 0 relative to the screen, not the bracket*/
     position: fixed;
     top: var(--header-height);
     left: 50%;
@@ -107,7 +106,7 @@
 }
 
 .option-title {
-    font-size: 30px;
+    font-size: 36px;
     font-weight: bold;
     width: 100%;
     overflow-wrap: break-word;
@@ -158,7 +157,7 @@
     /*border: 2px solid white;*/
     padding-left: 10px;
     padding-right: 10px;
-    font-size: 22px;
+    font-size: 28px;
     font-weight: bold;
 }
 
